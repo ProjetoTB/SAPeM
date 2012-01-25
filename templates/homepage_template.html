@@ -15,14 +15,18 @@
 		<script type="text/javascript" language="javascript" src="{{ MEDIA_URL }}js/jquery/jquery.js"></script>
 		<script type="text/javascript" language="javascript" src="{{ MEDIA_URL }}js/jquery/jquery.dataTables.js"></script>
 		<script type="text/javascript">
-
 		$(document).ready(function() {
-				$('#triagem_menu').click(function () {
-					$('ul.sub_menu').slideToggle('medium');
-				});
+			if ($.browser.mozilla != true){
+				window.location = "{{url}}FirefoxRequerido/"
+			}
+			$('#triagem_menu').click(function () {
+				$('#triagem_menu ul.sub_menu').slideToggle('medium');
 			});
+			$('#reports_menu').click(function () {
+				$('#reports_menu ul.sub_menu').slideToggle('medium');
+			});
+		});
 		</script>
-
 	</head>
 	<body>
 		<div id='content'>
@@ -34,7 +38,7 @@
 						{% if user.is_staff %}
 							<a href='{{ url }}admin/'>Administração</a> /
 						{% endif %}
-						<a href='logout/'>Encerrar sessão</a>
+						<a href='{{ url }}logout/'>Encerrar sessão</a>
 					{% endif %}
 				</div>
 			</div>
@@ -47,7 +51,7 @@
 						{% if triagem_form_list|length_is:"1" %}
 							<li id='triagem_menu'> <a href='{{ url }}form/{{triagem_form_list|first|getId}}/0' >Adicionar Paciente (Triagem)</a> </li>
 						{% else%}
-							<li id='triagem_menu'> <a href='#' >Adicionar Paciente (Triagem)</a> </li>
+							<li id='triagem_menu'> <a href='#' >Adicionar Paciente (Triagem)</a>
 								<ul  class="sub_menu">
 									{% for f in triagem_form_list %}
 									<li>
@@ -64,9 +68,19 @@
 									</li>
 									{% endfor %}
 								</ul>
+							</li>
 							{% endif %}
 							<li> <a href='patients'>Acessar Formulários</a> </li>
-							<!-- li> <a href='listPatients' >Listar Pacientes</a> </li -->
+						{% if user.is_staff %}
+							<li id='reports_menu'> <a href='#'> Relatórios </a>
+								<ul class='sub_menu'>
+									<li><a href='{{url}}reports/create'> Criar uma configuração </a></li>
+									<li><a href='{{url}}reports/view'> Visualizar configurações</a></li>
+									<li><a href='{{url}}filters/'> Mostrar Filtros </a></li>
+								</ul>
+							</li>
+							<li> <a href='{{ url }}download/excel/'> Exportar para Excel </a> </li>
+						{% endif %}
 						</ul>
 					</div>
 				</div>

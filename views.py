@@ -14,6 +14,7 @@ from xml.dom.minidom import parseString, getDOMImplementation
 
 from django import forms
 
+from django.core import serializers
 from django.db import IntegrityError
 from django.http import HttpResponse,HttpResponseNotFound, HttpResponseRedirect
 from django.shortcuts import render_to_response
@@ -25,8 +26,7 @@ from django.contrib.auth import authenticate, login,logout
 from django.views.generic.simple import direct_to_template
 
 import settings
-from forms.models import UnidadeSaude
-
+from forms.models import UnidadeSaude, Formulario, Ficha
 
 import unicodedata
 
@@ -374,6 +374,34 @@ def getUSfromTriagem(patient):
 	exec import_str
 	return Ficha.objects.filter(paciente=patient).get(formulario__tipo__nome='Triagem').unidadesaude
 
+def formOrderList(usr):
+	import_str = 'from forms.models import Grupo_Formulario, Grupo, Formulario'
+	exec import_str
+	groups = Grupo.objects.filter(membros=usr)
+	forms  = []
+	formsOrder = ['Triagem', 'Consulta', 'Exames', 'Follow-up']
+	for t in formsOrder:
+		forms.extend(
+			Grupo_Formulario.objects.filter(formulario__tipo__nome=t).filter(grupo__in = groups)\
+				.values_list('formulario', flat=True).distinct()
+			)
+	form_list =[]
+	for id in forms:
+		form_list.append(Formulario.objects.get(pk=id))
+	return form_list
+
+def retrieveUnidadesSaude(request):
+	if not request.user.is_authenticated():
+		return HttpResponseRedirect(settings.SITE_ROOT)
+	import_str = 'from forms.models import UnidadeSaude'
+	exec import_str
+
+	unidades = UnidadeSaude.objects.all()
+
+	data = serializers.serialize('json', unidades, fields=('nome', 'cidade', 'UF'))
+	return HttpResponse(data, mimetype='application/json')
+
+
 def show_patients(request):
 	if not request.user.is_authenticated():
 		return HttpResponseRedirect(settings.SITE_ROOT)
@@ -383,7 +411,8 @@ def show_patients(request):
 	us_list =  getListOfUS(request.user)
 	groups       = Grupo.objects.filter(membros=request.user)
 	group_names = [g.nome for g in groups]
-	forms_list = [
+	forms_list = formOrderList(request.user)
+	forms_list2 = [
 		Formulario.objects.get(pk=dictFormId.values()[0])
 		for dictFormId in Grupo_Formulario.objects.filter(grupo__in = groups)\
 		.values('formulario').distinct()
@@ -457,7 +486,10 @@ def showPatientLastRegister(request,patientId, formId):
 		try:
 			#Add Ficha id dinamically
 			impl = getDOMImplementation()
-			ficha = retrieveFichas(int(patientId), form.tipo).latest('data_ultima_modificacao')
+			try:
+				ficha = retrieveFichas(int(patientId), form.tipo).latest('data_ultima_modificacao')
+			except AttributeError:
+				return HttpResponseNotFound('A busca não retornou resultados')
 			if isinstance(ficha, str):#Is 
 				return HttpResponse(ficha)
 			dom = parseString(ficha.conteudo.encode('utf-8'))
@@ -476,6 +508,33 @@ def showPatientLastRegister(request,patientId, formId):
 	except Formulario.DoesNotExist:
 		xml = "<?xml version='1.0' encoding='UTF-8' ?><error>Formulario não achado</error>"
 	return HttpResponse(xml)
+
+def showPatientAllRegisters(request,patientId):
+	if not request.user.is_authenticated():
+		return HttpResponseRedirect(settings.SITE_ROOT)
+	import_str = 'from forms.models import Paciente, UnidadeSaude,Ficha, Formulario, Grupo, Grupo_Formulario'
+	exec import_str
+	try:
+		registers = retrieveFichas(int(patientId))
+	except customError, e:
+		msg = e.value
+		if request.method == 'GET':
+			url = settings.SITE_ROOT
+			return render_to_response('error.html',
+				locals(), RequestContext(request, {}))
+		return HttpResponseNotFound('A busca não retornou resultados')
+	patient = Paciente.objects.get(id=int(patientId))
+	#Check groups rights
+	groups       = Grupo.objects.filter(membros=request.user)
+	us_list =  getListOfUS(request.user)
+	gf = Grupo_Formulario.objects.filter(grupo__in = groups)
+	if not len(gf):
+		return HttpResponseNotFound('A busca não retornou resultados')
+	# Ugly fix. TODO check if this is valid for all situations.
+	gf = gf[0]
+	url = settings.SITE_ROOT
+	return render_to_response('show.registers.patient.html',
+		locals(), RequestContext(request, {}))
 
 def showPatientRegisters(request,patientId, formId):
 	if not request.user.is_authenticated():
@@ -701,9 +760,10 @@ def showARTResult(request,patientId, formId):
 		return HttpResponseRedirect(settings.SITE_ROOT)
 	import_str = 'from forms.models import Paciente, UnidadeSaude,Ficha, Formulario, Grupo, Grupo_Formulario'
 	exec import_str
-	if not u'Implementação' in [g.nome for g in Grupo.objects.filter(membros=request.user)]:
-		return HttpResponseNotFound(u'Permissão Negada')
 	form = Formulario.objects.get(id=formId)
+	if not u'Implementação' in form.nome:
+		return HttpResponseNotFound( form.nome )
+		return HttpResponseNotFound(u'Permissão Negada')
 	try:
 		registers = retrieveFichas(int(patientId), form.tipo)
 	except customError, e:
@@ -725,3 +785,426 @@ def showARTResult(request,patientId, formId):
 	url = settings.SITE_ROOT
 	return render_to_response('traffic_light_template.html',
 		locals(), RequestContext(request, {}))
+
+def ffrequired(request):
+	return render_to_response('firefox.html',
+		locals(), RequestContext(request, {}))
+
+def showFilters(request):
+	############ TRIAGEM BASELINE HOSPITAL
+	# TOSSE
+	triagemBaselineHospital_tosseSim = 0
+	triagemBaselineHospital_tosseNao = 0
+	triagemBaselineHospital_tosseIgn = 0
+
+	fichas = Ficha.objects.all().filter(formulario=1)
+
+	for ficha in fichas:
+		xmlContent = ficha.conteudo
+
+		doc = parseString(xmlContent.encode('utf-8'))
+
+		nodes = doc.firstChild.childNodes
+
+		#Translate input tags
+		fields = (
+			'tosse',
+			'hemoptoico',
+			'sudorese',
+			'febre',
+			'emagrecimento',
+			'dispneia',
+			'fumante',
+			'internacaoHospitalar'
+		)
+
+		for node in nodes:
+			if node.firstChild and node.nodeName == "tosse":
+				if node.firstChild.nodeValue == "sim":
+					triagemBaselineHospital_tosseSim += 1
+				elif node.firstChild.nodeValue == 'nao':
+					triagemBaselineHospital_tosseNao += 1
+				else:
+					triagemBaselineHospital_tosseIgn += 1
+	
+	triagemBaselineHospital_tosseTotal = triagemBaselineHospital_tosseSim + triagemBaselineHospital_tosseNao + triagemBaselineHospital_tosseIgn
+
+	# HEMOPTOICO
+	triagemBaselineHospital_hemoptoicoSim = 0
+	triagemBaselineHospital_hemoptoicoNao = 0
+	triagemBaselineHospital_hemoptoicoIgn = 0
+
+	fichas = Ficha.objects.all().filter(formulario=1)
+
+	for ficha in fichas:
+		xmlContent = ficha.conteudo
+
+		doc = parseString(xmlContent.encode('utf-8'))
+
+		nodes = doc.firstChild.childNodes
+		
+		for node in nodes:
+			if node.firstChild and node.nodeName == "hemoptoico":
+				if node.firstChild.nodeValue == "sim":
+					triagemBaselineHospital_hemoptoicoSim += 1
+				elif node.firstChild.nodeValue == 'nao':
+					triagemBaselineHospital_hemoptoicoNao += 1
+				else:
+					triagemBaselineHospital_hemoptoicoIgn += 1
+	
+	triagemBaselineHospital_hemoptoicoTotal = triagemBaselineHospital_hemoptoicoSim + triagemBaselineHospital_hemoptoicoNao + triagemBaselineHospital_hemoptoicoIgn
+
+	# SUDORESE
+	triagemBaselineHospital_sudoreseSim = 0
+	triagemBaselineHospital_sudoreseNao = 0
+	triagemBaselineHospital_sudoreseIgn = 0
+
+	fichas = Ficha.objects.all().filter(formulario=1)
+
+	for ficha in fichas:
+		xmlContent = ficha.conteudo
+
+		doc = parseString(xmlContent.encode('utf-8'))
+
+		nodes = doc.firstChild.childNodes
+		
+		for node in nodes:
+			if node.firstChild and node.nodeName == "sudorese":
+				if node.firstChild.nodeValue == "sim":
+					triagemBaselineHospital_sudoreseSim += 1
+				elif node.firstChild.nodeValue == 'nao':
+					triagemBaselineHospital_sudoreseNao += 1
+				else:
+					triagemBaselineHospital_sudoreseIgn += 1
+	
+	triagemBaselineHospital_sudoreseTotal = triagemBaselineHospital_sudoreseSim + triagemBaselineHospital_sudoreseNao + triagemBaselineHospital_sudoreseIgn
+
+	# FEBRE
+	triagemBaselineHospital_febreSim = 0
+	triagemBaselineHospital_febreNao = 0
+	triagemBaselineHospital_febreIgn = 0
+
+	fichas = Ficha.objects.all().filter(formulario=1)
+
+	for ficha in fichas:
+		xmlContent = ficha.conteudo
+
+		doc = parseString(xmlContent.encode('utf-8'))
+
+		nodes = doc.firstChild.childNodes
+		
+		for node in nodes:
+			if node.firstChild and node.nodeName == "febre":
+				if node.firstChild.nodeValue == "sim":
+					triagemBaselineHospital_febreSim += 1
+				elif node.firstChild.nodeValue == 'nao':
+					triagemBaselineHospital_febreNao += 1
+				else:
+					triagemBaselineHospital_sudoreseIgn += 1
+	
+	triagemBaselineHospital_febreTotal = triagemBaselineHospital_febreSim + triagemBaselineHospital_febreNao + triagemBaselineHospital_febreIgn
+	####################################
+	############ TRIAGEM BASELINE AMBULATORIO
+	# TOSSE
+	triagemBaselineAmbulatorio_tosseSim = 0
+	triagemBaselineAmbulatorio_tosseNao = 0
+	triagemBaselineAmbulatorio_tosseIgn = 0
+
+	fichas = Ficha.objects.all().filter(formulario=2)
+
+	for ficha in fichas:
+		xmlContent = ficha.conteudo
+
+		doc = parseString(xmlContent.encode('utf-8'))
+
+		nodes = doc.firstChild.childNodes
+
+		for node in nodes:
+			if node.firstChild and node.nodeName == "tosse":
+				if node.firstChild.nodeValue == "sim":
+					triagemBaselineAmbulatorio_tosseSim += 1
+				elif node.firstChild.nodeValue == 'nao':
+					triagemBaselineAmbulatorio_tosseNao += 1
+				else:
+					triagemBaselineAmbulatorio_tosseIgn += 1
+	
+	triagemBaselineAmbulatorio_tosseTotal = triagemBaselineAmbulatorio_tosseSim + triagemBaselineAmbulatorio_tosseNao + triagemBaselineAmbulatorio_tosseIgn
+
+	# HEMOPTOICO
+	triagemBaselineAmbulatorio_hemoptoicoSim = 0
+	triagemBaselineAmbulatorio_hemoptoicoNao = 0
+	triagemBaselineAmbulatorio_hemoptoicoIgn = 0
+
+	fichas = Ficha.objects.all().filter(formulario=2)
+
+	for ficha in fichas:
+		xmlContent = ficha.conteudo
+
+		doc = parseString(xmlContent.encode('utf-8'))
+
+		nodes = doc.firstChild.childNodes
+		
+		for node in nodes:
+			if node.firstChild and node.nodeName == "hemoptoico":
+				if node.firstChild.nodeValue == "sim":
+					triagemBaselineAmbulatorio_hemoptoicoSim += 1
+				elif node.firstChild.nodeValue == 'nao':
+					triagemBaselineAmbulatorio_hemoptoicoNao += 1
+				else:
+					triagemBaselineAmbulatorio_hemoptoicoIgn += 1
+	
+	triagemBaselineAmbulatorio_hemoptoicoTotal = triagemBaselineAmbulatorio_hemoptoicoSim + triagemBaselineAmbulatorio_hemoptoicoNao + triagemBaselineAmbulatorio_hemoptoicoIgn
+
+	# SUDORESE
+	triagemBaselineAmbulatorio_sudoreseSim = 0
+	triagemBaselineAmbulatorio_sudoreseNao = 0
+	triagemBaselineAmbulatorio_sudoreseIgn = 0
+
+	fichas = Ficha.objects.all().filter(formulario=2)
+
+	for ficha in fichas:
+		xmlContent = ficha.conteudo
+
+		doc = parseString(xmlContent.encode('utf-8'))
+
+		nodes = doc.firstChild.childNodes
+		
+		for node in nodes:
+			if node.firstChild and node.nodeName == "sudorese":
+				if node.firstChild.nodeValue == "sim":
+					triagemBaselineAmbulatorio_sudoreseSim += 1
+				elif node.firstChild.nodeValue == 'nao':
+					triagemBaselineAmbulatorio_sudoreseNao += 1
+				else:
+					triagemBaselineAmbulatorio_sudoreseIgn += 1
+	
+	triagemBaselineAmbulatorio_sudoreseTotal = triagemBaselineAmbulatorio_sudoreseSim + triagemBaselineAmbulatorio_sudoreseNao + triagemBaselineAmbulatorio_sudoreseIgn
+
+	# FEBRE
+	triagemBaselineAmbulatorio_febreSim = 0
+	triagemBaselineAmbulatorio_febreNao = 0
+	triagemBaselineAmbulatorio_febreIgn = 0
+
+	fichas = Ficha.objects.all().filter(formulario=2)
+
+	for ficha in fichas:
+		xmlContent = ficha.conteudo
+
+		doc = parseString(xmlContent.encode('utf-8'))
+
+		nodes = doc.firstChild.childNodes
+		
+		for node in nodes:
+			if node.firstChild and node.nodeName == "febre":
+				if node.firstChild.nodeValue == "sim":
+					triagemBaselineAmbulatorio_febreSim += 1
+				elif node.firstChild.nodeValue == 'nao':
+					triagemBaselineAmbulatorio_febreNao += 1
+				else:
+					triagemBaselineAmbulatorio_febreIgn += 1
+	
+	triagemBaselineAmbulatorio_febreTotal = triagemBaselineAmbulatorio_febreSim + triagemBaselineAmbulatorio_febreNao + triagemBaselineAmbulatorio_febreIgn
+	####################################
+	############ TRIAGEM IMPLEMENTACAO HOSPITAL
+	# TOSSE
+	triagemImplementacaoHospital_tosseSim = 0
+	triagemImplementacaoHospital_tosseNao = 0
+	triagemImplementacaoHospital_tosseIgn = 0
+
+	fichas = Ficha.objects.all().filter(formulario=7)
+
+	for ficha in fichas:
+		xmlContent = ficha.conteudo
+
+		doc = parseString(xmlContent.encode('utf-8'))
+
+		nodes = doc.firstChild.childNodes
+
+		for node in nodes:
+			if node.firstChild and node.nodeName == "tosse":
+				if node.firstChild.nodeValue == "sim":
+					triagemImplementacaoHospital_tosseSim += 1
+				elif node.firstChild.nodeValue == 'nao':
+					triagemImplementacaoHospital_tosseNao += 1
+				else:
+					triagemImplementacaoHospital_tosseIgn += 1
+	
+	triagemImplementacaoHospital_tosseTotal = triagemImplementacaoHospital_tosseSim + triagemImplementacaoHospital_tosseNao + triagemImplementacaoHospital_tosseIgn
+
+	# HEMOPTOICO
+	triagemImplementacaoHospital_hemoptoicoSim = 0
+	triagemImplementacaoHospital_hemoptoicoNao = 0
+	triagemImplementacaoHospital_hemoptoicoIgn = 0
+
+	fichas = Ficha.objects.all().filter(formulario=7)
+
+	for ficha in fichas:
+		xmlContent = ficha.conteudo
+
+		doc = parseString(xmlContent.encode('utf-8'))
+
+		nodes = doc.firstChild.childNodes
+		
+		for node in nodes:
+			if node.firstChild and node.nodeName == "hemoptoico":
+				if node.firstChild.nodeValue == "sim":
+					triagemImplementacaoHospital_hemoptoicoSim += 1
+				elif node.firstChild.nodeValue == 'nao':
+					triagemImplementacaoHospital_hemoptoicoNao += 1
+				else:
+					triagemImplementacaoHospital_hemoptoicoIgn += 1
+	
+	triagemImplementacaoHospital_hemoptoicoTotal = triagemImplementacaoHospital_hemoptoicoSim + triagemImplementacaoHospital_hemoptoicoIgn + triagemImplementacaoHospital_hemoptoicoIgn
+
+	# SUDORESE
+	triagemImplementacaoHospital_sudoreseSim = 0
+	triagemImplementacaoHospital_sudoreseNao = 0
+	triagemImplementacaoHospital_sudoreseIgn = 0
+
+	fichas = Ficha.objects.all().filter(formulario=7)
+
+	for ficha in fichas:
+		xmlContent = ficha.conteudo
+
+		doc = parseString(xmlContent.encode('utf-8'))
+
+		nodes = doc.firstChild.childNodes
+		
+		for node in nodes:
+			if node.firstChild and node.nodeName == "sudorese":
+				if node.firstChild.nodeValue == "sim":
+					triagemImplementacaoHospital_sudoreseSim += 1
+				elif node.firstChild.nodeValue == 'nao':
+					triagemImplementacaoHospital_sudoreseNao += 1
+				else:
+					triagemImplementacaoHospital_sudoreseIgn += 1
+	
+	triagemImplementacaoHospital_sudoreseTotal = triagemImplementacaoHospital_sudoreseSim + triagemImplementacaoHospital_sudoreseNao + triagemImplementacaoHospital_sudoreseIgn
+
+	# FEBRE
+	triagemImplementacaoHospital_febreSim = 0
+	triagemImplementacaoHospital_febreNao = 0
+	triagemImplementacaoHospital_febreIgn = 0
+
+	fichas = Ficha.objects.all().filter(formulario=7)
+
+	for ficha in fichas:
+		xmlContent = ficha.conteudo
+
+		doc = parseString(xmlContent.encode('utf-8'))
+
+		nodes = doc.firstChild.childNodes
+		
+		for node in nodes:
+			if node.firstChild and node.nodeName == "febre":
+				if node.firstChild.nodeValue == "sim":
+					triagemImplementacaoHospital_febreSim += 1
+				elif node.firstChild.nodeValue == 'nao':
+					triagemImplementacaoHospital_febreNao += 1
+				else:
+					triagemImplementacaoHospital_febreIgn += 1
+	
+	triagemImplementacaoHospital_febreTotal = triagemImplementacaoHospital_febreSim + triagemImplementacaoHospital_febreNao + triagemImplementacaoHospital_febreIgn
+	####################################
+	############ TRIAGEM IMPLEMENTACAO AMBULATORIO
+	# TOSSE
+	triagemImplementacaoAmbulatorio_tosseSim = 0
+	triagemImplementacaoAmbulatorio_tosseNao = 0
+	triagemImplementacaoAmbulatorio_tosseIgn = 0
+
+	fichas = Ficha.objects.all().filter(formulario=6)
+
+	for ficha in fichas:
+		xmlContent = ficha.conteudo
+
+		doc = parseString(xmlContent.encode('utf-8'))
+
+		nodes = doc.firstChild.childNodes
+
+		for node in nodes:
+			if node.firstChild and node.nodeName == "tosse":
+				if node.firstChild.nodeValue == "sim":
+					triagemImplementacaoAmbulatorio_tosseSim += 1
+				elif node.firstChild.nodeValue == 'nao':
+					triagemImplementacaoAmbulatorio_tosseNao += 1
+				else:
+					triagemImplementacaoAmbulatorio_tosseIgn += 1
+	
+	triagemImplementacaoAmbulatorio_tosseTotal = triagemImplementacaoAmbulatorio_tosseSim + triagemImplementacaoAmbulatorio_tosseNao + triagemImplementacaoAmbulatorio_tosseIgn
+
+	# HEMOPTOICO
+	triagemImplementacaoAmbulatorio_hemoptoicoSim = 0
+	triagemImplementacaoAmbulatorio_hemoptoicoNao = 0
+	triagemImplementacaoAmbulatorio_hemoptoicoIgn = 0
+
+	fichas = Ficha.objects.all().filter(formulario=6)
+
+	for ficha in fichas:
+		xmlContent = ficha.conteudo
+
+		doc = parseString(xmlContent.encode('utf-8'))
+
+		nodes = doc.firstChild.childNodes
+		
+		for node in nodes:
+			if node.firstChild and node.nodeName == "hemoptoico":
+				if node.firstChild.nodeValue == "sim":
+					triagemImplementacaoAmbulatorio_hemoptoicoSim += 1
+				elif node.firstChild.nodeValue == 'nao':
+					triagemImplementacaoAmbulatorio_hemoptoicoNao += 1
+				else:
+					triagemImplementacaoAmbulatorio_hemoptoicoIgn += 1
+	
+	triagemImplementacaoAmbulatorio_hemoptoicoTotal = triagemImplementacaoAmbulatorio_hemoptoicoSim + triagemImplementacaoAmbulatorio_hemoptoicoNao + triagemImplementacaoAmbulatorio_hemoptoicoIgn
+
+	# SUDORESE
+	triagemImplementacaoAmbulatorio_sudoreseSim = 0
+	triagemImplementacaoAmbulatorio_sudoreseNao = 0
+	triagemImplementacaoAmbulatorio_sudoreseIgn = 0
+
+	fichas = Ficha.objects.all().filter(formulario=6)
+
+	for ficha in fichas:
+		xmlContent = ficha.conteudo
+
+		doc = parseString(xmlContent.encode('utf-8'))
+
+		nodes = doc.firstChild.childNodes
+		
+		for node in nodes:
+			if node.firstChild and node.nodeName == "sudorese":
+				if node.firstChild.nodeValue == "sim":
+					triagemImplementacaoAmbulatorio_sudoreseSim += 1
+				elif node.firstChild.nodeValue == 'nao':
+					triagemImplementacaoAmbulatorio_sudoreseNao += 1
+				else:
+					triagemImplementacaoAmbulatorio_sudoreseIgn += 1
+	
+	triagemImplementacaoAmbulatorio_sudoreseTotal = triagemImplementacaoAmbulatorio_sudoreseSim + triagemImplementacaoAmbulatorio_sudoreseNao + triagemImplementacaoAmbulatorio_sudoreseIgn
+
+	# FEBRE
+	triagemImplementacaoAmbulatorio_febreSim = 0
+	triagemImplementacaoAmbulatorio_febreNao = 0
+	triagemImplementacaoAmbulatorio_febreIgn = 0
+
+	fichas = Ficha.objects.all().filter(formulario=6)
+
+	for ficha in fichas:
+		xmlContent = ficha.conteudo
+
+		doc = parseString(xmlContent.encode('utf-8'))
+
+		nodes = doc.firstChild.childNodes
+		
+		for node in nodes:
+			if node.firstChild and node.nodeName == "febre":
+				if node.firstChild.nodeValue == "sim":
+					triagemImplementacaoAmbulatorio_febreSim += 1
+				elif node.firstChild.nodeValue == 'nao':
+					triagemImplementacaoAmbulatorio_febreNao += 1
+				else:
+					triagemImplementacaoAmbulatorio_febreIgn += 1
+	
+	triagemImplementacaoAmbulatorio_febreTotal = triagemImplementacaoAmbulatorio_febreSim + triagemImplementacaoAmbulatorio_febreNao + triagemImplementacaoAmbulatorio_febreIgn
+
+	return render_to_response('filters.html', locals(), RequestContext(request, {}))

@@ -62,7 +62,7 @@ class Ficha(models.Model):
 	paciente                  = models.ForeignKey(Paciente)
 	formulario                = models.ForeignKey(Formulario)
 	unidadesaude              = models.ForeignKey(UnidadeSaude)
-	conteudo                  = models.XMLField()
+	conteudo                  = models.TextField()
 	data_insercao             = models.DateTimeField(auto_now_add=True)
 	data_ultima_modificacao   = models.DateTimeField(auto_now=True)
 	class Meta:
@@ -81,7 +81,7 @@ class Grupo(models.Model):
 
 class HistoricoFicha(models.Model):
 	ficha                     = models.ForeignKey(Ficha)
-	conteudo                  = models.XMLField()
+	conteudo                  = models.TextField()
 	data_ultima_modificacao   = models.DateTimeField(auto_now=True)
 
 class Grupo_Formulario(models.Model):

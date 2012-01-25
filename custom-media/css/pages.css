@@ -20,6 +20,7 @@ body {
 	margin-top:     25px;
 	padding-top:    25px;
 }
+
 #title{
 	text-align:   center;
 	line-height:    150%;
@@ -143,11 +144,18 @@ body {
 	vertical-align: middle;
 }
 .error-msg{
-	color:  red;
-	font-size: 22px;
-	padding: 10px;
-	font-weight: bold;
+	color:			red;
+	font-size:		15px;
+	padding:		10px;
+	text-align:		left;
+	width:			40%;
 }
+
+.info {
+	font-size:		10px;
+	font-style:		italic;
+}
+
 .msg{
 	color:  #000066;
 	font-size: 22px;
@@ -225,4 +233,39 @@ body {
 	background: #FFF380 repeat-x bottom left;
 	color: #663333;
 	text-decoration: none;
+}
+
+#divConfig fieldset.config{
+	border-color: #999999;
+	border-style: solid none none;
+	border-width: 1px 0 0;
+	clear: both;
+	font-size: 100%;
+	margin: 10px;
+	padding: 40px;
+}
+
+#divConfig fieldset.config legend{
+	font-size: 150%;
+	font-weight: normal;
+	margin: 0;
+	padding: 0 5px;
+}
+
+#divFiltros fieldset.filtros{
+	border-color: #999999;
+	border-style: solid none none;
+	border-width: 1px 0 0;
+	clear: both;
+	font-size: 100%;
+	margin: 10px;
+	padding: 40px;
+}
+
+#divFiltros fieldset.filtros legend{
+	font-size: 150%;
+	font-weight: normal;
+	margin: 0;
+	padding: 0 5px;
+	color: #000066;
 }

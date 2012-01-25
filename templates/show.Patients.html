@@ -103,7 +103,7 @@
 							{% for p in patient_list  %}
 							<tr>
 								<td>  {{ patient_us|hash:p.id }} </td>
-								<td>  {{ p.nome }} </td>
+								<td>  <a href='{{url}}/registers/all/{{p.id}}/'>{{ p.nome }}</a> </td>
 								<td>  {{ p.data_nascimento }} </td>
 								<td>  {{ p.nome_mae }} </td>
 								{% for f in forms_list %}
@@ -121,7 +121,7 @@
 											<a href='{{ url }}registers/{{ f.id }}/{{ p.id }}/'>
 												<img src='{{ MEDIA_URL }}/images/icon-view-eye.gif' class='viewReport icon' target='_blank'/>
 											</a>
-											{% if f.tipo.nome == "Triagem" and 'NeuralTB' in f.nome and 'Implementação' in group_names%}
+											{% if 'Implementação' in f.nome%}
 												<a href='{{ url }}art/{{ f.id }}/{{p.id}}'>
 													<img src='{{MEDIA_URL }}/images/traffic_light.png' class='viewReport icon' target='_blank'/>
 												</a>

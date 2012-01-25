@@ -18,16 +18,20 @@ ADMINS = (
 
 MANAGERS = ADMINS
 #Site URL. Please edit if the system is moved
-SITE_ROOT = '/sapem/'
+#SITE_ROOT = '/sapem/'
+SITE_ROOT = '/~fferreira/sapem/'
 #SITE_ROOT = 'http://localhost:8000/'
 
-DATABASE_ENGINE = 'sqlite3'           # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-DATABASE_NAME = os.path.join(os.path.dirname(os.path.realpath(__file__)) , 'tb.db')             # Or path to database file if using sqlite3.
-DATABASE_USER = ''             # Not used with sqlite3.
-DATABASE_PASSWORD = ''         # Not used with sqlite3.
-DATABASE_HOST = ''             # Set to empty string for localhost. Not used with sqlite3.
-DATABASE_PORT = ''             # Set to empty string for default. Not used with sqlite3.
-
+DATABASES = {
+	'default':{
+		'ENGINE' : 'django.db.backends.sqlite3',           # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+		'NAME' : os.path.join(os.path.dirname(os.path.realpath(__file__)) , 'tb.db')            # Or path to database file if using sqlite3.
+		#'USER' : '',             # Not used with sqlite3.
+		#'PASSWORD' : '',         # Not used with sqlite3.
+		#'HOST' : '' ,            # Set to empty string for localhost. Not used with sqlite3.
+		#'PORT' : ''             # Set to empty string for default. Not used with sqlite3.
+	}
+}
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # although not all choices may be available on all operating systems.
@@ -107,6 +111,7 @@ INSTALLED_APPS = (
 	'tbForms.forms',
 	'tbForms.autocomplete',
 	'django.contrib.admin',
+	'tbForms.reports',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
