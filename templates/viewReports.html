@@ -1,0 +1,79 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+{% load forms_extras %}
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<style type="text/css" title="currentStyle">
+			@import "{{ MEDIA_URL }}css/pages.css";
+			@import "{{ MEDIA_URL }}css/dataTable.css";
+			#settings_table {
+				width:450px;
+				text-align: center;
+			}
+		</style>
+		<script type="text/javascript" language="javascript" src="{{ MEDIA_URL }}js/jquery/jquery.js"></script>
+		<script type="text/javascript" language="javascript" src="{{ MEDIA_URL }}js/jquery/jquery.dataTables.js"></script>
+		<script type="text/javascript">
+			$(document).ready(function(){
+				var formTable = $('#settings_table').dataTable({
+					"aaSorting": [[ 2, "desc" ]],
+					"iDisplayLength": 300,
+					"sDom": 't<"clear">',
+					"aoColumnDefs": [
+						{ "bSearchable": false, "bVisible": false, "aTargets": [ 1 ] }
+					] 
+
+				});
+			});
+			</script>
+		<title> Relatórios </title>
+	</head>
+	<body>
+		<div id='content'>
+			<div id='header'>
+				<div id='branding'>&nbsp;</div>
+				<div id='user-tools'>
+					{% if user.is_authenticated %}
+						Bem vindo, <strong>{{ user.username }}</strong>.
+						{% if user.is_staff %}
+							<a href='{{ url }}admin/'>Administração</a> /
+						{% endif %}
+						<a href='{{url}}logout/'>Encerrar sessão</a>
+					{% else %}
+						<a href='{{url}}admin/'>Administração</a>
+					{% endif %}
+				</div>
+			</div>
+			{% block content %}
+			<div id='mainFrame'>
+			{% if user.is_authenticated %}
+				<div id='title'> Configurações disponíveis para Relatórios</div>
+				<div id='maincontent'>
+					<center>
+					<table id='settings_table'>
+						<thead>
+							<tr>
+								<th>Nome</th>
+								<th>Data de Criação</th>
+								<th>Gerar relatório</th>
+								<th>Remover</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for s in settings %}
+							<tr>
+								<td style='font-size:150%;'> <b>{{ s.name }}</b> </td>
+								<td > {{ s.creation_date }} </td>
+								<td> <a href="{{SITE_ROOT}}/reports/download/{{ s.id }}/excel/"><img src="{{MEDIA_URL}}images/download.png" width='20px' border='0'/></a></td>
+								<td> <a href="{{SITE_ROOT}}/reports/removeConfig/{{ s.id }}"><img src="{{MEDIA_URL}}images/trash-can-delete.png" width='20px' border='0'/></a></td>
+							</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+					</center>
+				</div>
+			{% endif %}
+			</div>
+			{% endblock %}
+		</div>
+	</body>
+</html>

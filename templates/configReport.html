@@ -1,0 +1,123 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+{% load forms_extras %}
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<style type="text/css" title="currentStyle">
+			@import "{{ MEDIA_URL }}css/pages.css";
+			@import "{{ MEDIA_URL }}css/dataTable.css";
+		</style>
+		<script type="text/javascript" language="javascript" src="{{ MEDIA_URL }}js/jquery/jquery.js"></script>
+		<script type="text/javascript" language="javascript" src="{{ MEDIA_URL }}js/jquery/jquery.dataTables.js"></script>
+		<script type="text/javascript" language="javascript" src="{{ MEDIA_URL }}js/reports.js"></script>
+		<title> Configuração de Relatório </title>
+	</head>
+	<body>
+		<div id='content'>
+			<div id='header'>
+				<div id='branding'>&nbsp;</div>
+				<div id='user-tools'>
+					{% if user.is_authenticated %}
+						Bem vindo, <strong>{{ user.username }}</strong>.
+						{% if user.is_staff %}
+							<a href='{{ url }}admin/'>Administração</a> /
+						{% endif %}
+						<a href='{{url}}logout/'>Encerrar sessão</a>
+					{% else %}
+						<a href='{{url}}admin/'>Administração</a>
+					{% endif %}
+				</div>
+			</div>
+			{% block content %}
+			<div id='mainFrame'>
+			{% if user.is_authenticated %}
+				<div id='maincontent'>
+					<div id='title'> Criar uma configuração de relatório </div>
+					<form method="POST">
+						<center>
+						<div id='divConfig'>
+							<fieldset class='config'>
+								<legend> Unidades de Saúde </legend>
+								<div id='divUnidadesSaude'>
+									<table id='unidadesSaude_table'>
+										<thead>
+										<tr>
+											<th> </th>
+											<th> Nome </th>
+											<th> Cidade </th>
+											<th> UF </th>
+										</tr>
+										</thead>
+										<tbody>
+											{% for us in unidades %}
+											<tr>
+												<td> <input type='checkbox' name='unidadeSaude' value='{{ us.id}}'/></td>
+												<td> {{ us.nome }} </td>
+												<td> {{ us.cidade }} </td>
+												<td> {{ us.UF }} </td>
+											</tr>
+											{% endfor %}
+										</tbody>
+									</table>
+								</div>
+							</fieldset>
+							<fieldset class='config'>
+								<legend> Formulários </legend>
+								<div id='divForm'>
+									<table id='form_table'>
+										<thead>
+										<tr>
+											<th> </th>
+											<th> Formulário </th>
+										</tr>
+										</thead>
+										<tbody>
+											{% for f in forms_list %}
+											<tr>
+												<td> <input type='checkbox' name='formularios' value='{{ f.id }}'/></td>
+												<td> {{ f.nome }} </td>
+											</tr>
+											{% endfor %}
+										</tbody>
+									</table>
+								</div>
+							</fieldset>
+							<!---
+							<fieldset class='config'>
+								<legend> Perguntas </legend>
+								<div id='divPerguntas'>
+									<table id='perguntas_table' width='70%'>
+										<thead>
+											<th> </th>
+											<th> </th>
+										</thead>
+										<tbody>
+											<tr>
+												<td> </td>
+												<td> Nome </td>
+											</tr>
+											<tr>
+												<td> </td>
+												<td> teste </td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</fieldset>
+							-->
+							<fieldset class='config'>
+								<legend> Salvar Como</legend>
+								<input type='text' name='name' width='100' />
+							</fieldset>
+						</div>
+						<div class='submit'>
+							<input type='submit' value='Gerar Relatório'/>
+						</div>
+						</center>
+					</form>
+				</div>
+			{% endif %}
+			</div>
+			{% endblock %}
+		</div>
+	</body>
+</html>

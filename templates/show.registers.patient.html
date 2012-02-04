@@ -3,10 +3,31 @@
 	<head>
 		<style type="text/css" title="currentStyle">
 			@import "{{ MEDIA_URL }}css/pages.css";
-			@import "{{MEDIA_URL}}css/dataTable.css";
 			@import "{{ MEDIA_URL }}css/show.registers.css";
 		</style>
 		<script src='{{ MEDIA_URL}}js/jquery/jquery.min.js' type="text/javascript"></script>
+		<script>
+		function writeTable(xmlstring, div){
+			var xml = (new DOMParser()).parseFromString(xmlstring, "text/xml");
+			var table = $('<table />');
+			table.addClass('registers');
+			table.css('border-collapse', 'collapse');
+			var tbody = $('<tbody />');
+			var elements = xml.getElementsByTagName('documento')[0].childNodes;
+			$(elements).each(function(){
+				var el = $(this).get(0);
+				var tr = $('<tr />');
+				if($(el)[0].nodeType == xml.ELEMENT_NODE){
+					var tagname = $(el)[0].tagName;
+					tr.append('<th>' + tagname +'</th>');
+					tr.append('<td>' + $(el).text()+'</td>');
+					tbody.append(tr);
+					table.append(tbody);
+					div.append(table);
+				}
+			});
+		}
+		</script>
 	</head>
 	<body>
 		<div id='content'>
@@ -24,6 +45,7 @@
 						<div class='list-header'>
 						Informações inseridas em {{ r.data_insercao|date:"d/M/Y" }}, {{r.data_insercao|date:"H:i:s"}}
 						</div>
+						<h1>{{r.formulario.nome}}</h1>
 						<div class='toolbox' id='toolbox-{{r.data_insercao|date:'YmdHis'}}'>
 							{% if gf.permissao == 'T' %}
 								<div id='edit-button'>
@@ -32,25 +54,10 @@
 							{% endif %}
 						</div>
 						<div class='row-content' id='row-content-{{r.data_insercao|date:'YmdHis'}}'>
-							<table id='register_table' class='registerTable'>
-								<thead>
-									<th></th>
-									<th></th>
-								</thead>
-								<tbody>
-								{% for key,value in r.conteudoDict.items %}
-									{% if forloop.counter|divisibleby:2 %}
-									<tr class='even'>
-									{%else%}
-									<tr class='odd'>
-									{%endif%}
-										<td class='sorting_1'>{{value.label}}</th>
-										<td>{{value.value }}</td>
-									</tr>
-								{% endfor %}
-								</tbody>
-							</table>
 						<script type='text/javascript'>
+							{% autoescape off %}
+							writeTable("{{ r.conteudo|addslashes }}", $('#row-content-{{r.data_insercao|date:'YmdHis'}}'));
+							{% endautoescape %}
 						</script>
 						</div>
 					{% endfor %}

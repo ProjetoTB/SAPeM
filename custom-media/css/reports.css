@@ -1,0 +1,84 @@
+*{
+	margin: 0;
+	padding: 0;
+}
+body {
+	background:    white;
+	font-family:  "Lucida Grande","DejaVu Sans","Bitstream Vera Sans",Verdana,Arial,sans-serif;
+	font-size:       75%;
+}
+#header{
+	background:   #00664B;
+	width:          97.5%;
+	color:          white;
+	padding:    10px 15px;
+}
+
+#maincontent {
+	color:       #004533;
+	height:         auto;
+	margin-top:     25px;
+	padding-top:    25px;
+}
+#title{
+	padding-left:   200px;
+	line-height:    150%;
+	font-size:      165%;
+	font-weight:    bold;
+	padding-top:    20px;
+	padding-bottom: 20px;
+	color:          #004533;
+}
+#subtitle{
+	text-align:   center;
+	font-size:      150%;
+	padding-top:    25px;
+}
+
+#user-tools {
+	color: #FFFFCC;
+	font-size :11px;
+	padding: 1.2em 10px;
+	position: absolute;
+	right: 0;
+	text-align: right;
+	top: 0;
+}
+
+#user-tools a {
+	color: white;
+	text-decoration: none;
+}
+
+#user-tools a:hover {
+	text-decoration: underline;
+}
+
+#divNameHeader{
+	color:        #006666;
+	font: 600 26px "Lucida Grande","DejaVu Sans","Bitstream Vera Sans",Verdana,Arial,sans-serif;
+	margin-left:      30px;
+	margin-right:      auto;
+	margin-bottom:   15px;
+}
+
+.config{
+	width:			60%;
+	padding-top:	40px;
+	padding-bottom:	40px;
+	border-width:	3px 1px 0 1px;
+	border-style: solid solid none solid;
+	margin:			0 0 0 0;
+}
+
+.config legend{
+	color:			#004533;
+	font-weight:	bold;
+	font-size:		130%;
+	text-align:		left;
+}
+
+#formulario{
+	font-size:		9pt;
+	color:			#004533;
+}

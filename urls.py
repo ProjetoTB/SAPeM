@@ -26,6 +26,7 @@ from tbForms.views import art_view
 from tbForms.views import showARTResult
 from tbForms.views import retrieveUnidadesSaude
 from tbForms.views import showFilters
+from tbForms.views import showFieldsXML
 
 from tbForms.reports.views import create_configuration_reports
 from tbForms.reports.views import view_configuration_reports
@@ -45,6 +46,7 @@ urlpatterns = patterns('',
 	(r'^showForms/(?P<healthUnit>\d)/$', list_forms_by_health_unit),
 	(r'^form/(?P<formId>\d+)/(?P<patientId>\d+)/(?P<f>.*)$', handle_form),
 	(r'^form/edit/(?P<fichaId>\d+)/(?P<f>.*)$', edit_form),
+	(r'^form/fields/xml/(?P<formId>\d+)/', showFieldsXML),
 	(r'^ficha/(?P<fichaId>\d+)/$', showFichaConteudo),
 	(r'^patientLastRegister/(?P<formId>\d+)/(?P<patientId>\d+)/$', showPatientLastRegister),
 	(r'^registers/(?P<formId>\d+)/(?P<patientId>\d+)/$', showPatientRegisters),

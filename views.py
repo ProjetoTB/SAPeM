@@ -10,15 +10,17 @@ import Image,ImageDraw
 
 from unicodedata import normalize
 from datetime import datetime, date, time
-from xml.dom.minidom import parseString, getDOMImplementation
+from xml.dom.minidom import parse, parseString, getDOMImplementation
 
 from django import forms
 
 from django.core import serializers
 from django.db import IntegrityError
 from django.http import HttpResponse,HttpResponseNotFound, HttpResponseRedirect
-from django.shortcuts import render_to_response
+from django.shortcuts import render, render_to_response
 from django.template import RequestContext
+from django.utils.datastructures import SortedDict
+
 
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.contrib.admin.views.decorators import staff_member_required
@@ -27,6 +29,7 @@ from django.views.generic.simple import direct_to_template
 
 import settings
 from forms.models import UnidadeSaude, Formulario, Ficha
+from forms.HumanRegister import HumanRegister
 
 import unicodedata
 
@@ -37,6 +40,13 @@ def smart_truncate_string(str, size):
 	if len(str) < size:
 		return str
 	return str[:size-3].rsplit(' ', 1)[0] + ' ...'
+
+def getText(nodelist):
+	rc = []
+	for node in nodelist:
+		if node.nodeType == node.TEXT_NODE:
+			rc.append(node.data)
+	return ''.join(rc)
 
 def smart_int(i):
 	if i.isdigit():
@@ -110,7 +120,6 @@ def getState(cep):
 		state = 'sc'
 	return state
 
-
 def correct_address(request, cep):
 	state = getState(cep)
 	import_autocomplete = "from autocomplete.models import ruas%s as acTool"%(state,)
@@ -161,8 +170,8 @@ def edit_form(request, fichaId, f=''):
 		ficha = Ficha.objects.get(pk=int(fichaId))
 	except Ficha.DoesNotExist:
 		url = settings.SITE_ROOT
-		return render_to_response('error.html',
-			locals(), RequestContext(request, {}))
+		return render(request, 'error.html',
+			dictionary=locals(), context_instance=RequestContext(request, {}), status=404)
 	p = Paciente.objects.get(id=int(ficha.paciente.id))
 	if request.method == 'POST':
 		form = request.POST
@@ -200,9 +209,57 @@ def edit_form(request, fichaId, f=''):
 	except ImportError:
 		msg = 'Módulo não encontrado'
 		url = settings.SITE_ROOT
-		return render_to_response('error.html',
-			locals(), RequestContext(request, {}))
+		return render(request, 'error.html',
+			dictionary=locals(), context_instance=RequestContext(request, {}), status=404)
+
 	return moduleForm.handle_request(request, f)
+
+def getFieldsXML(form):
+	#return DOM object for a xml setting file of a form
+	pathname, moduleFormName = os.path.split(form.path)
+	pathname ='%s/'%(pathname,)
+	if not pathname in sys.path:
+		sys.path.append(pathname)
+	try:
+		moduleForm = __import__(moduleFormName)
+		xmlPath = '%s/%s/%s'%(pathname,moduleFormName,
+				moduleForm.fields_xml_path,)
+		xmlDom = parse(xmlPath)
+	except ImportError:
+		raise customError('Módulo não encontrado')
+	except IOError:
+		return None
+	except AttributeError:
+		return None
+	return xmlDom
+
+def getOrderedFields(form):
+	xmlDOM= getFieldsXML(form)
+	elements = xmlDOM.getElementsByTagName('fields')[0].childNodes
+	content = SortedDict(
+		[(el.nodeName, getText(el.childNodes)) for el in elements
+		if el.nodeType == el.ELEMENT_NODE]
+	)
+	return content
+
+
+
+
+def showFieldsXML(request, formId):
+	try:
+		form = Formulario.objects.get(id=int(formId))
+		xmlDOM= getFieldsXML(form)
+		return HttpResponse(xmlDOM.toxml(), mimetype='application/xml')
+	except Formulario.DoesNotExist:
+		msg = 'Formulário Inexistente'
+		url = settings.SITE_ROOT
+		return render(request, 'error.html',
+			dictionary=locals(), context_instance=RequestContext(request, {}), status=404)
+	except AttributeError:
+		msg = 'XML não encontrado'
+		url = settings.SITE_ROOT
+		return render(request, 'error.html',
+			dictionary=locals(), context_instance=RequestContext(request, {}), status=404)
 
 def handle_form(request, formId, patientId, f=''):
 	if not request.user.is_authenticated():
@@ -225,8 +282,10 @@ def handle_form(request, formId, patientId, f=''):
 			except IntegrityError:
 				msg = 'Paciente já existente no sistema'
 				url = settings.SITE_ROOT
-				return render_to_response('error.html',
-					locals(), RequestContext(request, {}))
+				return render(request, 'error.html',
+					dictionary=locals(),
+					context_instance=RequestContext(request, {}),
+					status=404)
 			p = new_patient
 		else:
 			p = Paciente.objects.get(id=int(patientId))
@@ -294,8 +353,10 @@ def handle_form(request, formId, patientId, f=''):
 	except ImportError:
 		msg = 'Módulo não encontrado'
 		url = settings.SITE_ROOT
-		return render_to_response('error.html',
-			locals(), RequestContext(request, {}))
+		return render(request, 'error.html',
+			dictionary=locals(),
+			context_instance=RequestContext(request, {}),
+			status=404)
 	return moduleForm.handle_request(request, f)
 
 
@@ -446,8 +507,10 @@ def sapem_login(request):
 				login(request, user)
 				return HttpResponseRedirect(url)
 			msg = u'Conta Inativa. Contate o administrador do sistema.'
-			return render_to_response('error.html',
-				locals(), RequestContext(request, {}))
+			return render(request, 'error.html',
+				dictionary=locals(),
+				context_instance=RequestContext(request, {}),
+				status=404)
 		msg = u'Usuário e/ou senha inválida'
 	return render_to_response('homepage_template.html',
 		locals(), RequestContext(request, {}))
@@ -490,7 +553,7 @@ def showPatientLastRegister(request,patientId, formId):
 				ficha = retrieveFichas(int(patientId), form.tipo).latest('data_ultima_modificacao')
 			except AttributeError:
 				return HttpResponseNotFound('A busca não retornou resultados')
-			if isinstance(ficha, str):#Is 
+			if isinstance(ficha, str):#Is
 				return HttpResponse(ficha)
 			dom = parseString(ficha.conteudo.encode('utf-8'))
 			tag = dom.createElement('ficha_id')
@@ -502,8 +565,10 @@ def showPatientLastRegister(request,patientId, formId):
 			msg = e.value
 			if request.method == 'GET':
 				url = settings.SITE_ROOT
-				return render_to_response('error.html',
-					locals(), RequestContext(request, {}))
+				return render(request, 'error.html',
+					dictionary=locals(),
+					context_instance=RequestContext(request, {}),
+					status=404)
 			return HttpResponseNotFound('A busca não retornou resultados')
 	except Formulario.DoesNotExist:
 		xml = "<?xml version='1.0' encoding='UTF-8' ?><error>Formulario não achado</error>"
@@ -536,6 +601,13 @@ def showPatientAllRegisters(request,patientId):
 	return render_to_response('show.registers.patient.html',
 		locals(), RequestContext(request, {}))
 
+
+
+
+def retrieveHumanRegister(patientId, form_type):
+	return [HumanRegister(r, getOrderedFields(r.formulario))
+			for r in retrieveFichas(int(patientId), form_type)]
+
 def showPatientRegisters(request,patientId, formId):
 	if not request.user.is_authenticated():
 		return HttpResponseRedirect(settings.SITE_ROOT)
@@ -543,7 +615,7 @@ def showPatientRegisters(request,patientId, formId):
 	exec import_str
 	form = Formulario.objects.get(id=formId)
 	try:
-		registers = retrieveFichas(int(patientId), form.tipo)
+		registers = retrieveHumanRegister(int(patientId), form.tipo)
 	except customError, e:
 		msg = e.value
 		if request.method == 'GET':
@@ -826,7 +898,7 @@ def showFilters(request):
 					triagemBaselineHospital_tosseNao += 1
 				else:
 					triagemBaselineHospital_tosseIgn += 1
-	
+
 	triagemBaselineHospital_tosseTotal = triagemBaselineHospital_tosseSim + triagemBaselineHospital_tosseNao + triagemBaselineHospital_tosseIgn
 
 	# HEMOPTOICO
@@ -842,7 +914,7 @@ def showFilters(request):
 		doc = parseString(xmlContent.encode('utf-8'))
 
 		nodes = doc.firstChild.childNodes
-		
+
 		for node in nodes:
 			if node.firstChild and node.nodeName == "hemoptoico":
 				if node.firstChild.nodeValue == "sim":
@@ -851,7 +923,7 @@ def showFilters(request):
 					triagemBaselineHospital_hemoptoicoNao += 1
 				else:
 					triagemBaselineHospital_hemoptoicoIgn += 1
-	
+
 	triagemBaselineHospital_hemoptoicoTotal = triagemBaselineHospital_hemoptoicoSim + triagemBaselineHospital_hemoptoicoNao + triagemBaselineHospital_hemoptoicoIgn
 
 	# SUDORESE
@@ -867,7 +939,7 @@ def showFilters(request):
 		doc = parseString(xmlContent.encode('utf-8'))
 
 		nodes = doc.firstChild.childNodes
-		
+
 		for node in nodes:
 			if node.firstChild and node.nodeName == "sudorese":
 				if node.firstChild.nodeValue == "sim":
@@ -876,7 +948,7 @@ def showFilters(request):
 					triagemBaselineHospital_sudoreseNao += 1
 				else:
 					triagemBaselineHospital_sudoreseIgn += 1
-	
+
 	triagemBaselineHospital_sudoreseTotal = triagemBaselineHospital_sudoreseSim + triagemBaselineHospital_sudoreseNao + triagemBaselineHospital_sudoreseIgn
 
 	# FEBRE
@@ -892,7 +964,7 @@ def showFilters(request):
 		doc = parseString(xmlContent.encode('utf-8'))
 
 		nodes = doc.firstChild.childNodes
-		
+
 		for node in nodes:
 			if node.firstChild and node.nodeName == "febre":
 				if node.firstChild.nodeValue == "sim":
@@ -901,7 +973,7 @@ def showFilters(request):
 					triagemBaselineHospital_febreNao += 1
 				else:
 					triagemBaselineHospital_sudoreseIgn += 1
-	
+
 	triagemBaselineHospital_febreTotal = triagemBaselineHospital_febreSim + triagemBaselineHospital_febreNao + triagemBaselineHospital_febreIgn
 	####################################
 	############ TRIAGEM BASELINE AMBULATORIO
@@ -927,7 +999,7 @@ def showFilters(request):
 					triagemBaselineAmbulatorio_tosseNao += 1
 				else:
 					triagemBaselineAmbulatorio_tosseIgn += 1
-	
+
 	triagemBaselineAmbulatorio_tosseTotal = triagemBaselineAmbulatorio_tosseSim + triagemBaselineAmbulatorio_tosseNao + triagemBaselineAmbulatorio_tosseIgn
 
 	# HEMOPTOICO
@@ -943,7 +1015,7 @@ def showFilters(request):
 		doc = parseString(xmlContent.encode('utf-8'))
 
 		nodes = doc.firstChild.childNodes
-		
+
 		for node in nodes:
 			if node.firstChild and node.nodeName == "hemoptoico":
 				if node.firstChild.nodeValue == "sim":
@@ -952,7 +1024,7 @@ def showFilters(request):
 					triagemBaselineAmbulatorio_hemoptoicoNao += 1
 				else:
 					triagemBaselineAmbulatorio_hemoptoicoIgn += 1
-	
+
 	triagemBaselineAmbulatorio_hemoptoicoTotal = triagemBaselineAmbulatorio_hemoptoicoSim + triagemBaselineAmbulatorio_hemoptoicoNao + triagemBaselineAmbulatorio_hemoptoicoIgn
 
 	# SUDORESE
@@ -968,7 +1040,7 @@ def showFilters(request):
 		doc = parseString(xmlContent.encode('utf-8'))
 
 		nodes = doc.firstChild.childNodes
-		
+
 		for node in nodes:
 			if node.firstChild and node.nodeName == "sudorese":
 				if node.firstChild.nodeValue == "sim":
@@ -977,7 +1049,7 @@ def showFilters(request):
 					triagemBaselineAmbulatorio_sudoreseNao += 1
 				else:
 					triagemBaselineAmbulatorio_sudoreseIgn += 1
-	
+
 	triagemBaselineAmbulatorio_sudoreseTotal = triagemBaselineAmbulatorio_sudoreseSim + triagemBaselineAmbulatorio_sudoreseNao + triagemBaselineAmbulatorio_sudoreseIgn
 
 	# FEBRE
@@ -993,7 +1065,7 @@ def showFilters(request):
 		doc = parseString(xmlContent.encode('utf-8'))
 
 		nodes = doc.firstChild.childNodes
-		
+
 		for node in nodes:
 			if node.firstChild and node.nodeName == "febre":
 				if node.firstChild.nodeValue == "sim":
@@ -1002,7 +1074,7 @@ def showFilters(request):
 					triagemBaselineAmbulatorio_febreNao += 1
 				else:
 					triagemBaselineAmbulatorio_febreIgn += 1
-	
+
 	triagemBaselineAmbulatorio_febreTotal = triagemBaselineAmbulatorio_febreSim + triagemBaselineAmbulatorio_febreNao + triagemBaselineAmbulatorio_febreIgn
 	####################################
 	############ TRIAGEM IMPLEMENTACAO HOSPITAL
@@ -1028,7 +1100,7 @@ def showFilters(request):
 					triagemImplementacaoHospital_tosseNao += 1
 				else:
 					triagemImplementacaoHospital_tosseIgn += 1
-	
+
 	triagemImplementacaoHospital_tosseTotal = triagemImplementacaoHospital_tosseSim + triagemImplementacaoHospital_tosseNao + triagemImplementacaoHospital_tosseIgn
 
 	# HEMOPTOICO
@@ -1044,7 +1116,7 @@ def showFilters(request):
 		doc = parseString(xmlContent.encode('utf-8'))
 
 		nodes = doc.firstChild.childNodes
-		
+
 		for node in nodes:
 			if node.firstChild and node.nodeName == "hemoptoico":
 				if node.firstChild.nodeValue == "sim":
@@ -1053,7 +1125,7 @@ def showFilters(request):
 					triagemImplementacaoHospital_hemoptoicoNao += 1
 				else:
 					triagemImplementacaoHospital_hemoptoicoIgn += 1
-	
+
 	triagemImplementacaoHospital_hemoptoicoTotal = triagemImplementacaoHospital_hemoptoicoSim + triagemImplementacaoHospital_hemoptoicoIgn + triagemImplementacaoHospital_hemoptoicoIgn
 
 	# SUDORESE
@@ -1069,7 +1141,7 @@ def showFilters(request):
 		doc = parseString(xmlContent.encode('utf-8'))
 
 		nodes = doc.firstChild.childNodes
-		
+
 		for node in nodes:
 			if node.firstChild and node.nodeName == "sudorese":
 				if node.firstChild.nodeValue == "sim":
@@ -1078,7 +1150,7 @@ def showFilters(request):
 					triagemImplementacaoHospital_sudoreseNao += 1
 				else:
 					triagemImplementacaoHospital_sudoreseIgn += 1
-	
+
 	triagemImplementacaoHospital_sudoreseTotal = triagemImplementacaoHospital_sudoreseSim + triagemImplementacaoHospital_sudoreseNao + triagemImplementacaoHospital_sudoreseIgn
 
 	# FEBRE
@@ -1094,7 +1166,7 @@ def showFilters(request):
 		doc = parseString(xmlContent.encode('utf-8'))
 
 		nodes = doc.firstChild.childNodes
-		
+
 		for node in nodes:
 			if node.firstChild and node.nodeName == "febre":
 				if node.firstChild.nodeValue == "sim":
@@ -1103,7 +1175,7 @@ def showFilters(request):
 					triagemImplementacaoHospital_febreNao += 1
 				else:
 					triagemImplementacaoHospital_febreIgn += 1
-	
+
 	triagemImplementacaoHospital_febreTotal = triagemImplementacaoHospital_febreSim + triagemImplementacaoHospital_febreNao + triagemImplementacaoHospital_febreIgn
 	####################################
 	############ TRIAGEM IMPLEMENTACAO AMBULATORIO
@@ -1129,7 +1201,7 @@ def showFilters(request):
 					triagemImplementacaoAmbulatorio_tosseNao += 1
 				else:
 					triagemImplementacaoAmbulatorio_tosseIgn += 1
-	
+
 	triagemImplementacaoAmbulatorio_tosseTotal = triagemImplementacaoAmbulatorio_tosseSim + triagemImplementacaoAmbulatorio_tosseNao + triagemImplementacaoAmbulatorio_tosseIgn
 
 	# HEMOPTOICO
@@ -1145,7 +1217,7 @@ def showFilters(request):
 		doc = parseString(xmlContent.encode('utf-8'))
 
 		nodes = doc.firstChild.childNodes
-		
+
 		for node in nodes:
 			if node.firstChild and node.nodeName == "hemoptoico":
 				if node.firstChild.nodeValue == "sim":
@@ -1154,7 +1226,7 @@ def showFilters(request):
 					triagemImplementacaoAmbulatorio_hemoptoicoNao += 1
 				else:
 					triagemImplementacaoAmbulatorio_hemoptoicoIgn += 1
-	
+
 	triagemImplementacaoAmbulatorio_hemoptoicoTotal = triagemImplementacaoAmbulatorio_hemoptoicoSim + triagemImplementacaoAmbulatorio_hemoptoicoNao + triagemImplementacaoAmbulatorio_hemoptoicoIgn
 
 	# SUDORESE
@@ -1170,7 +1242,7 @@ def showFilters(request):
 		doc = parseString(xmlContent.encode('utf-8'))
 
 		nodes = doc.firstChild.childNodes
-		
+
 		for node in nodes:
 			if node.firstChild and node.nodeName == "sudorese":
 				if node.firstChild.nodeValue == "sim":
@@ -1179,7 +1251,7 @@ def showFilters(request):
 					triagemImplementacaoAmbulatorio_sudoreseNao += 1
 				else:
 					triagemImplementacaoAmbulatorio_sudoreseIgn += 1
-	
+
 	triagemImplementacaoAmbulatorio_sudoreseTotal = triagemImplementacaoAmbulatorio_sudoreseSim + triagemImplementacaoAmbulatorio_sudoreseNao + triagemImplementacaoAmbulatorio_sudoreseIgn
 
 	# FEBRE
@@ -1195,7 +1267,7 @@ def showFilters(request):
 		doc = parseString(xmlContent.encode('utf-8'))
 
 		nodes = doc.firstChild.childNodes
-		
+
 		for node in nodes:
 			if node.firstChild and node.nodeName == "febre":
 				if node.firstChild.nodeValue == "sim":
@@ -1204,7 +1276,7 @@ def showFilters(request):
 					triagemImplementacaoAmbulatorio_febreNao += 1
 				else:
 					triagemImplementacaoAmbulatorio_febreIgn += 1
-	
+
 	triagemImplementacaoAmbulatorio_febreTotal = triagemImplementacaoAmbulatorio_febreSim + triagemImplementacaoAmbulatorio_febreNao + triagemImplementacaoAmbulatorio_febreIgn
 
 	return render_to_response('filters.html', locals(), RequestContext(request, {}))
