@@ -234,16 +234,30 @@ def getFieldsXML(form):
 	return xmlDom
 
 def getOrderedFields(form):
+	number_multifields = 3
 	xmlDOM= getFieldsXML(form)
-	elements = xmlDOM.getElementsByTagName('fields')[0].childNodes
-	content = SortedDict(
-		[(el.nodeName, getText(el.childNodes)) for el in elements
-		if el.nodeType == el.ELEMENT_NODE]
-	)
-	return content
-
-
-
+	if xmlDOM:
+		elements = xmlDOM.getElementsByTagName('fields')[0].childNodes
+		content = SortedDict(
+			[(el.nodeName, getText(el.childNodes)) for el in elements
+			if el.nodeType == el.ELEMENT_NODE]
+		)
+		content = SortedDict()
+		elements = xmlDOM.firstChild.childNodes
+		for el in elements:
+			if el.nodeName == "multipleFields":
+				fieldsetName = el.getAttribute('fieldset')
+				for idx in range(number_multifields):
+					for m_el in el.childNodes:
+						if m_el.nodeType == m_el.ELEMENT_NODE:
+							content["%s_%d"%(m_el.nodeName, idx)] = \
+								"%s %s %d"%(getText(m_el.childNodes),
+								fieldsetName, idx)
+			else:
+				if el.nodeType == el.ELEMENT_NODE:
+					content[el.nodeName] = getText(el.childNodes)
+		return content
+	return {}
 
 def showFieldsXML(request, formId):
 	try:
@@ -601,12 +615,10 @@ def showPatientAllRegisters(request,patientId):
 	return render_to_response('show.registers.patient.html',
 		locals(), RequestContext(request, {}))
 
-
-
-
 def retrieveHumanRegister(patientId, form_type):
-	return [HumanRegister(r, getOrderedFields(r.formulario))
+	hRegList = [HumanRegister(r, getOrderedFields(r.formulario))
 			for r in retrieveFichas(int(patientId), form_type)]
+	return hRegList
 
 def showPatientRegisters(request,patientId, formId):
 	if not request.user.is_authenticated():
@@ -681,74 +693,72 @@ def retrieveLastReportByType(request, patientId, type):
 		return HttpResponseNotFound('A busca não retornou resultados')
 	return HttpResponse( ficha.conteudo, mimetype="application/xhtml+xml")
 
-def db2file(request, format='excel'):
-	from forms.models import Ficha, Formulario
-	response = HttpResponseNotFound('Formato invalido')
-	if format == 'excel':
-		import xlwt
-		# Create file-like object
-		response = HttpResponse(mimetype='application/ms-excel')
-		filename = 'pacientes.xls'
-		response['Content-Disposition'] = 'attachment; filename="'+ filename +'"'
-		# Get Fichas grouped by Formularios
-		forms = Formulario.objects.all()
-		fichas = Ficha.objects.all()
-		wb = xlwt.Workbook(encoding='utf-8')
-		# Default styles
-		BG0 = xlwt.Pattern()
-		BG0.pattern = BG0.SOLID_PATTERN
-		BG0.pattern_fore_colour = 22
-		BG1 = xlwt.Pattern()
-		BG1.pattern = BG1.SOLID_PATTERN
-		BG1.pattern_fore_colour = 47
-		font0 = xlwt.Font()
-		font0.name = 'Arial'
-		font0.bold = True
-		font1 = xlwt.Font()
-		font1.name = 'Arial'
-		header_style = xlwt.XFStyle()
-		header_style.font = font0
-		header_style.pattern = BG0
-		body_style = xlwt.XFStyle()
-		body_style.font = font1
-		body_style.pattern = BG1
-
-		for f in forms:
-			# Tip: Excel just allows sheet names up to 31 caracters
-			ws = wb.add_sheet(smart_truncate_string(f.nome, 31))
-			ws.write(0, 0, u"Nome do paciente", header_style )
-			ws.write(0, 1, u"Data de nascimento",header_style )
-			ws.write(0, 2, u"Nome da mãe",header_style)
-			ws.write(0, 3, u"Unidade de saúde",header_style)
-			ws.col(0).width = 9000
-			ws.col(1).width = 5000
-			ws.col(2).width = 9000
-			ws.col(3).width = 12000
-			headers = {}
-			index = 4
-			for row, ficha in enumerate(fichas.filter(formulario=f)):
-				ws.write(row+1,0,ficha.paciente.nome, body_style)
-				ws.write(row+1,1,ficha.paciente.data_nascimento, body_style)
-				ws.write(row+1,2, ficha.paciente.nome_mae, body_style)
-				ws.write(row+1,3,ficha.unidadesaude.nome, body_style)
-				# Parse ficha
-				xml = parseString(ficha.conteudo.encode("utf-8" ))
-				for field in xml.firstChild.childNodes:
-					if not field.tagName in headers.keys():
-						headers[field.tagName] = index
-						ws.col(index).width = 4000
-						ws.write(0, index, field.tagName ,header_style)
-						index = index + 1
-					try:
-						ws.write(
-						row+1,headers[field.tagName],
-						', '.join(["%s"%(smart_int(f.firstChild.nodeValue))
-							for f in xml.getElementsByTagName(field.tagName)]),
-						body_style)
-					except:
-						pass
-		wb.save(response)
+def xls_to_response(xls, fname):
+	response = HttpResponse(mimetype="application/ms-excel")
+	response['Content-Disposition'] = 'attachment; filename=%s' % fname
+	xls.save(response)
 	return response
+
+def db2file(request):
+	from forms.models import Ficha, Formulario
+	import xlwt
+	# Create file-like object
+	# Get Fichas grouped by Formularios
+	forms = Formulario.objects.all()
+	fichas = Ficha.objects.all()
+	wb = xlwt.Workbook(encoding='utf-8')
+	# Default styles
+	BG0 = xlwt.Pattern()
+	BG0.pattern = BG0.SOLID_PATTERN
+	BG0.pattern_fore_colour = 22
+	BG1 = xlwt.Pattern()
+	BG1.pattern = BG1.SOLID_PATTERN
+	BG1.pattern_fore_colour = 47
+	font0 = xlwt.Font()
+	font0.name = 'Arial'
+	font0.bold = True
+	font1 = xlwt.Font()
+	font1.name = 'Arial'
+	header_style = xlwt.XFStyle()
+	header_style.font = font0
+	header_style.pattern = BG0
+	body_style = xlwt.XFStyle()
+	body_style.font = font1
+	body_style.pattern = BG1
+
+	for f in forms:
+		# Tip: Excel just allows sheet names up to 31 caracters
+		ws = wb.add_sheet(smart_truncate_string(f.nome, 31))
+		ws.write(0, 0, u"Nome do paciente", header_style )
+		ws.write(0, 1, u"Data de nascimento",header_style )
+		ws.write(0, 2, u"Nome da mãe",header_style)
+		ws.write(0, 3, u"Unidade de saúde",header_style)
+		orderedFields = getOrderedFields(f)
+		for idx, labels in enumerate(orderedFields.values()):
+			ws.write(0, idx+4, labels ,header_style)
+		headers = SortedDict([ (k,i+4) for i, k in enumerate(orderedFields.keys())])
+		ws.col(0).width = 9000
+		ws.col(1).width = 5000
+		ws.col(2).width = 9000
+		ws.col(3).width = 12000
+		index = 4
+		orderedFields = getOrderedFields(f)
+		for row, ficha in enumerate(fichas.filter(formulario=f)):
+			ws.write(row+1,0,ficha.paciente.nome)
+			ws.write(row+1,1,ficha.paciente.data_nascimento)
+			ws.write(row+1,2, ficha.paciente.nome_mae)
+			ws.write(row+1,3,ficha.unidadesaude.nome)
+			# Parse ficha
+			xml = parseString(ficha.conteudo.encode("utf-8" ))
+			for field in xml.firstChild.childNodes:
+				try:
+					ws.write(
+					row+1,headers[field.tagName],
+					', '.join(["%s"%(smart_int(f.firstChild.nodeValue))
+						for f in xml.getElementsByTagName(field.tagName)]))
+				except:
+					pass
+	return xls_to_response(wb, 'pacientes.xls')
 
 def art_view (request, formId, patientId):
 	if not request.user.is_authenticated():
