@@ -33,12 +33,13 @@ class HumanRegister:
 			if iFields:
 				for idx in range(iFields):
 					a =  getText(xml.getElementsByTagName(name)[idx].childNodes)
-					try:
-						dictTable = conteudo[name]
-					except KeyError:
-						conteudo[name]={"label": label, "value": answer.get(a, a)}
-						continue
-					conteudo[name]['value'] = ', '.join([answer.get(a,a), dictTable['value']])
+					if len(a) != 0:
+						try:
+							dictTable = conteudo[name]
+						except KeyError:
+							conteudo[name]={"label": label, "value": answer.get(a, a)}
+							continue
+						conteudo[name]['value'] = ', '.join([answer.get(a,a), dictTable['value']])
 
 		if len(conteudo) == 0:
 			elements = xml.firstChild.childNodes
