@@ -553,6 +553,24 @@ def retrieveFichas(patientId, formType=''):
 		raise customError('A busca não retornou resultados')
 	return register_qs
 
+def retrieveHumanRegister(patientId, form_type=None):
+	import_str = 'from forms.models import Paciente, Ficha,tipoFormulario'
+	exec import_str
+	if form_type:
+		hRegDict ={ form_type: [HumanRegister(r, getOrderedFields(r.formulario))
+				for r in retrieveFichas(int(patientId), form_type)]}
+	else:
+		p = Paciente.objects.get(id=patientId)
+		form_types = [ficha.formulario.tipo 
+			for ficha in Ficha.objects.filter(paciente=p)
+			]
+		forms= Ficha.objects.filter(paciente=p).values('formulario')
+		hRegDict = {}
+		for form_type in form_types:
+			hRegDict[form_type] = [HumanRegister(r, getOrderedFields(r.formulario))
+					for r in retrieveFichas(int(patientId), form_type)]
+	return hRegDict
+
 def showPatientLastRegister(request,patientId, formId):
 	if not request.user.is_authenticated():
 		return HttpResponseRedirect(settings.SITE_ROOT)
@@ -594,7 +612,7 @@ def showPatientAllRegisters(request,patientId):
 	import_str = 'from forms.models import Paciente, UnidadeSaude,Ficha, Formulario, Grupo, Grupo_Formulario'
 	exec import_str
 	try:
-		registers = retrieveFichas(int(patientId))
+		registers = retrieveHumanRegister(int(patientId))
 	except customError, e:
 		msg = e.value
 		if request.method == 'GET':
@@ -615,10 +633,6 @@ def showPatientAllRegisters(request,patientId):
 	return render_to_response('show.registers.patient.html',
 		locals(), RequestContext(request, {}))
 
-def retrieveHumanRegister(patientId, form_type):
-	hRegList = [HumanRegister(r, getOrderedFields(r.formulario))
-			for r in retrieveFichas(int(patientId), form_type)]
-	return hRegList
 
 def showPatientRegisters(request,patientId, formId):
 	if not request.user.is_authenticated():
@@ -627,7 +641,8 @@ def showPatientRegisters(request,patientId, formId):
 	exec import_str
 	form = Formulario.objects.get(id=formId)
 	try:
-		registers = retrieveHumanRegister(int(patientId), form.tipo)
+		registers = retrieveHumanRegister(int(patientId), form.tipo)\
+			.values()[0]
 	except customError, e:
 		msg = e.value
 		if request.method == 'GET':
