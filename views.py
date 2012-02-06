@@ -234,7 +234,7 @@ def getFieldsXML(form):
 	return xmlDom
 
 def getOrderedFields(form):
-	number_multifields = 3
+	number_multifields = 6
 	xmlDOM= getFieldsXML(form)
 	if xmlDOM:
 		elements = xmlDOM.getElementsByTagName('fields')[0].childNodes
@@ -250,9 +250,9 @@ def getOrderedFields(form):
 				for idx in range(number_multifields):
 					for m_el in el.childNodes:
 						if m_el.nodeType == m_el.ELEMENT_NODE:
-							content["%s_%d"%(m_el.nodeName, idx)] = \
+							content["%s_%d"%(m_el.nodeName, idx+1)] = \
 								"%s %s %d"%(getText(m_el.childNodes),
-								fieldsetName, idx)
+								fieldsetName, idx+1)
 			else:
 				if el.nodeType == el.ELEMENT_NODE:
 					content[el.nodeName] = getText(el.childNodes)
@@ -699,66 +699,92 @@ def xls_to_response(xls, fname):
 	xls.save(response)
 	return response
 
+def formatHeader(_cell):
+	from openpyxl.style import Color, Fill
+	from openpyxl.cell import Cell
+	_cell.style.font.name = 'Arial'
+	_cell.style.font.size = 9
+	_cell.style.font.bold = True
+	_cell.style.alignment.wrap_text = True
+	_cell.style.fill.fill_type = Fill.FILL_SOLID
+	_cell.style.fill.start_color.index = Color.DARKYELLOW
+	return _cell
+
+def formatCell(_cell):
+	from openpyxl.style import Color, Fill
+	from openpyxl.cell import Cell
+	_cell.style.font.name = 'Arial'
+	_cell.style.font.size = 9
+	_cell.style.font.bold = False
+	_cell.style.alignment.wrap_text = True
+	#_cell.style.fill.fill_type = Fill.FILL_SOLID
+	#_cell.style.fill.start_color.index = Color.WHITE
+	return _cell
+
 def db2file(request):
 	from forms.models import Ficha, Formulario
-	import xlwt
+	from openpyxl import Workbook
+	from openpyxl.style import Color, Fill
+	from openpyxl.cell import Cell
+	from openpyxl.cell import get_column_letter
+
 	# Create file-like object
+	wb = Workbook()
+	dest_filename = r'paciente.xlsx'
 	# Get Fichas grouped by Formularios
 	forms = Formulario.objects.all()
 	fichas = Ficha.objects.all()
-	wb = xlwt.Workbook(encoding='utf-8')
-	# Default styles
-	BG0 = xlwt.Pattern()
-	BG0.pattern = BG0.SOLID_PATTERN
-	BG0.pattern_fore_colour = 22
-	BG1 = xlwt.Pattern()
-	BG1.pattern = BG1.SOLID_PATTERN
-	BG1.pattern_fore_colour = 47
-	font0 = xlwt.Font()
-	font0.name = 'Arial'
-	font0.bold = True
-	font1 = xlwt.Font()
-	font1.name = 'Arial'
-	header_style = xlwt.XFStyle()
-	header_style.font = font0
-	header_style.pattern = BG0
-	body_style = xlwt.XFStyle()
-	body_style.font = font1
-	body_style.pattern = BG1
-
-	for f in forms:
+	wb = Workbook()
+	for iCol, f in enumerate(forms):
 		# Tip: Excel just allows sheet names up to 31 caracters
-		ws = wb.add_sheet(smart_truncate_string(f.nome, 31))
-		ws.write(0, 0, u"Nome do paciente", header_style )
-		ws.write(0, 1, u"Data de nascimento",header_style )
-		ws.write(0, 2, u"Nome da mãe",header_style)
-		ws.write(0, 3, u"Unidade de saúde",header_style)
 		orderedFields = getOrderedFields(f)
-		for idx, labels in enumerate(orderedFields.values()):
-			ws.write(0, idx+4, labels ,header_style)
-		headers = SortedDict([ (k,i+4) for i, k in enumerate(orderedFields.keys())])
-		ws.col(0).width = 9000
-		ws.col(1).width = 5000
-		ws.col(2).width = 9000
-		ws.col(3).width = 12000
-		index = 4
+		try:
+			ws = wb.worksheets[iCol]
+		except IndexError:
+			ws = wb.create_sheet()
+		ws.title = smart_truncate_string(f.nome, 31)
+		# Header
+		_cell = formatHeader(ws.cell("%s%d"%(get_column_letter(1), 1)))
+		_cell.value = u"Nome do Paciente"
+		_cell = formatHeader(ws.cell("%s%d"%(get_column_letter(2), 1)))
+		_cell.value = u"Data de Nascimento"
+		_cell = formatHeader(ws.cell("%s%d"%(get_column_letter(3), 1)))
+		_cell.value = u"Nome da Mãe"
+		_cell = formatHeader(ws.cell("%s%d"%(get_column_letter(4), 1)))
+		_cell.value = u"Unidade de saúde"
 		orderedFields = getOrderedFields(f)
+		headers = SortedDict()
+		for idx, key in enumerate(orderedFields.keys()):
+			label = orderedFields[key]
+			colLetter = get_column_letter(idx+5)
+			headers[key] = colLetter
+			_cell= formatHeader(ws.cell("%s%d"%(colLetter, 1)))
+			_cell.value = label
+		index = 5
 		for row, ficha in enumerate(fichas.filter(formulario=f)):
-			ws.write(row+1,0,ficha.paciente.nome)
-			ws.write(row+1,1,ficha.paciente.data_nascimento)
-			ws.write(row+1,2, ficha.paciente.nome_mae)
-			ws.write(row+1,3,ficha.unidadesaude.nome)
-			# Parse ficha
+			_cell = formatCell(ws.cell("%s%d"%(get_column_letter(1),row+2)))
+			_cell.value = ficha.paciente.nome
+			_cell = formatCell(ws.cell("%s%d"%(get_column_letter(2),row+2)))
+			_cell.value = ficha.paciente.data_nascimento
+			_cell = formatCell(ws.cell("%s%d"%(get_column_letter(3),row+2)))
+			_cell.value = ficha.paciente.nome_mae
+			_cell = formatCell(ws.cell("%s%d"%(get_column_letter(4),row+2)))
+			_cell.value = ficha.unidadesaude.nome
 			xml = parseString(ficha.conteudo.encode("utf-8" ))
 			for field in xml.firstChild.childNodes:
 				try:
-					ws.write(
-					row+1,headers[field.tagName],
-					', '.join(["%s"%(smart_int(f.firstChild.nodeValue))
-						for f in xml.getElementsByTagName(field.tagName)]))
-				except:
+					_cell = formatCell(
+						ws.cell("%s%d"%(headers[field.tagName],row+2))
+					)
+					_cell.value = ', '.join([
+						"%s"%(smart_int(f.firstChild.nodeValue))
+						for f in xml.getElementsByTagName(field.tagName)
+					])
+				except KeyError:
 					pass
-	return xls_to_response(wb, 'pacientes.xls')
+				except AttributeError:
+					pass
+	return xls_to_response(wb, dest_filename)
 
 def art_view (request, formId, patientId):
 	if not request.user.is_authenticated():
