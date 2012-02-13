@@ -25,6 +25,16 @@
 			$('#reports_menu').click(function () {
 				$('#reports_menu ul.sub_menu').slideToggle('medium');
 			});
+			$('#unidadeSaudesUsuario').val({{us_favorite.id}});
+			$('#unidadeSaudesUsuario').change(function(){
+				$.ajax({
+					url: "{{url }}unidadesSaude/change/",
+					type: "POST",
+					data: { usId: $(this).val() },
+					success : function(data){alert("Unidade Alterada");},
+					error: function(data){alert("A unidade não foi alterada"); $('#unidadeSaudesUsuario').val(us_favorite.id)}
+				});
+			});
 		});
 		</script>
 	</head>
@@ -43,7 +53,13 @@
 				</div>
 			</div>
 			{% if user.is_authenticated %}
-				<div class='usChoice'> Sua unidade atual: <u>{{ us_favorite|default:"Nenhuma unidade de saúde configurada (Entre em contato com o administrador)" }}</u> </div>
+				<div class='usChoice'> Sua unidade atual:
+				<select id='unidadeSaudesUsuario'>
+				{%for us in unidades_saudes%}
+					<option value='{{us.id}}'> {{us.nome}}</option>
+				{%endfor%}
+				</select>
+				</div>
 				<div class='msg'> Selecione uma ação </div>
 				<div class='dashboard-container'>
 					<div class='dashboard'>

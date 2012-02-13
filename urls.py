@@ -27,6 +27,7 @@ from tbForms.views import showARTResult
 from tbForms.views import retrieveUnidadesSaude
 from tbForms.views import showFilters
 from tbForms.views import showFieldsXML
+from tbForms.views import select_unidade_saude
 
 from tbForms.reports.views import create_configuration_reports
 from tbForms.reports.views import view_configuration_reports
@@ -63,6 +64,7 @@ urlpatterns = patterns('',
 	(r'^art_image/(?P<formId>\d+)/(?P<patientId>\d+)/$', art_view),
 	(r'^art/(?P<formId>\d+)/(?P<patientId>\d+)/$', showARTResult),
 	(r'^unidadesSaude/json/$', retrieveUnidadesSaude),
+	(r'^unidadesSaude/change/$', select_unidade_saude),
 	(r'^filters/', showFilters),
 	(r'^reports/create/$', create_configuration_reports),
 	(r'^reports/view/$', view_configuration_reports),

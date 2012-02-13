@@ -321,6 +321,7 @@ def handle_form(request, formId, patientId, f=''):
 			)
 			hf.save()
 			newFicha.conteudo = xmlStr
+			newFicha.unidadesaude = xmlStr
 		else:#New Entry
 			f = Formulario.objects.get(id=int(formId))
 			newFicha = Ficha(
@@ -373,9 +374,25 @@ def handle_form(request, formId, patientId, f=''):
 			status=404)
 	return moduleForm.handle_request(request, f)
 
+def select_unidade_saude(request):
+	import_str = "from forms.models import UnidadeSaude"
+	exec import_str
+	if request.method == 'POST':
+		usId = request.POST['usId']
+		if request.user.is_authenticated():
+			try:
+				us = UnidadeSaude.objects.get(id=int(usId))
+				user = request.user.get_profile()
+				user.unidadesaude_favorita = us
+				user.save()
+			except UnidadeSaude.DoesNotExist:
+				return HttpResponseNotFound(u'Unidade Saúde não existente')
+			return HttpResponse('OK')
+		return HttpResponse('Usuário não autenticado')
+	return HttpResponse('Nothing to do %s'%request.method)
 
 def homepage_view(request):
-	import_str = "from forms.models import tipoFormulario, Formulario, Grupo, Grupo_Formulario, UserProfile"
+	import_str = "from forms.models import UnidadeSaude, tipoFormulario, Formulario, Grupo, Grupo_Formulario, UserProfile"
 	exec import_str
 	if request.user.is_authenticated():
 		us_favorite = None
@@ -384,7 +401,6 @@ def homepage_view(request):
 			us_favorite = request.user.get_profile().unidadesaude_favorita
 			if not us_favorite: #User did not belong to a group
 				# Check whether now he belongs to one and set a favorite US
-				groups = Grupo.objects.filter(membros=request.user)
 				if groups.count():
 					us_favorite= groups[0].unidadesaude
 					profile = request.user.get_profile()
@@ -407,6 +423,7 @@ def homepage_view(request):
 		else: #User does not belong to any group, so do not access any form
 			triagem_form_list = Formulario.objects.none()
 		del temp
+		unidades_saudes = [g.unidadesaude for g in groups]
 	url = settings.SITE_ROOT
 	return render_to_response('homepage_template.html',
 			locals(), RequestContext(request, {}))
@@ -849,8 +866,6 @@ def art_view (request, formId, patientId):
 	f.seek(0)
 	return HttpResponse (f.read(),mimetype='image/png' )
 
-
-	return HttpResponse(r)
 
 def showARTResult(request,patientId, formId):
 	if not request.user.is_authenticated():
