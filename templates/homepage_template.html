@@ -26,6 +26,15 @@
 				$('#reports_menu ul.sub_menu').slideToggle('medium');
 			});
 			$('#unidadeSaudesUsuario').val({{us_favorite.id}});
+			$('#unidadeSaudesUsuario').change(function(){
+				$.ajax({
+					url: "{{url }}unidadesSaude/change/",
+					type: "POST",
+					data: { usId: $(this).val() },
+					success : function(data){alert("Unidade Alterada");},
+					error: function(data){alert("A unidade não foi alterada"); $('#unidadeSaudesUsuario').val(us_favorite.id)}
+				});
+			});
 		});
 		</script>
 	</head>

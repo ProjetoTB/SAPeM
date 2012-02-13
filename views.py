@@ -374,6 +374,22 @@ def handle_form(request, formId, patientId, f=''):
 			status=404)
 	return moduleForm.handle_request(request, f)
 
+def select_unidade_saude(request):
+	import_str = "from forms.models import UnidadeSaude"
+	exec import_str
+	if request.method == 'POST':
+		usId = request.POST['usId']
+		if request.user.is_authenticated():
+			try:
+				us = UnidadeSaude.objects.get(id=int(usId))
+				user = request.user.get_profile()
+				user.unidadesaude_favorita = us
+				user.save()
+			except UnidadeSaude.DoesNotExist:
+				return HttpResponseNotFound(u'Unidade Saúde não existente')
+			return HttpResponse('OK')
+		return HttpResponse('Usuário não autenticado')
+	return HttpResponse('Nothing to do %s'%request.method)
 
 def homepage_view(request):
 	import_str = "from forms.models import UnidadeSaude, tipoFormulario, Formulario, Grupo, Grupo_Formulario, UserProfile"
@@ -850,8 +866,6 @@ def art_view (request, formId, patientId):
 	f.seek(0)
 	return HttpResponse (f.read(),mimetype='image/png' )
 
-
-	return HttpResponse(r)
 
 def showARTResult(request,patientId, formId):
 	if not request.user.is_authenticated():
