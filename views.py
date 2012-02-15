@@ -234,7 +234,7 @@ def getFieldsXML(form):
 	return xmlDom
 
 def getOrderedFields(form):
-	number_multifields = 3
+	number_multifields = 4
 	xmlDOM= getFieldsXML(form)
 	if xmlDOM:
 		elements = xmlDOM.getElementsByTagName('fields')[0].childNodes
@@ -247,7 +247,7 @@ def getOrderedFields(form):
 		for el in elements:
 			if el.nodeName == "multipleFields":
 				fieldsetName = el.getAttribute('fieldset')
-				for idx in range(number_multifields):
+				for idx in range(1, number_multifields):
 					for m_el in el.childNodes:
 						if m_el.nodeType == m_el.ELEMENT_NODE:
 							content["%s_%d"%(m_el.nodeName, idx)] = \
