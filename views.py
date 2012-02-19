@@ -12,11 +12,6 @@ import unicodedata
 from unicodedata import normalize
 from datetime import datetime, date, time
 from xml.dom.minidom import parse, parseString, getDOMImplementation
-
-
-
-
-
 from django import forms
 
 from django.core import serializers
@@ -38,7 +33,6 @@ from forms.HumanRegister import HumanRegister
 
 
 def strip_accents(s):
-
     return ''.join((c for c in unicodedata.normalize('NFD', s) if unicodedata.category(c) != 'Mn'))
 
 def smart_truncate_string(str, size):
@@ -238,8 +232,7 @@ def getFieldsXML(form):
         return None
     return xmlDom
 
-def getOrderedFields(form):
-    number_multifields = 4
+def getOrderedFields(form, number_multifields=4):
     xmlDOM= getFieldsXML(form)
     if xmlDOM:
         elements = xmlDOM.getElementsByTagName('fields')[0].childNodes
@@ -829,13 +822,16 @@ def db2file(request, format='excel'):
         valid_chars = "-_.() %s%s" % (string.ascii_letters, string.digits)
         #Generate a file for each Triagem and complete with the other forms
         fields = []
+        files = []
         triagens = Formulario.objects.filter(tipo__nome= 'Triagem')
         other_forms = Formulario.objects.all().exclude(tipo__nome='Triagem')
-        other_forms_fields = [(f.id, getOrderedFields(f)) for f in other_forms]
-        files = []
+        other_forms_fields = SortedDict()
+        for f in other_forms:
+            other_forms_fields[f.id] = getOrderedFields(f)
         for tForm in triagens:
-            form_fields = [(tForm.id, getOrderedFields(tForm))]
-            form_fields.extend(other_forms_fields)
+            form_fields = SortedDict()
+            form_fields[tForm.id] = getOrderedFields(tForm)
+            form_fields.update(other_forms_fields)
             csvfilename = '%s_%04d.csv'%(
                 tForm.nome.replace(' ', '_').lower().encode('utf-8'),
                 random.randint(1, 9999)
@@ -846,9 +842,37 @@ def db2file(request, format='excel'):
             files.append(csvfilename)
             writer = csv.writer(csvfile, delimiter=';', quotechar='"', quoting=csv.QUOTE_ALL)
             #header
-
-            headerList = [v.encode('utf-8') for set_v in SortedDict(form_fields).values() for v in set_v.values()]
+            headerList = [v.encode('utf-8') for set_v in form_fields.values() for v in set_v.values()]
+            headerKeysList = [v.encode('utf-8') for set_v in form_fields.values() for v in set_v.keys()]
             writer.writerow(headerList)
+            #content
+            fichas_triagem = Ficha.objects.filter(formulario=tForm)
+            #Quem sao os pacientes
+            data = {}.fromkeys([int(p) for p in fichas_triagem.values_list('paciente', flat=True)])
+            for p in data.iterkeys():#loop over patients
+                data[p] = SortedDict()
+                for dict_keys in form_fields.values():
+                    for k in dict_keys.keys():
+                        data[p][k.encode('utf-8')] = ''
+            pacientes = data.keys()
+            #Todas as fichas destes pacientes
+            #pacintes serao reagrupados em subconjuntos para nao exceder o numero de variaveis
+            #Esta eh uma limitacao SQLite3
+            num = 500
+            for sub_pacientes in [pacientes[i::num] for i in range(num)]:
+                fichas = Ficha.objects.filter(paciente__in=sub_pacientes)
+                for ficha in fichas:
+                    xml = parseString(ficha.conteudo.encode("utf-8" ))
+                    paciente = ficha.paciente.id
+                    for field in xml.firstChild.childNodes:
+                        try:
+                            data[paciente][field.tagName] = ', '.join(["%s"%(smart_int(f.firstChild.nodeValue))
+                                for f in xml.getElementsByTagName(field.tagName)])
+                        except:
+                            pass
+            for id, tags in data.iteritems():
+                writer.writerow([tags[tag].encode('utf-8') for tag  in headerKeysList])
+                #writer.writerow([k for k in tags.iterkeys()])
             csvfile.close()
         return zip_to_response(files, 'pacientes.zip')
     return HttpResponseNotFound("File format not found")
