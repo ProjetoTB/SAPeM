@@ -25,6 +25,9 @@
 			$('#reports_menu').click(function () {
 				$('#reports_menu ul.sub_menu').slideToggle('medium');
 			});
+			$('#download_menu').click(function () {
+				$('#download_menu ul.sub_menu').slideToggle('medium');
+			});
 			$('#unidadeSaudesUsuario').val({{us_favorite.id}});
 			$('#unidadeSaudesUsuario').change(function(){
 				$.ajax({
@@ -95,7 +98,11 @@
 									<li><a href='{{url}}filters/'> Mostrar Filtros </a></li>
 								</ul>
 							</li>
-							<li> <a href='{{ url }}download/excel/'> Exportar para Excel </a> </li>
+							<li id='download_menu'> <a href='#'>Exportar</a>
+								<ul class='sub_menu'>
+									<li><a href='{{ url }}download/excel/'>Exportar para excel (uma planilha p/ formulario)</a></li> 
+									<li><a href='{{ url }}download/csv/'>Exportar para CSV (arquivo compactado)</a></li> 
+							</li>
 						{% endif %}
 						</ul>
 					</div>
