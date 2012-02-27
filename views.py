@@ -824,10 +824,11 @@ def db2file(request, format='excel'):
         fields = []
         files = []
         triagens = Formulario.objects.filter(tipo__nome= 'Triagem')
-        other_forms = Formulario.objects.all().exclude(tipo__nome='Triagem')
         other_forms_fields = SortedDict()
-        for f in other_forms:
-            other_forms_fields[f.id] = getOrderedFields(f)
+        for f_type in ['Consulta', 'Exames', 'Follow-up']:
+            other_forms = Formulario.objects.filter(tipo__nome=f_type)
+            for f in other_forms:
+                other_forms_fields[f.id] = getOrderedFields(f)
         for tForm in triagens:
             form_fields = SortedDict()
             form_fields[tForm.id] = getOrderedFields(tForm)
