@@ -1,0 +1,45 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+{% load forms_extras %}
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<style type="text/css" title="currentStyle">
+			@import "{{ MEDIA_URL }}css/pages.css";
+			@import "{{ MEDIA_URL }}css/dataTable.css";
+			#settings_table {
+				width:450px;
+				text-align: center;
+			}
+		</style>
+		<script type="text/javascript" language="javascript" src="{{ MEDIA_URL }}js/jquery/jquery.js"></script>
+		<script type="text/javascript" language="javascript" src="{{ MEDIA_URL }}js/jquery/jquery.dataTables.js"></script>
+		<script type="text/javascript" language="javascript" src="{{ MEDIA_URL }}js/reports.js"></script>
+		<title> Relatórios </title>
+	</head>
+	<body>
+		<div id='content'>
+			<div id='header'>
+				<div id='branding'>&nbsp;</div>
+				<div id='user-tools'>
+					{% if user.is_authenticated %}
+						Bem vindo, <strong>{{ user.username }}</strong>.
+						{% if user.is_staff %}
+							<a href='{{ url }}admin/'>Administração</a> /
+						{% endif %}
+						<a href='{{url}}logout/'>Encerrar sessão</a>
+					{% else %}
+						<a href='{{url}}admin/'>Administração</a>
+					{% endif %}
+				</div>
+			</div>
+			{% block content %}
+			<div id='mainFrame'>
+			{% if user.is_authenticated %}
+			<div id='title'> Relatório: {{ config.name }} </div>
+				<div id='maincontent'>
+				</div>
+			{% endif %}
+			</div>
+			{% endblock %}
+		</div>
+	</body>
+</html>
