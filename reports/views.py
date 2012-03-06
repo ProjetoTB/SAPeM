@@ -14,8 +14,6 @@ from django.db import IntegrityError
 from django.contrib.messages import constants as messages
 
 import settings
-from forms.models import Formulario
-from forms.models import UnidadeSaude
 from reports.models import Configuracao
 
 from xml.dom.minidom import parseString, getDOMImplementation
@@ -57,7 +55,9 @@ def create_configuration_reports(request):
 			#messages.add_message(request, messages.INFO, 'Hello world.')
 			#messages.info(request, 'Three credits remain in your account.')
 		return HttpResponseRedirect('%s/reports/view/'%url)
-	forms_list = Formulario.objects.all()
+	# Permitindo criação de relatórios apenas para formulários de Triagem
+	#forms_list = Formulario.objects.all()
+	forms_list = Formulario.objects.order_by('nome')[3:]
 	unidades = UnidadeSaude.objects.all()
 	return render_to_response('configReport.html',
 			locals(), RequestContext(request, {}))
@@ -86,14 +86,6 @@ def remove_configuration_reports(request, configId):
 	except Configuracao.DoesNotExist:
 		pass
 	return HttpResponseRedirect('%sreports/view'%url)
-
-def get_questions(request, formId):
-	forms = Formulario.objects.get(id=formId)
-	file = open("%s/questions.xml"%(forms.path), 'r')
-	content = file.read()
-	file.close()
-
-	return HttpResponse(content, mimetype='text/xml');
 
 def getText(nodelist):
 	rc = []
@@ -185,3 +177,14 @@ def configuration_db2file(request, sid,format='excel'):
 						pass
 		wb.save(response)
 	return response
+
+def show_report(request, configId):
+	config = Configuracao.objects.get(id=configId)
+	return render_to_response('reports.html',
+			locals(), RequestContext(request, {}))
+
+def get_configSettingsXml(request, configId):
+	url    = settings.SITE_ROOT
+	config = Configuracao.objects.get(id=configId)
+	xmlStr = config.settings
+	return HttpResponse( xmlStr, mimetype="application/xhtml+xml" )
