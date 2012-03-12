@@ -1,3 +1,4 @@
+settings.py
 *.pyc
 */modules/*
 modules/

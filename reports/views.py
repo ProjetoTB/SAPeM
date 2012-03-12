@@ -29,6 +29,7 @@ def smart_int(i):
 	return i
 
 def create_configuration_reports(request):
+	from forms.models import Formulario, UnidadeSaude
 	url = settings.SITE_ROOT
 	if request.method == "POST":
 		form = request.POST
