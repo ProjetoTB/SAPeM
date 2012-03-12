@@ -389,6 +389,15 @@ def select_unidade_saude(request):
         return HttpResponse('Usuário não autenticado')
     return HttpResponse('Nothing to do %s'%request.method)
 
+
+def jsFunctionCreateHeaderFooter(request):
+    data_dict = {
+        'url': settings.SITE_ROOT,
+        'user': request.user,
+    }
+    return render_to_response('createHeaderFooter.js',
+        data_dict, mimetype='application/x-javascript')
+
 def homepage_view(request):
     import_str = "from forms.models import UnidadeSaude, tipoFormulario, Formulario, Grupo, Grupo_Formulario, UserProfile"
     exec import_str

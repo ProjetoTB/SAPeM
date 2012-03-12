@@ -10,15 +10,21 @@
 			ul.sub_menu{
 				display:none;
 			}
+			#dashboard-container{
+				margin-bottom: 20px;
+			}
 		</style>
 		{{ form.media }}
 		<script type="text/javascript" language="javascript" src="{{ MEDIA_URL }}js/jquery/jquery.js"></script>
 		<script type="text/javascript" language="javascript" src="{{ MEDIA_URL }}js/jquery/jquery.dataTables.js"></script>
+		<script type="text/javascript" language="javascript" src="{{ url }}/js/createHeaderFooter/"></script>
 		<script type="text/javascript">
 		$(document).ready(function() {
 			if ($.browser.mozilla != true){
 				window.location = "{{url}}FirefoxRequerido/"
 			}
+			$('header').createHeader();
+			$('footer').createFooter();
 			$('#triagem_menu').click(function () {
 				$('#triagem_menu ul.sub_menu').slideToggle('medium');
 			});
@@ -42,19 +48,8 @@
 		</script>
 	</head>
 	<body>
+		<header></header>
 		<div id='content'>
-			<div id='header'>
-				<div id='branding'>&nbsp;</div>
-				<div id='user-tools'>
-					{% if user.is_authenticated %}
-						Bem vindo, <strong>{{ user.username }}</strong>.
-						{% if user.is_staff %}
-							<a href='{{ url }}admin/'>Administração</a> /
-						{% endif %}
-						<a href='{{ url }}logout/'>Encerrar sessão</a>
-					{% endif %}
-				</div>
-			</div>
 			{% if user.is_authenticated %}
 				<div class='usChoice'> Sua unidade atual:
 				<select id='unidadeSaudesUsuario'>
@@ -131,5 +126,6 @@
 			{% endif %}
 			</div>
 		</div>
+		<footer></footer>
 	</body>
 </html>

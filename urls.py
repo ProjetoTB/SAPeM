@@ -27,6 +27,7 @@ from tbForms.views import showARTResult
 from tbForms.views import retrieveUnidadesSaude
 from tbForms.views import showFieldsXML
 from tbForms.views import select_unidade_saude
+from tbForms.views import jsFunctionCreateHeaderFooter
 
 from tbForms.reports.views import create_configuration_reports
 from tbForms.reports.views import view_configuration_reports
@@ -57,6 +58,7 @@ urlpatterns = patterns('',
 	(r'^patientLastRegisterByType/(?P<patientId>\d+)/(?P<type>\w+)/$', retrieveLastReportByType),
 	(r'^patients/$', show_patients),
 	(r'^listPatients/$', list_patients),
+	(r'^js/createHeaderFooter/$', jsFunctionCreateHeaderFooter),
 	(r'^$', homepage_view),
 	(r'^download/(?P<format>\w+)/$', db2file),
 	(r'^login/$', sapem_login),
