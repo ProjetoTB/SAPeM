@@ -29,7 +29,7 @@ function setup_tracForm(){
         //"component_disabled"    :true,
         "email"                 :"projetotb@gruyere.lps.ufrj.br",
         "priority"              :"critical",
-        "ticket_created_message":'<a href="{{trac_url}}/ticket/{{ticket_id}}">Ticket URL</a>',
+        "ticket_created_message":'<a href="/trac/ticket/\{\{ticket_id\}\}">Ticket URL</a>',
         "type"                  :"bug-fix",
         "type_disabled"         :true,
         "trac_url"              :"https://gruyere.lps.ufrj.br/trac",
