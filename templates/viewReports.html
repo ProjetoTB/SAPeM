@@ -25,7 +25,7 @@
 				});
 			});
 			</script>
-		<title> Relatórios </title>
+		<title> Configurações </title>
 	</head>
 	<body>
 		<div id='content'>
@@ -52,19 +52,23 @@
 					<table id='settings_table'>
 						<thead>
 							<tr>
-								<th>Nome</th>
-								<th>Data de Criação</th>
-								<th>Gerar relatório</th>
-								<th>Remover</th>
+								<th> Configuração </th>
+								<th> </th>
+								<th> Data de Criação </th>
+								<th> Gerar relatório </th>
+								<th> Exportar </th>
+								<th> Remover</th>
 							</tr>
 						</thead>
 						<tbody>
 							{% for s in settings %}
 							<tr>
-								<td style='font-size:150%;'> <b>{{ s.name }}</b> </td>
-								<td > {{ s.creation_date }} </td>
-								<td> <a href="{{SITE_ROOT}}/reports/download/{{ s.id }}/excel/"><img src="{{MEDIA_URL}}images/download.png" width='20px' border='0'/></a></td>
-								<td> <a href="{{SITE_ROOT}}/reports/removeConfig/{{ s.id }}"><img src="{{MEDIA_URL}}images/trash-can-delete.png" width='20px' border='0'/></a></td>
+								<td style='font-size:150%;'> <b> {{ s.name }} </b> </td>
+								<td> </td>
+								<td> {{ s.creation_date }} </td>
+								<td> <a href="{{SITE_ROOT}}reports/showReport/{{ s.id }}"> <img src="{{MEDIA_URL}}images/genReport.png" width="30px" border="0"/></a> </td>
+								<td> <a href="{{SITE_ROOT}}reports/download/{{ s.id }}/excel/"><img src="{{MEDIA_URL}}images/excel.png" width='20px' border='0'/></a></td>
+								<td> <a href="{{SITE_ROOT}}reports/removeConfig/{{ s.id }}"><img src="{{MEDIA_URL}}images/trash-can-delete.png" width='20px' border='0'/></a></td>
 							</tr>
 							{% endfor %}
 						</tbody>
