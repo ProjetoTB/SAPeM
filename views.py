@@ -392,6 +392,7 @@ def select_unidade_saude(request):
 
 def jsFunctionCreateHeaderFooter(request):
     data_dict = {
+        'MEDIA_URL': settings.MEDIA_URL,
         'url': settings.SITE_ROOT,
         'user': request.user,
     }
