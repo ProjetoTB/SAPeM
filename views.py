@@ -947,16 +947,16 @@ def art_view (request, formId, patientId):
     index, r, R = art.getOutput()
     img = Image.new("RGB", (210,730), "#FFFFFF")
     draw = ImageDraw.Draw(img)
-    colorON = ['green', 'yellow', 'red']
-    color   = ['#98FB98','#EEE8AA','#CD9B9B']
+    colorON = ['red', 'yellow', 'green']
+    color = ['red', 'yellow', 'green']
     if index != None:
         color[index] = colorON[index]
     for k in range(3):
         draw.ellipse((0, k*210, 200, k*210 + 200), fill=color[k], outline=color[k])
-        draw.point((100, 100+210*k), fill='black')
+        draw.point((100, 100+210*k), fill='blue')
     if r:
         ri = 100*r/R
-    draw.arc((100-ri,(index*210) + 100 -ri ,100+ri ,index*210 + 100 + ri), 0, 360, fill='black')
+    draw.arc((100-ri,(index*210) + 100 -ri ,100+ri ,index*210 + 100 + ri), 0, 360, fill='blue')
     f = cStringIO.StringIO()
     img.save(f, "PNG")
     f.seek(0)
@@ -970,10 +970,9 @@ def showARTResult(request,patientId, formId):
     exec import_str
     form = Formulario.objects.get(id=formId)
     if not u'Implementação' in form.nome:
-        return HttpResponseNotFound( form.nome )
         return HttpResponseNotFound(u'Permissão Negada')
     try:
-        registers = retrieveFichas(int(patientId), form.tipo)
+        r = retrieveHumanRegister(int(patientId), form.tipo).values()[0][0]
     except customError, e:
         msg = e.value
         if request.method == 'GET':
@@ -985,7 +984,7 @@ def showARTResult(request,patientId, formId):
     #Check groups rights
     groups       = Grupo.objects.filter(membros=request.user)
     us_list =  getListOfUS(request.user)
-    gf = Grupo_Formulario.objects.filter(grupo__in = groups).filter(formulario= form)
+    gf = Grupo_Formulario.objects.filter(grupo__in = groups)
     if not len(gf):
         return HttpResponseNotFound('A busca não retornou resultados')
     # Ugly fix. TODO check if this is valid for all situations.
