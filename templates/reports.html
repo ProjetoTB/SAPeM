@@ -1,0 +1,76 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+{% load forms_extras %}
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<style type="text/css" title="currentStyle">
+			@import "{{ MEDIA_URL }}css/pages.css";
+		</style>
+
+		<link rel="stylesheet" href="{{ MEDIA_URL }}jquery-ui-1.8.18.custom/css/jquery.ui.theme.css">
+		<link rel="stylesheet" href="{{ MEDIA_URL }}jquery-ui-1.8.18.custom/css/jquery.ui.core.css">
+		<link rel="stylesheet" href="{{ MEDIA_URL }}jquery-ui-1.8.18.custom/css/jquery.ui.tabs.css">
+
+		<script type="text/javascript" language="javascript" src="{{ MEDIA_URL }}js/jquery/jquery.js"></script>
+		<script type="text/javascript" language="javascript" src="{{ MEDIA_URL }}js/jquery/jquery.dataTables.js"></script>
+		<script type="text/javascript" language="javascript" src="{{ MEDIA_URL }}js/show.reports.js"></script>
+		
+		<script src="{{ MEDIA_URL }}jquery-ui-1.8.18.custom/js/jquery-1.7.1.js"></script>
+		<script src="{{ MEDIA_URL }}jquery-ui-1.8.18.custom/js/jquery.ui.core.js"></script>
+		<script src="{{ MEDIA_URL }}jquery-ui-1.8.18.custom/js/jquery.ui.widget.js"></script>
+		<script src="{{ MEDIA_URL }}jquery-ui-1.8.18.custom/js/jquery.ui.tabs.js"></script>
+
+		<title> Relatório </title>
+	</head>
+	<body>
+		<div id='content'>
+			<div id='header'>
+				<div id='branding'>&nbsp;</div>
+				<div id='user-tools'>
+					{% if user.is_authenticated %}
+						Bem vindo, <strong>{{ user.username }}</strong>.
+						{% if user.is_staff %}
+							<a href='{{ url }}admin/'>Administração</a> /
+						{% endif %}
+						<a href='{{url}}logout/'>Encerrar sessão</a>
+					{% else %}
+						<a href='{{url}}admin/'>Administração</a>
+					{% endif %}
+				</div>
+			</div>
+			{% block content %}
+			<div id='mainFrame'>
+			{% if user.is_authenticated %}
+				<div id="title"> Relatório '{{ config.name }}' </title>
+				<div id="mainContent">
+					<center>
+						<div id="tabs">	<!-- Created on-the-fly --> </div>
+					</center>
+				</div>
+			{% else %}
+				<div class='error-msg'> {{ msg }} </div>
+				<div id='login-container'>
+					<div id='login'>
+						<form method="POST" accept-charset="utf-8">
+							<fieldset>
+								<legend> Acessar o sistema </legend>
+								<div id='divLogin'>
+									<label for="username">Nome do Usuário:</label>
+									<input type="text" name="username" value="" id="username" />
+								</div>
+								<div id='divPassword'>
+									<label for="password">Senha:</label>
+									<input type="password" name="password" value="" id="password" />
+								</div>
+								<div id='divSubmit'>
+									<input type="submit" value="Entrar">
+								</div>
+							</fieldset>
+						</form>
+					</div>
+				</div>
+			{% endif %}
+			</div>
+			{% endblock %}
+		</div>
+	</body>
+</html>

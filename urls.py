@@ -27,12 +27,14 @@ from tbForms.views import showARTResult
 from tbForms.views import retrieveUnidadesSaude
 from tbForms.views import showFieldsXML
 from tbForms.views import select_unidade_saude
+from tbForms.views import retrieveFormName
 
 from tbForms.reports.views import create_configuration_reports
 from tbForms.reports.views import view_configuration_reports
 from tbForms.reports.views import remove_configuration_reports
 from tbForms.reports.views import configuration_db2file
 from tbForms.reports.views import show_report
+from tbForms.reports.views import get_configSettingsXml
 
 admin.autodiscover()
 
@@ -47,6 +49,7 @@ urlpatterns = patterns('',
 	(r'^form/(?P<formId>\d+)/(?P<patientId>\d+)/(?P<f>.*)$', handle_form),
 	(r'^form/edit/(?P<fichaId>\d+)/(?P<f>.*)$', edit_form),
 	(r'^form/fields/xml/(?P<formId>\d+)/', showFieldsXML),
+	(r'^form/names/(?P<formId>\d+)/$', retrieveFormName),
 	(r'^ficha/(?P<fichaId>\d+)/$', showFichaConteudo),
 	(r'^patientLastRegister/(?P<formId>\d+)/(?P<patientId>\d+)/$', showPatientLastRegister),
 	(r'^registers/(?P<formId>\d+)/(?P<patientId>\d+)/$', showPatientRegisters),
@@ -69,7 +72,5 @@ urlpatterns = patterns('',
 	(r'^reports/removeConfig/(?P<configId>\d+)/$', remove_configuration_reports),
 	(r'^reports/download/(?P<sid>\d+)/(?P<format>\w+)/$', configuration_db2file),
 	(r'^reports/showReport/(?P<configId>\d+)/$', show_report),
+	(r'^reports/configSettingXml/(?P<configId>\d+)/$', get_configSettingsXml),
 )
-
-
-

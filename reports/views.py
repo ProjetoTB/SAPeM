@@ -180,6 +180,10 @@ def configuration_db2file(request, sid,format='excel'):
 	return response
 
 def show_report(request, configId):
+	from tbForms.views import homepage_view, sapem_login
+	if request.method == 'POST':
+		return homepage_view(request)
+
 	config = Configuracao.objects.get(id=configId)
 	return render_to_response('reports.html',
 			locals(), RequestContext(request, {}))
