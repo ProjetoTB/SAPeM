@@ -252,7 +252,7 @@ body {
 	padding: 0 5px;
 }
 
-#divFiltros fieldset.filtros{
+fieldset.filtros{
 	border-color: #999999;
 	border-style: solid none none;
 	border-width: 1px 0 0;
@@ -262,10 +262,11 @@ body {
 	padding: 40px;
 }
 
-#divFiltros fieldset.filtros legend{
-	font-size: 150%;
+fieldset.filtros legend{
+	font-size: 120%;
 	font-weight: normal;
 	margin: 0;
 	padding: 0 5px;
 	color: #000066;
 }
+

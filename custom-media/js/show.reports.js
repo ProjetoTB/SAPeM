@@ -1,5 +1,10 @@
 //////////////////////////////////////////////////////////////////////
 //////////////////// reports.html javascript file ////////////////////
+reportVars = {
+	"idade": "Faixa etária",
+	"tosse": "Tosse"
+};
+
 function getUrlArray(){
 	var urlString = $(location).attr('href');
 	var urlArray = urlString.split('/');
@@ -49,12 +54,19 @@ $(document).ready(function(){
 						}
 					})(a)
 			});
-			var content = $("<div>")
-				             .attr("id", "formId_"+ form_id[f])
-							 .text("esse é o formId " + form_id[f]);
+			var content = $("<div>").attr("id", "formId_"+ form_id[f])
 			content.appendTo($("#tabs"));
 		}
 		$('#tabs').tabs();
+	}
+
+	$.fn.createFieldset = function(label, form_id){
+		var fieldset = $("<fieldset>")
+			               .appendTo($("#formId_" + form_id))
+						   .addClass("filtros");
+		var legend = $("<legend>")
+			               .appendTo(fieldset)
+						   .text(label);
 	}
 	
 	urlbase  = getUrlbase();
@@ -84,7 +96,10 @@ $(document).ready(function(){
 					form_id[f] = (forms[f].childNodes[0].nodeValue);
 			}
 			$().retrieveFormNames(form_id);
+			for (id=0; id < form_id.length; id++){
+				for (k in reportVars)
+					$().createFieldset(reportVars[k], form_id[id]);
+			}
 		}
 	});
-	// Done parsing settings
 });
