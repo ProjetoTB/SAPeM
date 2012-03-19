@@ -47,7 +47,7 @@ function setup_tracForm(){
 
 jQuery.fn.createHeader = function() {
     var header = this;
-    cssObj= {
+    cssHeader= {
         'width'      : '96.6%',
         'background' : '#000066',
         'color'      : 'white',
@@ -55,7 +55,21 @@ jQuery.fn.createHeader = function() {
         'height'     : '15px',
         'clear'      : 'both'
     }
-    header.css(cssObj);
+    cssUserTools ={
+        'color'       : '#FFFFCC',
+        'font-size'   : '11px',
+        'padding'     : '1.2em 10px',
+        'position'    : 'relative',
+        'right'       : '0',
+        'text-align'  : 'right',
+        'top'         : '0',
+        'font-family' : '"Lucida Grande","DejaVu Sans","Bitstream Vera Sans",Verdana,Arial,sans-serif'
+    }
+    cssLink = {
+        'color': 'white',
+        'text-decoration': 'none'
+    }
+    header.css(cssHeader);
     brand = $('<div></div>');
     brand.attr('id', 'branding');
     header.append(brand);
@@ -63,17 +77,29 @@ jQuery.fn.createHeader = function() {
     ut.attr('id', 'user-tools');
     usermsg = 'Bem-vindo {{user.username}}! ';
     ut.text(usermsg);
+    ut.css(cssUserTools);
     {% if user.is_staff %}
         admLink = $('<a />');
         admLink.attr('href', '{{url}}admin/');
-        admLink.text('Administração ');
+        admLink.text('Administração');
+        admLink.css(cssLink);
         ut.append(admLink);
     {% endif %}
     logoutLink = $('<a />');
     logoutLink.attr('href', '{{url}}logout/');
     logoutLink.text('Sair');
+    logoutLink.css(cssLink);
     ut.append(logoutLink);
     header.append(ut);
+    $('a', ut).hover(function(){
+        $(this).css({
+        "text-decoration": "underline"
+        });
+    }, function(){
+        $(this).css({
+        "text-decoration": "none"
+        });
+    });
 };
 
 jQuery.fn.createFooter = function() {
