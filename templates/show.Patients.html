@@ -8,8 +8,11 @@
 		</style>
 		<script type="text/javascript" language="javascript" src="{{ MEDIA_URL }}js/jquery/jquery.js"></script>
 		<script type="text/javascript" language="javascript" src="{{ MEDIA_URL }}js/jquery/jquery.dataTables.js"></script>
+		<script type="text/javascript" language="javascript" src="{{ url }}/js/createHeaderFooter/"></script>
 		<script>
 		$(document).ready(function() {
+			$('header').createHeader();
+			$('footer').createFooter();
 			oTable = $('#patient_table').dataTable({
 				"fnDrawCallback": function ( oSettings ) {
 					if ( oSettings.aiDisplay.length == 0 )
@@ -67,6 +70,7 @@
 		</script>
 	</head>
 	<body>
+		<header></header>
 		<div id='content'>
 			<div id='header'>
 				<div id='branding'>&nbsp;</div>
@@ -139,5 +143,6 @@
 			{% endblock %}
 			</div>
 		</div>
+		<footer></footer>
 	</body>
 </html>
