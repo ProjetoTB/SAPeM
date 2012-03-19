@@ -85,11 +85,13 @@ jQuery.fn.createHeader = function() {
         admLink.css(cssLink);
         ut.append(admLink);
     {% endif %}
-    logoutLink = $('<a />');
-    logoutLink.attr('href', '{{url}}logout/');
-    logoutLink.text('Sair');
-    logoutLink.css(cssLink);
-    ut.append(logoutLink);
+    {% if user.is_authenticated %}
+		logoutLink = $('<a />');
+		logoutLink.attr('href', '{{url}}logout/');
+		logoutLink.text('Sair');
+		logoutLink.css(cssLink);
+		ut.append(logoutLink);
+    {% endif %}
     header.append(ut);
     $('a', ut).hover(function(){
         $(this).css({
