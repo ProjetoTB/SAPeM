@@ -36,6 +36,12 @@
 }
 #tracForm_ticket_form label{
     margin-right: 5px;
+    display: block;
+    float: none;
+    padding: 3px 5px;
+    text-align: left;
+    vertical-align: none;
+    width: auto;
 }
 #tracForm_ticket_form div{
     clear: left;
@@ -47,6 +53,7 @@
 }
 #tracForm_ticket_form div textarea{
     margin-right: 5px;
+    margin-left: 0px;
     width: 100%;
     height:150px;
     border:1px solid #ccc;
