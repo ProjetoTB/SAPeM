@@ -49,8 +49,10 @@ def getText(nodelist):
 
 def smart_int(i):
     if i.isdigit():
+        #It is a number
         return int(i)
-    return i
+    #It is a string and it wont have newline characters
+    return ' '.join(i.splitlines())
 
 class customError(Exception):
     def __init__(self, value):
