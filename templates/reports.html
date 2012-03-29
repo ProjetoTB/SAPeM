@@ -4,16 +4,28 @@
 	<head>
 		<style type="text/css" title="currentStyle">
 			@import "{{ MEDIA_URL }}css/pages.css";
-			@import "{{ MEDIA_URL }}css/dataTable.css";
-			#settings_table {
-				width:450px;
-				text-align: center;
-			}
+			@import "{{ MEDIA_URL }}jquery-ui-1.8.18.custom/css/jquery.ui.theme.css";
+			@import "{{ MEDIA_URL }}jquery-ui-1.8.18.custom/css/jquery.ui.core.css";
+			@import "{{ MEDIA_URL }}jquery-ui-1.8.18.custom/css/jquery.ui.tabs.css";
+
+			@import "{{ MEDIA_URL }}raphael/css/demo.css";
+			@import "{{ MEDIA_URL }}raphael/css/demo-print.css";
 		</style>
+
 		<script type="text/javascript" language="javascript" src="{{ MEDIA_URL }}js/jquery/jquery.js"></script>
 		<script type="text/javascript" language="javascript" src="{{ MEDIA_URL }}js/jquery/jquery.dataTables.js"></script>
-		<script type="text/javascript" language="javascript" src="{{ MEDIA_URL }}js/reports.js"></script>
-		<title> Relatórios </title>
+		<script type="text/javascript" language="javascript" src="{{ MEDIA_URL }}js/show.reports.js"></script>
+		
+		<script src="{{ MEDIA_URL }}jquery-ui-1.8.18.custom/js/jquery-1.7.1.js"></script>
+		<script src="{{ MEDIA_URL }}jquery-ui-1.8.18.custom/js/jquery.ui.core.js"></script>
+		<script src="{{ MEDIA_URL }}jquery-ui-1.8.18.custom/js/jquery.ui.widget.js"></script>
+		<script src="{{ MEDIA_URL }}jquery-ui-1.8.18.custom/js/jquery.ui.tabs.js"></script>
+
+		<script src="{{ MEDIA_URL }}raphael/js/raphael-min.js"></script>
+		<script src="{{ MEDIA_URL }}raphael/js/g.raphael-min.js"></script>
+		<script src="{{ MEDIA_URL }}raphael/js/g.pie-min.js"></script>
+
+		<title> Relatório </title>
 	</head>
 	<body>
 		<div id='content'>
@@ -34,8 +46,33 @@
 			{% block content %}
 			<div id='mainFrame'>
 			{% if user.is_authenticated %}
-			<div id='title'> Relatório: {{ config.name }} </div>
-				<div id='maincontent'>
+				<div id="title"> Relatório '{{ config.name }}' </title>
+				<div id="mainContent">
+					<center>
+						<div id="tabs">	<!-- Created on-the-fly --> </div>
+					</center>
+				</div>
+			{% else %}
+				<div class='error-msg'> {{ msg }} </div>
+				<div id='login-container'>
+					<div id='login'>
+						<form method="POST" accept-charset="utf-8">
+							<fieldset>
+								<legend> Acessar o sistema </legend>
+								<div id='divLogin'>
+									<label for="username">Nome do Usuário:</label>
+									<input type="text" name="username" value="" id="username" />
+								</div>
+								<div id='divPassword'>
+									<label for="password">Senha:</label>
+									<input type="password" name="password" value="" id="password" />
+								</div>
+								<div id='divSubmit'>
+									<input type="submit" value="Entrar">
+								</div>
+							</fieldset>
+						</form>
+					</div>
 				</div>
 			{% endif %}
 			</div>

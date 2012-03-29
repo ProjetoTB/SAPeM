@@ -1000,4 +1000,6 @@ def ffrequired(request):
     return render_to_response('firefox.html',
         locals(), RequestContext(request, {}))
 
-
+def retrieveFormName(request, formId):
+	formulario = Formulario.objects.get(id=formId)
+	return HttpResponse(formulario.nome)
