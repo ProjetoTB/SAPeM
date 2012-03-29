@@ -1,0 +1,47 @@
+<div style="display:none">
+    <div id="tracForm_container" class="window">
+        <div id="tracForm_header">
+            <div id="tracForm_tracFormTitle">
+                <p>Relate um erro</p>
+            </div>
+        </div>
+        <div id="tracForm_ticket_form" class="trac_form_body">
+            <form>
+                <fieldset>
+                    <div>
+                        <label for="tracForm_ticket_summary">Resumo do erro: </label>
+                        <input id="tracForm_ticket_summary" />
+                    </div>
+                    <div>
+                        <label for="tracForm_ticket_reporter">Relator: </label>
+                        <input id="tracForm_ticket_reporter" readonly="true" />
+                    </div>
+                    <div>
+                        <label for="tracForm_tiicket_description">Descrição: </label>
+                        <textarea id="tracForm_ticket_description" ></textarea>
+                    </div>
+                    <div>
+                        <label for="tracForm_ticket_type">Tipo: </label>
+                        <select id="tracForm_ticket_type">
+                        </select>
+                    </div>
+                    <div>
+                        <label for="tracForm_ticket_component">Componente: </label>
+                        <select id="tracForm_ticket_component">
+                        </select>
+                    </div>
+                    <div>
+                        <label for="tracForm_ticket_priority">Prioridade: </label>
+                        <select id="tracForm_ticket_priority">
+                        </select>
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <div align="center">
+                        <input id="tracForm_ticket_submit_button" type="button" value="Enviar" />
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+</div>
