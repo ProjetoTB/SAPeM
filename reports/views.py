@@ -189,7 +189,58 @@ def show_report(request, configId):
 			locals(), RequestContext(request, {}))
 
 def get_configSettingsXml(request, configId):
-	url    = settings.SITE_ROOT
 	config = Configuracao.objects.get(id=configId)
 	xmlStr = config.settings
 	return HttpResponse( xmlStr, mimetype="application/xhtml+xml" )
+
+def get_fichaValue(conteudo, tagname):
+	xml = parseString(conteudo.encode('utf-8'))
+	for f in xml.getElementsByTagName(tagname):
+		return (f.childNodes[0].nodeValue)
+
+def get_ageGroups():
+	return [range(0,26), range(26, 31), range(31, 41), range(41, 51), range(51, 120)]
+
+def get_ageGroupsLabels():
+	return ['0 - 25 anos', '26 - 30 anos', '31 - 40 anos', '41 - 50 anos', 'Acima de 50 anos']
+
+def get_ageGroup(age):
+	ages = get_ageGroups()
+	for group in xrange(len(ages)):
+		if age in ages[group]:
+			return group
+
+def get_dataXml(request, configId, formId, variable):
+	from forms.models import Ficha
+	json = ''
+
+
+	fichas = Ficha.objects.filter(formulario__id=formId, unidadesaude__id__in=request.GET["us"].split(','))
+
+	if fichas.count() > 0:
+		if variable == 'idade':
+			legend = get_ageGroupsLabels()
+			result = []
+
+			for a in legend:
+				result.append(0)
+
+			values = []
+			for f in fichas:
+				values.append(get_fichaValue(f.conteudo, variable))
+		
+			values.sort()
+			for v in values:
+				result[get_ageGroup(int(v))] += 1
+
+		json = "{"
+		for i in xrange(len(legend) - 1):
+			json += "\"%s\" : %d, "%(legend[i], result[i])
+		json += "\"%s\" : %d}"%(legend[len(legend) - 1], result[len(result) - 1])
+
+	if json == '':
+		response = HttpResponseNotFound('Nenhuma ficha foi encontrada!')
+	else:
+		response = HttpResponse( json )
+
+	return response

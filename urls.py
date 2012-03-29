@@ -35,6 +35,7 @@ from tbForms.reports.views import remove_configuration_reports
 from tbForms.reports.views import configuration_db2file
 from tbForms.reports.views import show_report
 from tbForms.reports.views import get_configSettingsXml
+from tbForms.reports.views import get_dataXml
 
 admin.autodiscover()
 
@@ -73,4 +74,5 @@ urlpatterns = patterns('',
 	(r'^reports/download/(?P<sid>\d+)/(?P<format>\w+)/$', configuration_db2file),
 	(r'^reports/showReport/(?P<configId>\d+)/$', show_report),
 	(r'^reports/configSettingXml/(?P<configId>\d+)/$', get_configSettingsXml),
+	(r'^reports/getData/(?P<configId>\d+)/(?P<formId>\d+)/(?P<variable>\w+)/$', get_dataXml),
 )
