@@ -8,7 +8,9 @@
 		</style>
 		<script type="text/javascript" language="javascript" src="{{ MEDIA_URL }}js/jquery/jquery.js"></script>
 		<script type="text/javascript" language="javascript" src="{{ MEDIA_URL }}js/jquery/jquery.dataTables.js"></script>
-		<script type="text/javascript" language="javascript" src="{{ MEDIA_URL }}js/reports.js"></script>
+		<script type="text/javascript" language="javascript" src="{{ MEDIA_URL }}js/jquery/jquery.validate.js"></script>
+		<script type="text/javascript" language="javascript" src="{{ MEDIA_URL }}js/messages_ptbr.js"></script>
+		<script type="text/javascript" language="javascript" src="{{ MEDIA_URL }}js/config.reports.js"></script>
 		<title> Configuração de Relatório </title>
 	</head>
 	<body>
@@ -32,7 +34,7 @@
 			{% if user.is_authenticated %}
 				<div id='maincontent'>
 					<div id='title'> Criar uma configuração de relatório </div>
-					<form method="POST">
+					<form name="form_configReport" id="form_configReport" method="POST">
 						<center>
 						<div id='divConfig'>
 							<fieldset class='config'>
@@ -50,7 +52,7 @@
 										<tbody>
 											{% for us in unidades %}
 											<tr>
-												<td> <input type='checkbox' name='unidadeSaude' value='{{ us.id}}'/></td>
+												<td> <input type='checkbox' name='unidadeSaude' id='unidadeSaude' value='{{ us.id }}' class='required' /></td>
 												<td> {{ us.nome }} </td>
 												<td> {{ us.cidade }} </td>
 												<td> {{ us.UF }} </td>
@@ -73,7 +75,7 @@
 										<tbody>
 											{% for f in forms_list %}
 											<tr>
-												<td> <input type='checkbox' name='formularios' value='{{ f.id }}'/></td>
+												<td> <input type='checkbox' name='formularios' id='formularios' value='{{ f.id }}' class='required'/></td>
 												<td> {{ f.nome }} </td>
 											</tr>
 											{% endfor %}
@@ -83,7 +85,7 @@
 							</fieldset>
 							<fieldset class='config'>
 								<legend> Salvar Como</legend>
-								<input type='text' name='name' width='100' />
+								<input type='text' name='name' id='name' width='100' class='required' />
 							</fieldset>
 						</div>
 						<div class='submit'>
