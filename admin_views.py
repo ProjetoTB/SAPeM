@@ -2,24 +2,24 @@
 # -*- coding: utf-8 -*-
 
 import os, sys
-
 # Work around made due the fact production version has an outdated version of
 # tempfile module
 import tempfile2 as tempfile
 import tarfile
+from datetime import datetime, timedelta
 
-from django.http import HttpResponse, HttpResponseRedirect
-from django.template import RequestContext
-from django.shortcuts import render_to_response
-from django.core.files.uploadedfile import SimpleUploadedFile
 from django import forms
-from django.forms import ModelForm
 from django.contrib.admin.util import model_ngettext
-from django.utils.translation import ugettext_lazy, ugettext as _
-
 from django.contrib.admin.views.decorators import staff_member_required
-
-from forms.models import Formulario, tipoFormulario, UnidadeSaude
+from django.core.files.uploadedfile import SimpleUploadedFile
+from django.db import connection
+from django.db.models import Count
+from django.forms import ModelForm
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import render_to_response
+from django.template import RequestContext
+from django.utils.translation import ugettext_lazy, ugettext as _
+from forms.models import Formulario, tipoFormulario, UnidadeSaude, Ficha
 
 import settings
 
@@ -135,6 +135,30 @@ def edit_formulario(request, f_id, app_label='Forms'):
 	return render_to_response('change_form.html',
 			locals(), RequestContext(request, {}))
 
+def log_unidadesaude(request, stDate=365, endDate=0):
+	if not request.user.is_authenticated():
+		return HttpResponseRedirect(settings.SITE_ROOT + 'admin/')
+	truncate_date = connection.ops.date_trunc_sql('month', 'data_insercao')
+	fichas_report = Ficha.objects.filter(
+                                            data_insercao__gte=datetime.now() -timedelta(days=stDate),
+                                            data_insercao__lte=datetime.now() -timedelta(days=endDate)
+                                        ).\
+                            extra(
+                                   select={
+                                      'month': truncate_date,
+                                  }).\
+                            values('unidadesaude__nome', 'month').\
+                            annotate(numero_fichas=Count('pk')).\
+                            order_by('-month')
+	fichas_report = [ dict([
+         ('unidadesaude__nome', l['unidadesaude__nome']),
+         ('month', datetime.strptime(l['month'].split(' ')[0], '%Y-%m-%d')),
+         ('numero_fichas', l['numero_fichas'])
+     ]) for l in fichas_report]
+	#counter.query.group_by = ['forms_unidadesaude.nome']
+	return render_to_response('admin/unidadesaude_log.html',
+			locals(), RequestContext(request, {}))
 
 add_formulario = staff_member_required(add_formulario)
 edit_formulario = staff_member_required(edit_formulario)
+log_unidadesaude = staff_member_required(log_unidadesaude)

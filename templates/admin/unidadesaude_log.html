@@ -1,0 +1,44 @@
+{% extends "admin/base_site.html" %}
+{% block extrahead %}
+
+<script>
+$(function() {
+	$( "#tabs" ).tabs();
+});
+</script>
+
+{% endblock %}
+
+{% block title %}Log de atividade das Unidades de Saúde{% endblock %}
+{% block content %}
+<div id="content-main">
+<div id="tabs">
+	<ul>
+		<li><a href="#tabs-1">Número de fichas preenchidas</a></li>
+		<li><a href="#tabs-2">Relatório detalhado</a></li>
+	</ul>
+	<div id="tabs-1">
+	{% regroup fichas_report by month as log_list %}
+	{% for c in log_list %}
+		<h2>{{c.grouper|date:'M Y'}}</h2>
+		<table>
+		<thead>
+			<tr>
+				<th> Unidade de Saúde</th>
+				<th> Número de fichas preenchidas</th>
+			</tr>
+		</thead>
+		<tbody>
+		{%for item in c.list%}
+		<tr>
+			<td>{{item.unidadesaude__nome}} </td><td>{{item.numero_fichas}}</td>
+		</tr>
+		{% endfor %}
+		</tbody>
+		</table>
+	{% endfor %}
+	</div>
+	<div id="tabs-2">
+	</div>
+</div>
+{% endblock %}
