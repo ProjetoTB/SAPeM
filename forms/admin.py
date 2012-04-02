@@ -1,5 +1,8 @@
-from django.contrib import admin
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
+
+from django.contrib import admin
 from tbForms.forms.models import Paciente, Ficha, tipoFormulario
 from tbForms.forms.models import Formulario, UnidadeSaude
 from tbForms.forms.models import Grupo_Formulario, Grupo
@@ -90,3 +93,6 @@ class PacienteAdmin(admin.ModelAdmin):
 		#Return nothing to make sure user can't update any data
 		pass
 admin.site.register(Paciente, PacienteAdmin)
+
+from tbForms.admin_views import log_unidadesaude
+admin.site.register_view('log', log_unidadesaude, u'Fichas preenchidas por Unidade de Saúde')

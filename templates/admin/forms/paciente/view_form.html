@@ -23,12 +23,14 @@
 </div>
 {% endif %}{% endblock %}
 
+{% block title %}Visualizar dados {% endblock %}
+{% block content_title %}<h1>Visualizar dados</h1>{% endblock %}
+
 {% block content %}<div id="content-main">
 {% block object-tools %}
 {% if change %}{% if not is_popup %}
   <ul class="object-tools">
     {% block object-tools-items %}
-    <li><a href="history/" class="historylink">{% trans "History" %}</a></li>
     {% if has_absolute_url %}<li><a href="../../../r/{{ content_type_id }}/{{ object_id }}/" class="viewsitelink">{% trans "View on site" %}</a></li>{% endif%}
     {% endblock %}
   </ul>

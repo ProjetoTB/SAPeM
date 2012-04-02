@@ -39,6 +39,11 @@ from tbForms.reports.views import show_report
 from tbForms.reports.views import get_configSettingsXml
 from tbForms.reports.views import get_dataXml
 
+
+from adminplus import AdminSitePlus
+
+admin.site = AdminSitePlus()
+
 admin.autodiscover()
 
 urlpatterns = patterns('',
@@ -46,7 +51,7 @@ urlpatterns = patterns('',
 	(r'^admin/forms/formulario/add/$', add_formulario),
 	(r'^admin/forms/formulario/(\d)/$', edit_formulario),
 	(r'^admin/', include(admin.site.urls)),
-	(r'^admin/unidadesaude/log/$', log_unidadesaude),
+#	(r'^admin/unidadesaude/log/$', log_unidadesaude),
 	(r'^admin/unidadesaude/(?P<healthUnit>\d+)/log/$', log_unidadesaude_by_form),
 	(r'^FirefoxRequerido/', ffrequired),
 	(r'^addressService/cep/(\d{5}-\d{3})/$', correct_address),

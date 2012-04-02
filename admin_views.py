@@ -10,6 +10,7 @@ from datetime import datetime, timedelta
 import time
 
 from django import forms
+from django.contrib import admin
 from django.contrib.admin.util import model_ngettext
 from django.contrib.admin.views.decorators import staff_member_required
 from django.core.files.uploadedfile import SimpleUploadedFile
