@@ -1,10 +1,24 @@
-{% extends "admin/base_site.html" %}
+{% extends "admin/change_list.html" %}
 {% block extrahead %}
 
 <style type="text/css" title="currentStyle">
 	@import "{{ MEDIA_URL }}jquery-ui-1.8.18.custom/css/jquery.ui.theme.css";
 	@import "{{ MEDIA_URL }}jquery-ui-1.8.18.custom/css/jquery.ui.core.css";
 	@import "{{ MEDIA_URL }}jquery-ui-1.8.18.custom/css/jquery.ui.tabs.css";
+	#result_list tbody tr.highlight {
+		background-color: #F4F379;
+	}
+	.extra_details td{
+		font-size: 70%;
+		background-color: #FFFFEF;
+	}
+	.extra_details th{
+		font-size: 70%;
+		background-color: #FFFFEF;
+	}
+	#result_list tbody tr.selected {
+		font-style:italic;
+	}
 </style>
 <script type="text/javascript" language="javascript" src="{{ MEDIA_URL }}js/jquery/jquery.js"></script>
 <script type="text/javascript" language="javascript" src="{{ MEDIA_URL }}js/jquery/jquery.dataTables.js"></script>
@@ -14,8 +28,60 @@
 <script src="{{ MEDIA_URL }}jquery-ui-1.8.18.custom/js/jquery.ui.tabs.js"></script>
 
 <script>
+
+function ShowDetails(el){
+	$(el).click(function(){
+		var row = $(this).parent();
+		var usId = row.children().first().attr('id').split('_')[1];
+		if(row.html().match('details_open')){
+			$.getJSON('{{SITE_ROOT}}/admin/unidadesaude/'+usId+'/log/', function(data){
+				var currRow = row;
+				for(var fName in data){
+					var tr = $('<tr />');
+					var th = $('<th colspan="2">'+fName+'</th>');
+					tr.append(th);
+					for(var content in data[fName]){
+						var td = $('<td>' +data[fName][content]+'</td>');
+						tr.children().last().after(td);
+					}
+					tr.addClass('extra_details_'+usId)
+					tr.addClass('extra_details')
+					currRow.after(tr);
+					currRow = tr;
+				}
+				row.addClass('selected');
+				$('th.details_button img', row).attr('src', '{{ MEDIA_URL }}/images/details_close.png');
+			});
+		} else {
+			$('th.details_button img', row).attr('src', '{{ MEDIA_URL }}/images/details_open.png');
+			$('.extra_details_'+usId).each(function(){$(this).remove();});
+			row.removeClass('selected');
+		}
+	});
+}
 $(function() {
 	$( "#tabs" ).tabs();
+	{% regroup fichas_report by unidadesaude__id as table_data %}
+	{% for c in table_data%}
+		{% for item  in c.list %}
+			$('#cell_{{item.month|date:"Ym"}}_{{item.unidadesaude__id}}').text({{item.numero_fichas}});
+		{% endfor%}
+	{% endfor%}
+	$('#result_list tfoot td').each(function(){
+		var sum = 0;
+		var portions = $('.'+$(this).attr('id')).map(function(){return parseInt($(this).text())});
+		$.each(portions, function(){
+			sum += this;
+		});
+		$(this).text(sum);
+	});
+	$("#result_list tbody td").each(function(){ShowDetails(this);});
+	$("#result_list tbody th").each(function(){ShowDetails(this);});
+	$("#result_list tbody tr").hover(function(){
+		$(this).addClass("highlight");
+	},function(){
+		$(this).removeClass("highlight");
+	});
 });
 </script>
 
@@ -30,9 +96,9 @@ $(function() {
 		<li><a href="#tabs-2">Relatório detalhado</a></li>
 	</ul>
 	<div id="tabs-1">
-	{% regroup fichas_report by month as log_list %}
+	{% regroup fichas_report by month|date:'M Y' as log_list %}
 	{% for c in log_list %}
-		<h2>{{c.grouper|date:'M Y'}}</h2>
+		<h2>{{c.grouper}}</h2>
 		<table>
 		<thead>
 			<tr>
@@ -51,6 +117,40 @@ $(function() {
 	{% endfor %}
 	</div>
 	<div id="tabs-2">
+		<div id="changelist" class="module filtered">
+		<div class="results">
+		<table id='result_list' cellspacing='0'>
+			<thead>
+			<th>&nbsp;</th>
+			<th> Unidade de Saúde</th>
+			{%for col in columns %}
+				<th> {{col|date:'M Y'}}</th>
+			{%endfor%}
+			</tr>
+			</thead>
+			<tbody>
+			{%for r in rows%}
+				<tr class="{% if forloop.counter|divisibleby:2 %}row1{% else %}row2{% endif %}" >
+				<th id='details_{{r.id}}' class='details_button'><img src='{{ MEDIA_URL }}/images/details_open.png' /></th>
+				<th>{{r.nome}}</th>
+				{%for col in columns %}
+					<td class="cell_{{col|date:'Ym'}}" id="cell_{{col|date:'Ym'}}_{{r.id}}"> 0</td>
+				{%endfor%}
+				</tr>
+			{%endfor%}
+			</tbody>
+			<tfoot>
+				<tr>
+				<th>&nbsp;  </th>
+				<th> Total </th>
+				{%for col in columns %}
+					<td id="cell_{{col|date:'Ym'}}"> 0</td>
+				{%endfor%}
+				</tr>
+			</tfoot>
+		</table>
+		</div>
+		</div>
 	</div>
 </div>
 {% endblock %}

@@ -19,6 +19,7 @@ class UnidadeSaudeAdmin(admin.ModelAdmin):
 	list_filter   = ('cidade', 'UF')
 admin.site.register(UnidadeSaude, UnidadeSaudeAdmin)
 
+
 class FormularioAdmin(admin.ModelAdmin):
 	list_display  = ('nome','version', 'tipo', 'descricao', 'data_insercao')
 	list_filter   = ('nome', 'tipo', 'data_insercao')
@@ -76,3 +77,13 @@ class GrupoAdmin(admin.ModelAdmin):
 
 admin.site.register(Grupo, GrupoAdmin)
 
+
+class PacienteAdmin(admin.ModelAdmin):
+	list_display  = ('nome','nome_mae', 'data_nascimento')
+	def get_actions(self, request):
+		actions = super(PacienteAdmin, self).get_actions(request)
+		del actions['delete_selected']
+		return actions
+	def has_add_permission(self, request):
+		return False
+admin.site.register(Paciente, PacienteAdmin)

@@ -3,7 +3,8 @@ from django.conf import settings
 from django.contrib import admin
 
 #Custom
-from tbForms.admin_views import edit_formulario, add_formulario, log_unidadesaude
+from tbForms.admin_views import edit_formulario, add_formulario
+from tbForms.admin_views import log_unidadesaude, log_unidadesaude_by_form
 from tbForms.views import correct_address
 from tbForms.views import ffrequired
 from tbForms.views import list_forms_by_health_unit
@@ -46,6 +47,7 @@ urlpatterns = patterns('',
 	(r'^admin/forms/formulario/(\d)/$', edit_formulario),
 	(r'^admin/', include(admin.site.urls)),
 	(r'^admin/unidadesaude/log/$', log_unidadesaude),
+	(r'^admin/unidadesaude/(?P<healthUnit>\d+)/log/$', log_unidadesaude_by_form),
 	(r'^FirefoxRequerido/', ffrequired),
 	(r'^addressService/cep/(\d{5}-\d{3})/$', correct_address),
 	(r'^showForms/(?P<healthUnit>\d)/$', list_forms_by_health_unit),
