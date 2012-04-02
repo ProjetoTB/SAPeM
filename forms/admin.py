@@ -83,7 +83,7 @@ admin.site.register(Grupo, GrupoAdmin)
 
 class PacienteAdmin(admin.ModelAdmin):
 	list_display  = ('nome','nome_mae', 'data_nascimento')
-	change_form_template = 'view_form.html'
+	change_form_template = 'admin/forms/paciente/view_form.html'
 	def get_actions(self, request):
 		actions = super(PacienteAdmin, self).get_actions(request)
 		return actions
