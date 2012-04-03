@@ -92,8 +92,9 @@ $(function() {
 <div id="content-main">
 <div id="tabs">
 	<ul>
-		<li><a href="#tabs-1">Número de fichas preenchidas</a></li>
+		<li><a href="#tabs-1">Fichas preenchidas por mês</a></li>
 		<li><a href="#tabs-2">Relatório detalhado</a></li>
+		<li><a href="#tabs-3">Total de Fichas por Unidade</a></li>
 	</ul>
 	<div id="tabs-1">
 	{% regroup fichas_report by month|date:'M Y' as log_list %}
@@ -151,6 +152,31 @@ $(function() {
 		</table>
 		</div>
 		</div>
+	</div>
+	<div id="tabs-3">
+		<div class="module">
+		<table id=tableFichaUS' cellspacing='0'>
+		<thead>
+		<tr>
+		<th> Unidades Saúde</th>
+		{%for us in column_us%}
+			<th> {{us}} </th>
+		{%endfor%}
+		</tr>
+		</thead>
+		<tbody>
+		{%for us, counters in fichas_us_report.items%}
+		<tr class="{% if forloop.counter|divisibleby:2 %}row1{% else %}row2{% endif %}" >
+			<th> {{us}} </th>
+			{%for k, c in counters.items%}
+				<td id='td-{{us|slugify}}-{{k|slugify}}'>{{c}}</td>
+			{%endfor%}
+		</tr>
+
+		{%endfor%}
+
+		</tbody>
+		</table>
 	</div>
 </div>
 {% endblock %}

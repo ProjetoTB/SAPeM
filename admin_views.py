@@ -174,6 +174,15 @@ def log_unidadesaude(request, stDate=365, endDate=0):
      ]) for l in fichas_report]
 	columns = getMonthList(now, stDate, endDate)
 	rows = UnidadeSaude.objects.values('nome', 'id').order_by('nome')
+	#Fichas Total per US
+	column_us = [f.nome for f in  Formulario.objects.all()]
+	query_fichas_us_report = Ficha.objects.values('unidadesaude__nome', 'formulario__nome').\
+                             annotate(numero_fichas=Count('pk'))
+	fichas_us_report = SortedDict().fromkeys([us.nome for us in UnidadeSaude.objects.all()])
+	for k in fichas_us_report.keys():
+		fichas_us_report[k]= SortedDict().fromkeys(column_us, 0)
+	for row in query_fichas_us_report:
+		fichas_us_report[row['unidadesaude__nome']][row['formulario__nome']] = row['numero_fichas']
 	return render_to_response('admin/unidadesaude_log.html',
 			locals(), RequestContext(request, {}))
 
