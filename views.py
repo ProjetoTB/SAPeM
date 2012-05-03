@@ -234,7 +234,7 @@ def getFieldsXML(form):
         return None
     return xmlDom
 
-def getOrderedFields(form, number_multifields=4):
+def getOrderedFields(form, show_form=False, number_multifields=4):
     xmlDOM= getFieldsXML(form)
     if xmlDOM:
         elements = xmlDOM.getElementsByTagName('fields')[0].childNodes
@@ -250,12 +250,21 @@ def getOrderedFields(form, number_multifields=4):
                 for idx in range(1, number_multifields):
                     for m_el in el.childNodes:
                         if m_el.nodeType == m_el.ELEMENT_NODE:
-                            content["%s_%d"%(m_el.nodeName, idx)] = \
-                                "%s %s %d"%(getText(m_el.childNodes),
-                                fieldsetName, idx)
+                            if show_form:
+                                content["%s_%d"%(m_el.nodeName, idx)] = \
+                                    "%s %s %d"%(getText(m_el.childNodes),
+                                    fieldsetName, idx)
+                            else:
+                                content["%s_%d"%(m_el.nodeName, idx)] = \
+                                    "%s %s %d"%(getText(m_el.childNodes),
+                                    fieldsetName, idx)
             else:
                 if el.nodeType == el.ELEMENT_NODE:
-                    content[el.nodeName] = getText(el.childNodes)
+                    if show_form:
+                        content[el.nodeName] = "%s - %s"%(form.tipo.nome, getText(el.childNodes))
+                    else:
+                        content[el.nodeName] = getText(el.childNodes)
+
         return content
     return {}
 
@@ -766,7 +775,6 @@ def zip_to_response(files, fname):
     buffer.close()
     return response
 
-
 def db2file(request, format='excel'):
     from forms.models import Ficha, Formulario,Paciente
     # Create file-like object
@@ -804,14 +812,13 @@ def db2file(request, format='excel'):
             ws.write(0, 3, u"Unidade de saúde",header_style)
             orderedFields = getOrderedFields(f)
             for idx, labels in enumerate(orderedFields.values()):
-                ws.write(0, idx+4, labels ,header_style)
+                ws.write(0, idx+4, labels  ,header_style)
             headers = SortedDict([ (k,i+4) for i, k in enumerate(orderedFields.keys())])
             ws.col(0).width = 9000
             ws.col(1).width = 5000
             ws.col(2).width = 9000
             ws.col(3).width = 12000
             index = 4
-            orderedFields = getOrderedFields(f)
             for row, ficha in enumerate(fichas.filter(formulario=f)):
                 ws.write(row+1,0,ficha.paciente.nome)
                 ws.write(row+1,1,ficha.paciente.data_nascimento)
@@ -840,10 +847,10 @@ def db2file(request, format='excel'):
         for f_type in ['Consulta', 'Exames', 'Follow-up']:
             other_forms = Formulario.objects.filter(tipo__nome=f_type)
             for f in other_forms:
-                other_forms_fields[f.id] = getOrderedFields(f)
+                other_forms_fields[f.id] = getOrderedFields(f, show_form=True)
         for tForm in triagens:
             form_fields = SortedDict()
-            form_fields[tForm.id] = getOrderedFields(tForm)
+            form_fields[tForm.id] = getOrderedFields(tForm, show_form=True)
             form_fields.update(other_forms_fields)
             csvfilename = '%s_%04d.csv'%(
                 tForm.nome.replace(' ', '_').lower().encode('utf-8'),

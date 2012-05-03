@@ -12,11 +12,12 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.db import IntegrityError
 from django.contrib.messages import constants as messages
+from django.utils.datastructures import SortedDict
 
 import settings
 from reports.models import Configuracao
 
-from xml.dom.minidom import parseString, getDOMImplementation
+from xml.dom.minidom import parse, parseString, getDOMImplementation
 
 def smart_truncate_string(str, size):
 	if len(str) < size:
@@ -55,7 +56,7 @@ def create_configuration_reports(request):
 			pass
 			#messages.add_message(request, messages.INFO, 'Hello world.')
 			#messages.info(request, 'Three credits remain in your account.')
-		return HttpResponseRedirect('%s/reports/view/'%url)
+		return HttpResponseRedirect('%sreports/view/'%url)
 	# Permitindo criação de relatórios apenas para formulários de Triagem
 	#forms_list = Formulario.objects.all()
 	forms_list = Formulario.objects.order_by('nome')[3:]
@@ -95,7 +96,7 @@ def getText(nodelist):
 			rc.append(node.data)
 	return ''.join(rc)
 
-def configuration_db2file(request, sid,format='excel'):
+def configuration_db2file(request, sid,format='csv'):
 	from forms.models import Ficha, Formulario
 	try:
 		d = Configuracao.objects.get(pk=sid)
@@ -112,72 +113,70 @@ def configuration_db2file(request, sid,format='excel'):
 		forms = Formulario.objects.filter(pk__in=ids)
 		fichas = Ficha.objects.filter(unidadesaude__id__in=ids_us, formulario__in=forms)
 	except Configuracao.DoesNotExist:
-		forms = Formulario.objects.all()
+		forms = Formulario.objects.filter(tipo__nome= 'Triagem')
 		fichas = Ficha.objects.all()
 	response = HttpResponseNotFound('Formato invalido')
-	if format == 'excel':
-		import xlwt
-		# Create file-like object
-		response = HttpResponse(mimetype='application/ms-excel')
-		filename = 'pacientes.xls'
-		response['Content-Disposition'] = 'attachment; filename="'+ filename +'"'
-		# Get Fichas grouped by Formularios
-		wb = xlwt.Workbook(encoding='utf-8')
-		# Default styles
-		BG0 = xlwt.Pattern()
-		BG0.pattern = BG0.SOLID_PATTERN
-		BG0.pattern_fore_colour = 22
-		BG1 = xlwt.Pattern()
-		BG1.pattern = BG1.SOLID_PATTERN
-		BG1.pattern_fore_colour = 47
-		font0 = xlwt.Font()
-		font0.name = 'Arial'
-		font0.bold = True
-		font1 = xlwt.Font()
-		font1.name = 'Arial'
-		header_style = xlwt.XFStyle()
-		header_style.font = font0
-		header_style.pattern = BG0
-		body_style = xlwt.XFStyle()
-		body_style.font = font1
-		body_style.pattern = BG1
+	if format == 'csv':
+		import csv, random
+		import string
+		valid_chars = "-_.() %s%s" % (string.ascii_letters, string.digits)
+		#Generate a file for each Triagem and complete with the other forms
+		fields = []
+		files = []
+		triagens = forms
+		other_forms_fields = SortedDict()
+		for f_type in ['Consulta', 'Exames', 'Follow-up']:
+			other_forms = Formulario.objects.filter(tipo__nome=f_type)
+			for f in other_forms:
+				other_forms_fields[f.id] = getOrderedFields(f, show_form=True)
+		for tForm in triagens:
+			form_fields = SortedDict()
+			form_fields[tForm.id] = getOrderedFields(tForm, show_form=True)
+			form_fields.update(other_forms_fields)
+			csvfilename = '%s_%04d.csv'%(
+				tForm.nome.replace(' ', '_').lower().encode('utf-8'),
+				random.randint(1, 9999)
+				)
+			csvfilename =  '/tmp/%s'%''.join(c for c in csvfilename if c in valid_chars)
 
-		for f in forms:
-			# Tip: Excel just allows sheet names up to 31 caracters
-			ws = wb.add_sheet(smart_truncate_string(f.nome, 31))
-			ws.write(0, 0, u"Nome do paciente", header_style )
-			ws.write(0, 1, u"Data de nascimento",header_style )
-			ws.write(0, 2, u"Nome da mãe",header_style)
-			ws.write(0, 3, u"Unidade de saúde",header_style)
-			ws.col(0).width = 9000
-			ws.col(1).width = 5000
-			ws.col(2).width = 9000
-			ws.col(3).width = 12000
-			headers = {}
-			index = 4
-			for row, ficha in enumerate(fichas.filter(formulario=f)):
-				ws.write(row+1,0,ficha.paciente.nome, body_style)
-				ws.write(row+1,1,ficha.paciente.data_nascimento, body_style)
-				ws.write(row+1,2, ficha.paciente.nome_mae, body_style)
-				ws.write(row+1,3,ficha.unidadesaude.nome, body_style)
-				# Parse ficha
-				xml = parseString(ficha.conteudo.encode("utf-8" ))
-				for field in xml.firstChild.childNodes:
-					if not field.tagName in headers.keys():
-						headers[field.tagName] = index
-						ws.col(index).width = 4000
-						ws.write(0, index, field.tagName ,header_style)
-						index = index + 1
-					try:
-						ws.write(
-						row+1,headers[field.tagName],
-						', '.join(["%s"%(smart_int(f.firstChild.nodeValue))
-							for f in xml.getElementsByTagName(field.tagName)]),
-						body_style)
-					except:
-						pass
-		wb.save(response)
-	return response
+			csvfile = open(csvfilename, 'wb')
+			files.append(csvfilename)
+			writer = csv.writer(csvfile, delimiter=';', quotechar='"', quoting=csv.QUOTE_ALL)
+			#header
+			headerList = [v.encode('utf-8') for set_v in form_fields.values() for v in set_v.values()]
+			headerKeysList = [v.encode('utf-8') for set_v in form_fields.values() for v in set_v.keys()]
+			writer.writerow(headerList)
+			#content
+			fichas_triagem = Ficha.objects.filter(unidadesaude__id__in=ids_us, formulario=tForm)
+			#Quem sao os pacientes
+			data = {}.fromkeys([int(p) for p in fichas_triagem.values_list('paciente', flat=True)])
+			for p in data.iterkeys():#loop over patients
+				data[p] = SortedDict()
+				for dict_keys in form_fields.values():
+					for k in dict_keys.keys():
+						data[p][k.encode('utf-8')] = ''
+			pacientes = data.keys()
+			#Todas as fichas destes pacientes
+			#pacintes serao reagrupados em subconjuntos para nao exceder o numero de variaveis
+			#Esta eh uma limitacao SQLite3
+			num = 500
+			for sub_pacientes in [pacientes[i::num] for i in range(num)]:
+				fichas = Ficha.objects.filter(paciente__in=sub_pacientes)
+				for ficha in fichas:
+					xml = parseString(ficha.conteudo.encode("utf-8" ))
+					paciente = ficha.paciente.id
+					for field in xml.firstChild.childNodes:
+						try:
+							data[paciente][field.tagName] = ', '.join(["%s"%(smart_int(f.firstChild.nodeValue))
+								for f in xml.getElementsByTagName(field.tagName)])
+						except:
+							pass
+			for id, tags in data.iteritems():
+				writer.writerow([tags[tag].encode('utf-8') for tag  in headerKeysList])
+				#writer.writerow([k for k in tags.iterkeys()])
+			csvfile.close()
+		return zip_to_response(files, 'pacientes.zip')
+	return HttpResponseNotFound("File format not found")
 
 def show_report(request, configId):
 	from tbForms.views import homepage_view, sapem_login
@@ -244,3 +243,73 @@ def get_dataXml(request, configId, formId, variable):
 		response = HttpResponse( json )
 
 	return response
+
+def getOrderedFields(form, show_form=False, number_multifields=4):
+	xmlDOM= getFieldsXML(form)
+	if xmlDOM:
+		elements = xmlDOM.getElementsByTagName('fields')[0].childNodes
+		content = SortedDict(
+			[(el.nodeName, getText(el.childNodes)) for el in elements
+			if el.nodeType == el.ELEMENT_NODE]
+		)
+		content = SortedDict()
+		elements = xmlDOM.firstChild.childNodes
+		for el in elements:
+			if el.nodeName == "multipleFields":
+				fieldsetName = el.getAttribute('fieldset')
+				for idx in range(1, number_multifields):
+					for m_el in el.childNodes:
+						if m_el.nodeType == m_el.ELEMENT_NODE:
+							if show_form:
+								content["%s_%d"%(m_el.nodeName, idx)] = \
+									"%s %s %d"%(getText(m_el.childNodes),
+									fieldsetName, idx)
+							else:
+								content["%s_%d"%(m_el.nodeName, idx)] = \
+									"%s %s %d"%(getText(m_el.childNodes),
+									fieldsetName, idx)
+			else:
+				if el.nodeType == el.ELEMENT_NODE:
+					if show_form:
+						content[el.nodeName] = "%s - %s"%(form.tipo.nome, getText(el.childNodes))
+					else:
+						content[el.nodeName] = getText(el.childNodes)
+
+		return content
+	return {}
+
+def getFieldsXML(form):
+#return DOM object for a xml setting file of a form
+	pathname, moduleFormName = os.path.split(form.path)
+	pathname ='%s/'%(pathname,)
+	if not pathname in sys.path:
+		sys.path.append(pathname)
+	try:
+		moduleForm = __import__(moduleFormName)
+		xmlPath = '%s/%s/%s'%(pathname,moduleFormName,
+				moduleForm.fields_xml_path,)
+		xmlDom = parse(xmlPath)
+	except ImportError:
+		raise customError('Módulo não encontrado')
+	except IOError:
+		return None
+	except AttributeError:
+		return None
+	return xmlDom
+
+def zip_to_response(files, fname):
+	import zipfile
+	from StringIO import StringIO
+	response = HttpResponse(mimetype="application/x-zip-compressed")
+	response['Content-Disposition'] = 'attachment; filename=%s' % fname
+	buffer = StringIO()
+	zip = zipfile.ZipFile(buffer, "w", zipfile.ZIP_DEFLATED)
+	for name in files:
+		zip.write(name)
+	zip.close()
+	buffer.flush()
+	ret_zip = buffer.getvalue()
+	response.write(ret_zip)
+	buffer.close()
+	return response
+
