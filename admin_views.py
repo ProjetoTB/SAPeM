@@ -183,6 +183,50 @@ def log_unidadesaude(request, stDate=365, endDate=0):
 		fichas_us_report[k]= SortedDict().fromkeys(column_us, 0)
 	for row in query_fichas_us_report:
 		fichas_us_report[row['unidadesaude__nome']][row['formulario__nome']] = row['numero_fichas']
+	#Count projeto Baseline
+	column_us_baseline = [u"Triagem Baseline Hospital",
+                          u"Triagem Baseline Ambulatório",
+                          u"Consulta Baseline",
+                          u"FollowUp",
+                          u"Exames"]
+	pacients_baseline = [f.paciente_id for f in Ficha.objects.\
+        filter(formulario__tipo__nome='Triagem').\
+        filter(formulario__nome__icontains=u'baseline').only('paciente')]
+	fichas_projeto_baseline_report = SortedDict().fromkeys([us.nome for us in UnidadeSaude.objects.all()])
+	for k in fichas_projeto_baseline_report.keys():
+		fichas_projeto_baseline_report[k]= SortedDict().fromkeys(column_us_baseline, 0)
+	num = 999
+	for sub_pacients in [pacients_baseline[i::num] for i in range(num)]:
+		query_fichas_projeto_baseline_report = Ficha.objects.\
+								 filter(formulario__nome__in= column_us_baseline).\
+								 filter(paciente__in=sub_pacients).\
+								 values('unidadesaude__nome', 'formulario__nome').\
+								 annotate(numero_fichas=Count('pk'))
+		for row in query_fichas_projeto_baseline_report:
+			fichas_projeto_baseline_report[row['unidadesaude__nome']][row['formulario__nome']] = \
+					fichas_projeto_baseline_report[row['unidadesaude__nome']][row['formulario__nome']] +row['numero_fichas']
+	#Count projeto Implementacao
+	column_us_implementacao = [u"Triagem Implementação Hospital",
+                          u"Triagem Implementação Ambulatório",
+                          u"Consulta Implementação",
+                          u"FollowUp",
+                          u"Exames"]
+	pacients_implementacao = [f.paciente_id for f in Ficha.objects.\
+        filter(formulario__tipo__nome='Triagem').\
+        filter(formulario__nome__icontains=u'implementa').only('paciente')]
+	fichas_projeto_implementacao_report = SortedDict().fromkeys([us.nome for us in UnidadeSaude.objects.all()])
+	for k in fichas_projeto_implementacao_report.keys():
+		fichas_projeto_implementacao_report[k]= SortedDict().fromkeys(column_us_implementacao, 0)
+	num = 999
+	for sub_pacients in [pacients_implementacao[i::num] for i in range(num)]:
+		query_fichas_projeto_implementacao_report = Ficha.objects.\
+								 filter(formulario__nome__in= column_us_implementacao).\
+								 filter(paciente__in=sub_pacients).\
+								 values('unidadesaude__nome', 'formulario__nome').\
+								 annotate(numero_fichas=Count('pk'))
+		for row in query_fichas_projeto_implementacao_report:
+			fichas_projeto_implementacao_report[row['unidadesaude__nome']][row['formulario__nome']] = \
+					fichas_projeto_implementacao_report[row['unidadesaude__nome']][row['formulario__nome']] +row['numero_fichas']
 	return render_to_response('admin/unidadesaude_log.html',
 			locals(), RequestContext(request, {}))
 

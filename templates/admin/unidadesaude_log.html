@@ -95,6 +95,7 @@ $(function() {
 		<li><a href="#tabs-1">Fichas preenchidas por mês</a></li>
 		<li><a href="#tabs-2">Relatório detalhado</a></li>
 		<li><a href="#tabs-3">Total de Fichas por Unidade</a></li>
+		<li><a href="#tabs-4">Total de Fichas por Unidade-Projeto</a></li>
 	</ul>
 	<div id="tabs-1">
 	{% regroup fichas_report by month|date:'M Y' as log_list %}
@@ -177,6 +178,54 @@ $(function() {
 
 		</tbody>
 		</table>
+	</div>
+	</div>
+	<div id="tabs-4">
+		<div class="module">
+		<h1> Baseline</h1>
+		<table id=tableFichaUSProjetoBaseline' cellspacing='0'>
+		<thead>
+		<tr>
+		<th> Unidades Saúde</th>
+		{%for us in column_us_baseline%}
+			<th> {{us}} </th>
+		{%endfor%}
+		</tr>
+		</thead>
+		<tbody>
+		{%for us, counters in fichas_projeto_baseline_report.items%}
+		<tr class="{% if forloop.counter|divisibleby:2 %}row1{% else %}row2{% endif %}" >
+			<th> {{us}} </th>
+			{%for k, c in counters.items%}
+				<td id='td-{{us|slugify}}-{{k|slugify}}'>{{c}}</td>
+			{%endfor%}
+		</tr>
+		{%endfor%}
+		</tbody>
+		</table>
+		<div class="module" style='margin-top:20px;'>
+		<h1> Implementação</h1>
+		<table id=tableFichaUSProjetoImplementação' cellspacing='0'>
+		<thead>
+		<tr>
+		<th> Unidades Saúde</th>
+		{%for us in column_us_implementacao%}
+			<th> {{us}} </th>
+		{%endfor%}
+		</tr>
+		</thead>
+		<tbody>
+		{%for us, counters in fichas_projeto_implementacao_report.items%}
+		<tr class="{% if forloop.counter|divisibleby:2 %}row1{% else %}row2{% endif %}" >
+			<th> {{us}} </th>
+			{%for k, c in counters.items%}
+				<td id='td-{{us|slugify}}-{{k|slugify}}'>{{c}}</td>
+			{%endfor%}
+		</tr>
+		{%endfor%}
+		</tbody>
+		</table>
+		</div>
 	</div>
 </div>
 {% endblock %}
