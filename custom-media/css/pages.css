@@ -1,258 +1,260 @@
 *{
-	margin: 0;
-	padding: 0;
+    margin: 0;
+    padding: 0;
 }
 body {
-	background:    white;
-	font-family:  "Lucida Grande","DejaVu Sans","Bitstream Vera Sans",Verdana,Arial,sans-serif;
-	font-size:       75%;
-}
-#header{
-	background:   #000066;
-	width:          97.5%;
-	color:          white;
-	padding:    10px 15px;
+    background:    white;
+    font-family:  "Lucida Grande","DejaVu Sans","Bitstream Vera Sans",Verdana,Arial,sans-serif;
+    font-size:       75%;
 }
 
 #maincontent {
-	color:       #000066;
-	height:         auto;
-	margin-top:     25px;
-	padding-top:    25px;
+    color:       #000066;
+    padding-top:    25px;
 }
 
+#content {
+    height: auto !important;
+	min-height: 100%;
+	height: 100%
+    margin:     0px auto -20px;
+}
 #title{
-	text-align:   center;
-	line-height:    150%;
-	font-size:      165%;
-	font-weight:    bold;
-	padding-top:    20px;
+    text-align:   center;
+    line-height:    150%;
+    font-size:      165%;
+    font-weight:    bold;
+    padding-top:    20px;
 }
 #subtitle{
-	text-align:   center;
-	font-size:      150%;
-	padding-top:    25px;
+    text-align:   center;
+    font-size:      150%;
+    padding-top:    25px;
 }
 
 #login-container {
-	position: absolute;
-	top:           50%;
-	left:          0px;
-	width:        100%;
-	height:        1px;
-	overflow:  visible;
+    position: absolute;
+    top:           50%;
+    left:          0px;
+    width:        100%;
+    height:        1px;
+    overflow:  visible;
 }
 
 #login{
-	color:        #000066;
-	font: 300 20px "Lucida Grande","DejaVu Sans","Bitstream Vera Sans",Verdana,Arial,sans-serif;
-	width:          400px;
-	margin:      0px auto;
-	height:         200px;
-	margin-left:   -200px;  /***  width / 2   ***/
-	position:    absolute;
-	top:           -100px;  /***  height / 2   ***/
-	left:             50%;
+    color:        #000066;
+    font: 300 20px "Lucida Grande","DejaVu Sans","Bitstream Vera Sans",Verdana,Arial,sans-serif;
+    width:          400px;
+    margin:      0px auto;
+    height:         200px;
+    margin-left:   -200px;  /***  width / 2   ***/
+    position:    absolute;
+    top:           -100px;  /***  height / 2   ***/
+    left:             50%;
 }
 
 #login fieldset legend{
-	font: 600 12px tahoma;
+    font: 600 12px tahoma;
 }
 
 #login form div{
-	clear:        left;
-	height:     middle;
-	padding:   3px 5px;
+    clear:        left;
+    height:     middle;
+    padding:   3px 5px;
 }
 #login input{
-	width:    100px;
-	margin:   5px;
+    width:    100px;
+    margin:   5px;
 }
 #login form div label{
-	display:         block;
-	margin:            5px;
-	float:            left;
-	width:           200px;
-	text-align:      right;
-	vertical-align: middle;
+    display:         block;
+    margin:            5px;
+    float:            left;
+    width:           200px;
+    text-align:      right;
+    vertical-align: middle;
 }
 
 #divSubmit{
-	text-align: right;
+    text-align: right;
 }
 
 #user-tools {
-	color: #FFFFCC;
-	font-size :11px;
-	padding: 1.2em 10px;
-	position: absolute;
-	right: 0;
-	text-align: right;
-	top: 0;
+    color: #FFFFCC;
+    font-size :11px;
+    padding: 1.2em 10px;
+    position: relative;
+    right: 0;
+    text-align: right;
+    top: 0;
 }
 
 #user-tools a {
-	color: white;
-	text-decoration: none;
+    color: white;
+    text-decoration: none;
 }
 
 #user-tools a:hover {
-	text-decoration: underline;
+    text-decoration: underline;
 }
 #divNameHeader{
-	color:        #000066;
-	font: 600 26px "Lucida Grande","DejaVu Sans","Bitstream Vera Sans",Verdana,Arial,sans-serif;
-	margin-left:      30px;
-	margin-right:      auto;
-	margin-bottom:   15px;
+    color:        #000066;
+    font: 600 26px "Lucida Grande","DejaVu Sans","Bitstream Vera Sans",Verdana,Arial,sans-serif;
+    margin-left:      30px;
+    margin-right:      auto;
+    margin-bottom:   15px;
 }
 
 #divPatientForm{
-	color:        #000066;
-	font: 300 12px "Lucida Grande","DejaVu Sans","Bitstream Vera Sans",Verdana,Arial,sans-serif;
-	width:          600px;
-	margin-left:      auto;
-	margin-right:      auto;
-	margin-bottom:   10px;
+    color:        #000066;
+    font: 300 12px "Lucida Grande","DejaVu Sans","Bitstream Vera Sans",Verdana,Arial,sans-serif;
+    width:          600px;
+    margin-left:      auto;
+    margin-right:      auto;
+    margin-bottom:   10px;
 }
 
 #divPatientForm fieldset legend{
-	font: 600 16px tahoma;
+    font: 600 16px tahoma;
 }
 
 #divPatientForm form div{
-	clear:        left;
-	height:     middle;
-	padding:   3px 5px;
+    clear:        left;
+    height:     middle;
+    padding:   3px 5px;
 }
 #divPatientForm input.textInput{
-	width:    300px;
-	margin:   5px;
+    width:    300px;
+    margin:   5px;
 }
 
 #divPatientForm input{
-	width:    100px;
-	margin:   5px;
+    width:    100px;
+    margin:   5px;
 }
 
 #divPatientForm form div label{
-	display:         block;
-	margin:            5px;
-	float:            left;
-	width:           200px;
-	text-align:      right;
-	vertical-align: middle;
+    display:         block;
+    margin:            5px;
+    float:            left;
+    width:           200px;
+    text-align:      right;
+    vertical-align: middle;
 }
 .error-msg{
-	color:			red;
-	font-size:		15px;
-	padding:		10px;
-	text-align:		left;
-	width:			40%;
+    color:          red;
+    font-size:      15px;
+    padding:        10px;
+    text-align:     left;
+    width:          40%;
 }
 
 .info {
-	font-size:		10px;
-	font-style:		italic;
+    font-size:      10px;
+    font-style:     italic;
 }
 
 .msg{
-	color:  #000066;
-	font-size: 22px;
-	padding: 10px;
-	font-weight: bold;
+    color:  #000066;
+    font-size: 22px;
+    padding: 10px;
+    font-weight: bold;
 }
 
 .usChoice{
-	color:  #000066;
-	font-size: 12px;
-	padding: 10px;
+    color:  #000066;
+    font-size: 12px;
+    padding: 10px;
 }
-
+/*
 .dashboard-container {
-	position: absolute;
-	top:           50%;
-	left:          0px;
-	width:        100%;
-	height:        1px;
-	overflow:  visible;
+    position: absolute;
+    top:           50%;
+    left:          0px;
+    width:        100%;
+    height:        1px;
+    overflow:  visible;
+}*/
+.dashboard-container{
+	padding-bottom:40px;
 }
 
 .dashboard{
-	position:    absolute;
-	margin: 0 auto;
-	padding: 0;
-	width: 400px; /*WIDTH OF MAIN MENU ITEMS*/
-	border-top: 1px solid black;
-	border-left: 1px solid black;
-	border-right: 1px solid black;
-	margin-left:   -200px;  /***  width / 2   ***/
-	top:           -125px;  /***  height / 2   ***/
-	left:             50%;
+    /*position:    absolute;*/
+    /*margin: 0 auto;*/
+    padding: 0;
+    width: 400px; /*WIDTH OF MAIN MENU ITEMS*/
+    border-top: 1px solid black;
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+    /*margin-left:   -200px; */ /***  width / 2   ***/
+    /*top:           -125px; */ /***  height / 2   ***/
+    /*left:             50%;*/
+	margin-left: auto; margin-right: auto; text-align: left;
 }
 
 .dashboard ul{
-	list-style-type: none;
+    list-style-type: none;
 }
 
 .dashboard li{
-	position: relative;
-	border-bottom: 1px solid black;
+    position: relative;
+    border-bottom: 1px solid black;
 }
 
 .dashboard li a{
-	background: #B9D3EE repeat-x bottom left;
-	font: 300 20px "Lucida Grande","DejaVu Sans","Bitstream Vera Sans",Verdana,Arial,sans-serif;
-	color: #000066;
-	display: block;
-	width: auto;
-	padding: 10px 0;
-	padding-left: 10px;
-	text-decoration: none;
+    background: #B9D3EE repeat-x bottom left;
+    font: 300 20px "Lucida Grande","DejaVu Sans","Bitstream Vera Sans",Verdana,Arial,sans-serif;
+    color: #000066;
+    display: block;
+    width: auto;
+    padding: 10px 0;
+    padding-left: 10px;
+    text-decoration: none;
 }
 .dashboard li a:hover {
-	background: #A9FFFF repeat-x bottom left;
-	color: #000066;
-	text-decoration: none;
+    background: #A9FFFF repeat-x bottom left;
+    color: #000066;
+    text-decoration: none;
 }
 .dashboard ul.sub_menu li a{
-	background: #FFDAB9 repeat-x bottom left;
-	font: 300 20px "Lucida Grande","DejaVu Sans","Bitstream Vera Sans",Verdana,Arial,sans-serif;
-	color:#663333;
-	display: block;
-	width: auto;
-	padding: 10px 0;
-	padding-left: 20px;
-	text-decoration: none;
+    background: #FFDAB9 repeat-x bottom left;
+    font: 300 20px "Lucida Grande","DejaVu Sans","Bitstream Vera Sans",Verdana,Arial,sans-serif;
+    color:#663333;
+    display: block;
+    width: auto;
+    padding: 10px 0;
+    padding-left: 20px;
+    text-decoration: none;
 }
 .dashboard ul.sub_menu li a small {
-	font-style: italic;
-	font-size: 12px ;
+    font-style: italic;
+    font-size: 12px ;
 }
 .dashboard ul.sub_menu li a:hover {
-	background: #FFF380 repeat-x bottom left;
-	color: #663333;
-	text-decoration: none;
+    background: #FFF380 repeat-x bottom left;
+    color: #663333;
+    text-decoration: none;
 }
 
 #divConfig fieldset.config{
-	border-color: #999999;
-	border-style: solid none none;
-	border-width: 1px 0 0;
-	clear: both;
-	font-size: 100%;
-	margin: 10px;
-	padding: 40px;
+    border-color: #999999;
+    border-style: solid none none;
+    border-width: 1px 0 0;
+    clear: both;
+    font-size: 100%;
+    margin: 10px;
+    padding: 40px;
 }
 
 #divConfig fieldset.config legend{
-	font-size: 150%;
-	font-weight: normal;
-	margin: 0;
-	padding: 0 5px;
+    font-size: 150%;
+    font-weight: normal;
+    margin: 0;
+    padding: 0 5px;
 }
 
-#divFiltros fieldset.filtros{
+fieldset.filtros{
 	border-color: #999999;
 	border-style: solid none none;
 	border-width: 1px 0 0;
@@ -262,10 +264,11 @@ body {
 	padding: 40px;
 }
 
-#divFiltros fieldset.filtros legend{
-	font-size: 150%;
+fieldset.filtros legend{
+	font-size: 120%;
 	font-weight: normal;
 	margin: 0;
 	padding: 0 5px;
 	color: #000066;
 }
+

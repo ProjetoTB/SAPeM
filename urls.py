@@ -4,6 +4,7 @@ from django.contrib import admin
 
 #Custom
 from tbForms.admin_views import edit_formulario, add_formulario
+from tbForms.admin_views import log_unidadesaude, log_unidadesaude_by_form
 from tbForms.views import correct_address
 from tbForms.views import ffrequired
 from tbForms.views import list_forms_by_health_unit
@@ -27,6 +28,8 @@ from tbForms.views import showARTResult
 from tbForms.views import retrieveUnidadesSaude
 from tbForms.views import showFieldsXML
 from tbForms.views import select_unidade_saude
+from tbForms.views import jsFunctionCreateHeaderFooter
+from tbForms.views import retrieveFormName
 
 from tbForms.reports.views import create_configuration_reports
 from tbForms.reports.views import view_configuration_reports
@@ -34,6 +37,12 @@ from tbForms.reports.views import remove_configuration_reports
 from tbForms.reports.views import configuration_db2file
 from tbForms.reports.views import show_report
 from tbForms.reports.views import get_configSettingsXml
+from tbForms.reports.views import get_dataXml
+
+
+from adminplus import AdminSitePlus
+
+admin.site = AdminSitePlus()
 
 admin.autodiscover()
 
@@ -42,12 +51,15 @@ urlpatterns = patterns('',
 	(r'^admin/forms/formulario/add/$', add_formulario),
 	(r'^admin/forms/formulario/(\d)/$', edit_formulario),
 	(r'^admin/', include(admin.site.urls)),
+#	(r'^admin/unidadesaude/log/$', log_unidadesaude),
+	(r'^admin/unidadesaude/(?P<healthUnit>\d+)/log/$', log_unidadesaude_by_form),
 	(r'^FirefoxRequerido/', ffrequired),
 	(r'^addressService/cep/(\d{5}-\d{3})/$', correct_address),
 	(r'^showForms/(?P<healthUnit>\d)/$', list_forms_by_health_unit),
 	(r'^form/(?P<formId>\d+)/(?P<patientId>\d+)/(?P<f>.*)$', handle_form),
 	(r'^form/edit/(?P<fichaId>\d+)/(?P<f>.*)$', edit_form),
 	(r'^form/fields/xml/(?P<formId>\d+)/', showFieldsXML),
+	(r'^form/names/(?P<formId>\d+)/$', retrieveFormName),
 	(r'^ficha/(?P<fichaId>\d+)/$', showFichaConteudo),
 	(r'^patientLastRegister/(?P<formId>\d+)/(?P<patientId>\d+)/$', showPatientLastRegister),
 	(r'^registers/(?P<formId>\d+)/(?P<patientId>\d+)/$', showPatientRegisters),
@@ -57,6 +69,7 @@ urlpatterns = patterns('',
 	(r'^patientLastRegisterByType/(?P<patientId>\d+)/(?P<type>\w+)/$', retrieveLastReportByType),
 	(r'^patients/$', show_patients),
 	(r'^listPatients/$', list_patients),
+	(r'^js/createHeaderFooter/$', jsFunctionCreateHeaderFooter),
 	(r'^$', homepage_view),
 	(r'^download/(?P<format>\w+)/$', db2file),
 	(r'^login/$', sapem_login),
@@ -71,7 +84,5 @@ urlpatterns = patterns('',
 	(r'^reports/download/(?P<sid>\d+)/(?P<format>\w+)/$', configuration_db2file),
 	(r'^reports/showReport/(?P<configId>\d+)/$', show_report),
 	(r'^reports/configSettingXml/(?P<configId>\d+)/$', get_configSettingsXml),
+	(r'^reports/getData/(?P<configId>\d+)/(?P<formId>\d+)/(?P<variable>\w+)/$', get_dataXml),
 )
-
-
-

@@ -1,5 +1,8 @@
-from django.contrib import admin
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
+
+from django.contrib import admin
 from tbForms.forms.models import Paciente, Ficha, tipoFormulario
 from tbForms.forms.models import Formulario, UnidadeSaude
 from tbForms.forms.models import Grupo_Formulario, Grupo
@@ -18,6 +21,7 @@ class UnidadeSaudeAdmin(admin.ModelAdmin):
 	list_display  = ('nome', 'cidade', 'UF')
 	list_filter   = ('cidade', 'UF')
 admin.site.register(UnidadeSaude, UnidadeSaudeAdmin)
+
 
 class FormularioAdmin(admin.ModelAdmin):
 	list_display  = ('nome','version', 'tipo', 'descricao', 'data_insercao')
@@ -76,3 +80,19 @@ class GrupoAdmin(admin.ModelAdmin):
 
 admin.site.register(Grupo, GrupoAdmin)
 
+
+class PacienteAdmin(admin.ModelAdmin):
+	list_display  = ('nome','nome_mae', 'data_nascimento')
+	change_form_template = 'admin/forms/paciente/view_form.html'
+	def get_actions(self, request):
+		actions = super(PacienteAdmin, self).get_actions(request)
+		return actions
+	def has_add_permission(self, request):
+		return False
+	def save_model(self, request, obj, form, change):
+		#Return nothing to make sure user can't update any data
+		pass
+admin.site.register(Paciente, PacienteAdmin)
+
+from tbForms.admin_views import log_unidadesaude
+admin.site.register_view('log', log_unidadesaude, u'Fichas preenchidas por Unidade de Saúde')

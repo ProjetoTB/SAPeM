@@ -67,7 +67,7 @@
 								<td> </td>
 								<td> {{ s.creation_date }} </td>
 								<td> <a href="{{SITE_ROOT}}reports/showReport/{{ s.id }}"> <img src="{{MEDIA_URL}}images/genReport.png" width="30px" border="0"/></a> </td>
-								<td> <a href="{{SITE_ROOT}}reports/download/{{ s.id }}/excel/"><img src="{{MEDIA_URL}}images/excel.png" width='20px' border='0'/></a></td>
+								<td> <a href="{{SITE_ROOT}}reports/download/{{ s.id }}/csv/"><img src="{{MEDIA_URL}}images/download-csv-icon.gif" width='30px' border='0'/></a></td>
 								<td> <a href="{{SITE_ROOT}}reports/removeConfig/{{ s.id }}"><img src="{{MEDIA_URL}}images/trash-can-delete.png" width='20px' border='0'/></a></td>
 							</tr>
 							{% endfor %}

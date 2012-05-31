@@ -2,24 +2,29 @@
 # -*- coding: utf-8 -*-
 
 import os, sys
-
 # Work around made due the fact production version has an outdated version of
 # tempfile module
 import tempfile2 as tempfile
 import tarfile
+from datetime import datetime, timedelta
+import time
 
-from django.http import HttpResponse, HttpResponseRedirect
-from django.template import RequestContext
-from django.shortcuts import render_to_response
-from django.core.files.uploadedfile import SimpleUploadedFile
 from django import forms
-from django.forms import ModelForm
+from django.contrib import admin
 from django.contrib.admin.util import model_ngettext
+from django.contrib.admin.views.decorators import staff_member_required
+from django.core.files.uploadedfile import SimpleUploadedFile
+from django.db import connection
+from django.db.models import Count
+from django.forms import ModelForm
+from django.http import HttpResponse,HttpResponseNotFound, HttpResponseRedirect
+from django.shortcuts import render_to_response
+from django.template import RequestContext
+from django.utils import simplejson
+from django.utils.datastructures import SortedDict
 from django.utils.translation import ugettext_lazy, ugettext as _
 
-from django.contrib.admin.views.decorators import staff_member_required
-
-from forms.models import Formulario, tipoFormulario, UnidadeSaude
+from forms.models import Formulario, tipoFormulario, UnidadeSaude, Ficha
 
 import settings
 
@@ -135,6 +140,137 @@ def edit_formulario(request, f_id, app_label='Forms'):
 	return render_to_response('change_form.html',
 			locals(), RequestContext(request, {}))
 
+def getMonthList(now, stDate, endDate):
+	dateRange =[now - timedelta(days=stDate), now-timedelta(days=endDate)]
+	dt1, dt2 = dateRange
+	start_month=dt1.month
+	end_months=(dt2.year-dt1.year)*12 + dt2.month+1
+	return [datetime(year=yr, month=mn, day=1) for (yr, mn) in (
+          ((m - 1) / 12 + dt1.year, (m - 1) % 12 + 1) for m in range(start_month, end_months)
+    )]
+
+
+def log_unidadesaude(request, stDate=365, endDate=0):
+	if not request.user.is_authenticated():
+		return HttpResponseRedirect(settings.SITE_ROOT + 'admin/')
+	"""
+	Summary report
+	"""
+	now= datetime.now()
+	truncate_date = connection.ops.date_trunc_sql('month', 'data_insercao')
+	fichas_report = Ficha.objects.filter(
+                                            data_insercao__gte=now -timedelta(days=stDate),
+                                            data_insercao__lte=now -timedelta(days=endDate)
+                                        ).\
+                            extra(select={'month': truncate_date}).\
+                            values('unidadesaude__id', 'unidadesaude__nome', 'month').\
+                            annotate(numero_fichas=Count('pk')).\
+                            order_by('-month')
+	fichas_report = [ dict([
+         ('unidadesaude__nome', l['unidadesaude__nome']),
+         ('unidadesaude__id', l['unidadesaude__id']),
+         ('month', datetime.strptime(l['month'].split(' ')[0], '%Y-%m-%d')),
+         ('numero_fichas', l['numero_fichas'])
+     ]) for l in fichas_report]
+	columns = getMonthList(now, stDate, endDate)
+	rows = UnidadeSaude.objects.values('nome', 'id').order_by('nome')
+	#Fichas Total per US
+	column_us = [f.nome for f in  Formulario.objects.all()]
+	query_fichas_us_report = Ficha.objects.values('unidadesaude__nome', 'formulario__nome').\
+                             annotate(numero_fichas=Count('pk'))
+	fichas_us_report = SortedDict().fromkeys([us.nome for us in UnidadeSaude.objects.all()])
+	for k in fichas_us_report.keys():
+		fichas_us_report[k]= SortedDict().fromkeys(column_us, 0)
+	for row in query_fichas_us_report:
+		fichas_us_report[row['unidadesaude__nome']][row['formulario__nome']] = row['numero_fichas']
+	#Count projeto Baseline
+	column_us_baseline = [u"Triagem Baseline Hospital",
+                          u"Triagem Baseline Ambulatório",
+                          u"Consulta Baseline",
+                          u"FollowUp",
+                          u"Exames"]
+	pacients_baseline = [f.paciente_id for f in Ficha.objects.\
+        filter(formulario__tipo__nome='Triagem').\
+        filter(formulario__nome__icontains=u'baseline').only('paciente')]
+	fichas_projeto_baseline_report = SortedDict().fromkeys([us.nome for us in UnidadeSaude.objects.all()])
+	for k in fichas_projeto_baseline_report.keys():
+		fichas_projeto_baseline_report[k]= SortedDict().fromkeys(column_us_baseline, 0)
+	num = 999
+	for sub_pacients in [pacients_baseline[i::num] for i in range(num)]:
+		query_fichas_projeto_baseline_report = Ficha.objects.\
+								 filter(formulario__nome__in= column_us_baseline).\
+								 filter(paciente__in=sub_pacients).\
+								 values('unidadesaude__nome', 'formulario__nome').\
+								 annotate(numero_fichas=Count('pk'))
+		for row in query_fichas_projeto_baseline_report:
+			fichas_projeto_baseline_report[row['unidadesaude__nome']][row['formulario__nome']] = \
+					fichas_projeto_baseline_report[row['unidadesaude__nome']][row['formulario__nome']] +row['numero_fichas']
+	#Count projeto Implementacao
+	column_us_implementacao = [u"Triagem Implementação Hospital",
+                          u"Triagem Implementação Ambulatório",
+                          u"Consulta Implementação",
+                          u"FollowUp",
+                          u"Exames"]
+	pacients_implementacao = [f.paciente_id for f in Ficha.objects.\
+        filter(formulario__tipo__nome='Triagem').\
+        filter(formulario__nome__icontains=u'implementa').only('paciente')]
+	fichas_projeto_implementacao_report = SortedDict().fromkeys([us.nome for us in UnidadeSaude.objects.all()])
+	for k in fichas_projeto_implementacao_report.keys():
+		fichas_projeto_implementacao_report[k]= SortedDict().fromkeys(column_us_implementacao, 0)
+	num = 999
+	for sub_pacients in [pacients_implementacao[i::num] for i in range(num)]:
+		query_fichas_projeto_implementacao_report = Ficha.objects.\
+								 filter(formulario__nome__in= column_us_implementacao).\
+								 filter(paciente__in=sub_pacients).\
+								 values('unidadesaude__nome', 'formulario__nome').\
+								 annotate(numero_fichas=Count('pk'))
+		for row in query_fichas_projeto_implementacao_report:
+			fichas_projeto_implementacao_report[row['unidadesaude__nome']][row['formulario__nome']] = \
+					fichas_projeto_implementacao_report[row['unidadesaude__nome']][row['formulario__nome']] +row['numero_fichas']
+	return render_to_response('admin/unidadesaude_log.html',
+			locals(), RequestContext(request, {}))
+
+def log_unidadesaude_by_form(request, healthUnit,stDate=365, endDate=0):
+	if not request.user.is_authenticated():
+		return HttpResponseRedirect(settings.SITE_ROOT + 'admin/')
+	now= datetime.now()
+	try:
+		us = UnidadeSaude.objects.get(pk=int(healthUnit))
+	except:
+		return HttpResponseNotFound('Id de unidade errado')
+	truncate_date = connection.ops.date_trunc_sql('month', 'forms_ficha.data_insercao')
+	fichas_report = Ficha.objects.\
+                                   filter(
+                                            unidadesaude=us,
+                                            data_insercao__gte=now -timedelta(days=stDate),
+                                            data_insercao__lte=now -timedelta(days=endDate)
+                                        ).\
+                            extra(select={'month': truncate_date}).\
+                            values('formulario__nome', 'month').\
+                            annotate(numero_fichas=Count('pk')).\
+                            order_by('-month')
+	fichas_report = [ dict([
+         ('formulario__nome', l['formulario__nome']),
+         ('month', datetime.strptime(l['month'].split(' ')[0], '%Y-%m-%d').strftime('%Y%m')),
+         ('numero_fichas', l['numero_fichas'])
+     ]) for l in fichas_report]
+	columns = [dt.strftime('%Y%m') for dt in getMonthList(now, stDate, endDate)]
+	forms = Formulario.objects.all()
+	rows = [r.nome for r in forms]
+	table_data = SortedDict().fromkeys(rows)
+	for k in table_data.keys():
+		table_data[k] = SortedDict().fromkeys(columns, 0)
+	for f in fichas_report:
+		table_data[f['formulario__nome']][f['month']] = f['numero_fichas']
+	return json_response(table_data)
+
+def json_response(data):
+	return HttpResponse(
+		simplejson.dumps(data),
+		content_type = 'application/javascript; charset=utf8'
+	)
 
 add_formulario = staff_member_required(add_formulario)
 edit_formulario = staff_member_required(edit_formulario)
+log_unidadesaude = staff_member_required(log_unidadesaude)
+log_unidadesaude_by_form = staff_member_required(log_unidadesaude_by_form)
