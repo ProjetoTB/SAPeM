@@ -72,20 +72,6 @@
 	<body>
 		<header></header>
 		<div id='content'>
-			<div id='header'>
-				<div id='branding'>&nbsp;</div>
-				<div id='user-tools'>
-					{% if user.is_authenticated %}
-						Bem vindo, <strong>{{ user.username }}</strong>.
-						{% if user.is_staff %}
-							<a href='{{ url }}admin/'>Administração</a> /
-						{% endif %}
-						<a href='{{url}}logout/'>Encerrar sessão</a>
-					{% else %}
-						<a href='{{url}}admin/'>Administração</a>
-					{% endif %}
-				</div>
-			</div>
 			{% block content %}
 			{% if user.is_authenticated %}
 			<!-- Authenticate account menu -->

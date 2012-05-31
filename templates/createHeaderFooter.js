@@ -86,6 +86,7 @@ jQuery.fn.createHeader = function() {
         ut.append(admLink);
     {% endif %}
     {% if user.is_authenticated %}
+    	ut.append(" ");
 		logoutLink = $('<a />');
 		logoutLink.attr('href', '{{url}}logout/');
 		logoutLink.text('Sair');
@@ -135,10 +136,9 @@ jQuery.fn.createFooter = function() {
         "background": "none repeat scroll 0 0 #000066",
         'color'     : 'white',
         'padding'   : '15px 20px',
-        'clear'     : 'both',
-        "position"  : "fixed",
-        "bottom"    : "0px",
-        "height"    : "20px"
+        "height"    : "20px",
+		"position"  : "fixed",
+		"bottom"    : "0px",
     }
     footer.css(cssObj);
     footer.prev().css({'margin-bottom': '20px'});
@@ -159,3 +159,20 @@ jQuery.fn.createFooter = function() {
     });
 };
 
+function positionFooter() { 
+    var mFoo = $("footer"); 
+    if (
+        (($(document.body).height() + mFoo.height()) < $(window).height() && mFoo.css("position") == "fixed") ||
+        ($(document.body).height() < $(window).height() && mFoo.css("position") != "fixed")
+    ) {
+        mFoo.css({ position: "fixed", bottom: "0px" }); 
+    } else { 
+        mFoo.css({ position: "static" }); 
+    } 
+}
+$(document).ready(function () {
+    positionFooter();
+    $(window).scroll(positionFooter);
+    $(window).resize(positionFooter); 
+    $(window).load(positionFooter); }
+);
