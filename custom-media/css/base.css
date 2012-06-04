@@ -1,6 +1,11 @@
 /*
     DJANGO Admin styles
 */
+article, aside, canvas, details,
+figcaption, figure, footer, header,
+hgroup, nav, section, summary, video {
+    display: block;
+}
 
 body {
     margin: 0;

@@ -1,3 +1,9 @@
+article, aside, canvas, details,
+figcaption, figure, footer, header,
+hgroup, nav, section, summary, video {
+    display: block;
+}
+
 *{
     margin: 0;
     padding: 0;
