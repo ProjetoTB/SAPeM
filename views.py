@@ -891,11 +891,37 @@ def db2file(request, format='excel'):
                         except:
                             pass
             for id, tags in data.iteritems():
+                tags['data_consulta'] = str_to_date(tags['data_consulta'])
                 writer.writerow([tags[tag].encode('utf-8') for tag  in headerKeysList])
                 #writer.writerow([k for k in tags.iterkeys()])
             csvfile.close()
         return zip_to_response(files, 'pacientes.zip')
     return HttpResponseNotFound("File format not found")
+
+def parse_date(date):
+	'''
+	Aceita datas no formato DD de MES de AAAA
+	'''
+
+	meses = ['Janeiro', 'Fevereiro', 'Marco',
+			'Abril', 'Maio', 'Junho', 'Julho',
+			'Agosto', 'Setembro', 'Outubro',
+			'Novembro', 'Dezembro']
+	date_list = date.split(' de ')
+	return '%s/%s/%s' % (date_list[0], meses.index(date_list[1]) + 1, date_list[2])
+
+def str_to_date(date):
+	'''
+	Sao dois formatos de datas que temos nos csv
+	que tem que ser transformados para DD/MM/AAAA:
+	Segunda-feira, 11 de Abril de 2011
+	e
+	01 de Abril de 2011
+	'''
+	date = strip_accents(date)
+	if not date: return date
+	date_list = date.split(',')
+	return parse_date(date_list[-1].strip())
 
 def art_view (request, formId, patientId):
     if not request.user.is_authenticated():
