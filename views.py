@@ -865,6 +865,10 @@ def db2file(request, format='excel'):
             headerList = [v.encode('utf-8') for set_v in form_fields.values() for v in set_v.values()]
             headerKeysList = [v.encode('utf-8') for set_v in form_fields.values() for v in set_v.keys()]
             writer.writerow(headerList)
+            # O SPSS corta valores das variaveis loucamente
+            # por isso essa linha eh necessaria, para forçar o tamanho da coluna
+            fake_line = ['-'*200] * len(headerList)
+            writer.writerow(fake_line)
             #content
             fichas_triagem = Ficha.objects.filter(formulario=tForm)
             #Quem sao os pacientes
