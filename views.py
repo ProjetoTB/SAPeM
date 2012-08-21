@@ -234,7 +234,7 @@ def getFieldsXML(form):
         return None
     return xmlDom
 
-def getOrderedFields(form, show_form=False, number_multifields=4):
+def getOrderedFields(form, show_form=False, number_multifields=4, form_in_index=False):
     xmlDOM= getFieldsXML(form)
     if xmlDOM:
         elements = xmlDOM.getElementsByTagName('fields')[0].childNodes
@@ -251,7 +251,7 @@ def getOrderedFields(form, show_form=False, number_multifields=4):
                     for m_el in el.childNodes:
                         if m_el.nodeType == m_el.ELEMENT_NODE:
                             if show_form:
-                                content["%s_%d"%(m_el.nodeName, idx)] = \
+                                content["%s - %s_%d"%(form.tipo.nome, m_el.nodeName, idx)] = \
                                     "%s %s %d"%(getText(m_el.childNodes),
                                     fieldsetName, idx)
                             else:
@@ -261,7 +261,10 @@ def getOrderedFields(form, show_form=False, number_multifields=4):
             else:
                 if el.nodeType == el.ELEMENT_NODE:
                     if show_form:
-                        content[el.nodeName] = "%s - %s"%(form.tipo.nome, getText(el.childNodes))
+                    	if form_in_index:
+                        	content["%s - %s" % (form.tipo.nome, el.nodeName)] = "%s - %s"%(form.tipo.nome, getText(el.childNodes))
+                    	else:
+                        	content[el.nodeName] = "%s - %s"%(form.tipo.nome, getText(el.childNodes))
                     else:
                         content[el.nodeName] = getText(el.childNodes)
 
@@ -847,10 +850,10 @@ def db2file(request, format='excel'):
         for f_type in ['Consulta', 'Exames', 'Follow-up']:
             other_forms = Formulario.objects.filter(tipo__nome=f_type)
             for f in other_forms:
-                other_forms_fields[f.id] = getOrderedFields(f, show_form=True)
+                other_forms_fields[f.id] = getOrderedFields(f, show_form=True, form_in_index=True)
         for tForm in triagens:
             form_fields = SortedDict()
-            form_fields[tForm.id] = getOrderedFields(tForm, show_form=True)
+            form_fields[tForm.id] = getOrderedFields(tForm, show_form=True, form_in_index=True)
             form_fields.update(other_forms_fields)
             csvfilename = '%s_%04d.csv'%(
                 tForm.nome.replace(' ', '_').lower().encode('utf-8'),
@@ -890,12 +893,12 @@ def db2file(request, format='excel'):
                     paciente = ficha.paciente.id
                     for field in xml.firstChild.childNodes:
                         try:
-                            data[paciente][field.tagName] = ', '.join(["%s"%(smart_int(f.firstChild.nodeValue))
-                                for f in xml.getElementsByTagName(field.tagName)])
+                            field_data = ', '.join(["%s"%(smart_int(f.firstChild.nodeValue))  for f in xml.getElementsByTagName(field.tagName)])
+                            data[paciente]["%s - %s" % (ficha.formulario.tipo.nome, field.tagName)] = field_data
                         except:
                             pass
             for id, tags in data.iteritems():
-                tags['data_consulta'] = str_to_date(tags['data_consulta'])
+                tags['Triagem - data_consulta'] = str_to_date(tags['Triagem - data_consulta'])
                 writer.writerow([tags[tag].encode('utf-8') for tag  in headerKeysList])
                 #writer.writerow([k for k in tags.iterkeys()])
             csvfile.close()
@@ -922,8 +925,8 @@ def str_to_date(date):
 	e
 	01 de Abril de 2011
 	'''
-	date = strip_accents(date)
 	if not date: return date
+	date = strip_accents(date)
 	date_list = date.split(',')
 	return parse_date(date_list[-1].strip())
 
