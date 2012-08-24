@@ -935,7 +935,7 @@ def validate_export(files, report):
 		name_index, name_mae_index, data_nascimento_index, to_be_ignored = None, None, None, None
 		xml_vars = None
 		header = None
-		erros, pacientes_nao_encontrados = 0, 0
+		erros, pacientes_nao_encontrados, pacientes_duplicados = 0, 0, 0
 
 		for index, row in enumerate(reader):
 
@@ -977,6 +977,10 @@ def validate_export(files, report):
 				report.write("Data de nascimento: %s\n" % smart_str(row[data_nascimento_index]))
 				report.write("Paciente nao encontrado!\n\n")
 				continue
+			except Paciente.MultipleObjectsReturned:
+				pacientes_duplicados += 1
+				report.write("Paciente duplicado!\n")
+				continue
 
 			fichas = paciente.ficha_set.all()
 			fichas_xml = [parseString(smart_str(ficha.conteudo)) for ficha in fichas]
@@ -997,6 +1001,9 @@ def validate_export(files, report):
 				except ValueError:
 					continue
 
+				if len(tipo_fichas) != len(set(tipo_fichas)):
+					report.write("Fomrularios duplicados: %s\n" % str(tipo_fichas))
+
 				try:
 					field_data = ', '.join(["%s"%(smart_int(field.firstChild.nodeValue)) for field in ficha_xml.getElementsByTagName(xml_var)])
 				except AttributeError:
@@ -1014,7 +1021,8 @@ def validate_export(files, report):
 			report.write("\n")
 
 		report.write("%s pacientes verificados\n" % str(index+1-3))
-		report.write("%s paciente nao encontrados\n" % str(pacientes_nao_encontrados))
+		report.write("%s pacientes duplicados\n" % str(pacientes_duplicados))
+		report.write("%s pacientes nao encontrados\n" % str(pacientes_nao_encontrados))
 		report.write("%s erros\n" % str(erros))
 		report.write("%s\n" % ("-"*100))
 		csvfile.close()
