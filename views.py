@@ -921,8 +921,6 @@ def validate_export(files, report):
 	import csv
 	from forms.models import Paciente
 
-	raise ValueError
-
 	for f in files:
 
 		if 'report' in f: continue
