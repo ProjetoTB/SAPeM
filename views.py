@@ -905,11 +905,12 @@ def db2file(request, format='excel'):
                 writer.writerow([tags[tag].encode('utf-8') for tag  in headerKeysList])
                 #writer.writerow([k for k in tags.iterkeys()])
             csvfile.close()
-        reportfilename =  '/tmp/report.txt'
-        files.append(reportfilename)
-        report = open(reportfilename, 'w')
-        validate_export(files, report)
-        report.close()
+        if request.GET.get('report', '') == "true":
+            reportfilename =  '/tmp/report.txt'
+            files.append(reportfilename)
+            report = open(reportfilename, 'w')
+            validate_export(files, report)
+            report.close()
         return zip_to_response(files, 'pacientes.zip')
     return HttpResponseNotFound("File format not found")
 
