@@ -869,12 +869,12 @@ def db2file(request, format='excel'):
             headerList = [v.encode('utf-8') for set_v in form_fields.values() for v in set_v.values()]
             headerKeysList = [v.encode('utf-8') for set_v in form_fields.values() for v in set_v.keys()]
             writer.writerow(headerList)
-            # Linha com o nome das variaveis no XML
-            writer.writerow(headerKeysList)
             # O SPSS corta valores das variaveis loucamente
             # por isso essa linha eh necessaria, para forçar o tamanho da coluna
             fake_line = ['-'*200] * len(headerList)
             writer.writerow(fake_line)
+            # Linha com o nome das variaveis no XML
+            writer.writerow(headerKeysList)
             #content
             fichas_triagem = Ficha.objects.filter(formulario=tForm)
             #Quem sao os pacientes
@@ -905,7 +905,11 @@ def db2file(request, format='excel'):
                 writer.writerow([tags[tag].encode('utf-8') for tag  in headerKeysList])
                 #writer.writerow([k for k in tags.iterkeys()])
             csvfile.close()
+            reportfilename =  '/tmp/report.txt'
+            report = open(reportfilename, 'w')
             files = validate_export(files)
+            report.close()
+            files.append(reportfilename)
         return zip_to_response(files, 'pacientes.zip')
     return HttpResponseNotFound("File format not found")
 
@@ -916,9 +920,6 @@ def validate_export(files):
 	'''
 	import csv
 	from forms.models import Paciente
-
-	reportfilename =  '/tmp/report.txt'
-	report = open(reportfilename, 'w')
 
 	for f in files:
 
@@ -942,8 +943,11 @@ def validate_export(files):
 				header = row
 				continue
 
+			# Fake line
+			if index == 1: continue
+
 			# Nome das variaveis
-			if index == 1:
+			if index == 2:
 
 				xml_vars = row
 
@@ -960,9 +964,6 @@ def validate_export(files):
 						to_be_ignored = row.index(original_column)
 
 				continue
-
-			# Fake line
-			if index == 2: continue
 
 			report.write("Paciente %s\n" % smart_str(row[name_index]))
 
@@ -1016,10 +1017,6 @@ def validate_export(files):
 		report.write("%s erros\n" % str(erros))
 		report.write("%s\n" % ("-"*100))
 		csvfile.close()
-
-	report.close()
-	files.append(reportfilename)
-	return files
 
 
 def parse_date(date):
