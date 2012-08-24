@@ -26,6 +26,7 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth import authenticate, login,logout
 from django.views.generic.simple import direct_to_template
+from django.utils.encoding import smart_str
 
 import settings
 from forms.models import UnidadeSaude, Formulario, Ficha
@@ -868,6 +869,8 @@ def db2file(request, format='excel'):
             headerList = [v.encode('utf-8') for set_v in form_fields.values() for v in set_v.values()]
             headerKeysList = [v.encode('utf-8') for set_v in form_fields.values() for v in set_v.keys()]
             writer.writerow(headerList)
+            # Linha com o nome das variaveis no XML
+            writer.writerow(headerKeysList)
             # O SPSS corta valores das variaveis loucamente
             # por isso essa linha eh necessaria, para forçar o tamanho da coluna
             fake_line = ['-'*200] * len(headerList)
@@ -902,8 +905,122 @@ def db2file(request, format='excel'):
                 writer.writerow([tags[tag].encode('utf-8') for tag  in headerKeysList])
                 #writer.writerow([k for k in tags.iterkeys()])
             csvfile.close()
+            files = validate_export(files)
         return zip_to_response(files, 'pacientes.zip')
     return HttpResponseNotFound("File format not found")
+
+def validate_export(files):
+	'''
+	Para cada CSV checa se os dados estao de acordo
+	com os dados presentes no BD
+	'''
+	import csv
+	from forms.models import Paciente
+
+	reportfilename =  '/tmp/report.txt'
+	report = open(reportfilename, 'w')
+
+	for f in files:
+
+		if 'report' in f: continue
+
+		csvfile = open(f, 'rb')
+		reader = csv.reader(csvfile, delimiter=';', quotechar='"', quoting=csv.QUOTE_ALL)
+
+		report.write("%s\n" % ("-"*100))
+		report.write("Verificando arquivo %s\n\n" % f)
+
+		name_index, name_mae_index, data_nascimento_index, to_be_ignored = None, None, None, None
+		xml_vars = None
+		header = None
+		erros, pacientes_nao_encontrados = 0, 0
+
+		for index, row in enumerate(reader):
+
+			# Header
+			if index == 0:
+				header = row
+				continue
+
+			# Nome das variaveis
+			if index == 1:
+
+				xml_vars = row
+
+				for column in row:
+					original_column = column
+					column = smart_str(column).strip()
+					if column.startswith("Triagem") and column.endswith("nome"):
+						name_index = row.index(original_column)
+					if column.startswith("Triagem") and column.endswith("nome_mae"):
+						name_mae_index = row.index(original_column)
+					if column.startswith("Triagem") and column.endswith("data_nascimento"):
+						data_nascimento_index = row.index(original_column)
+					if column.startswith("Triagem") and column.endswith("data_consulta"):
+						to_be_ignored = row.index(original_column)
+
+				continue
+
+			# Fake line
+			if index == 2: continue
+
+			report.write("Paciente %s\n" % smart_str(row[name_index]))
+
+			# Pega as fichas do paciente
+			try:
+				paciente = Paciente.objects.get(nome=smart_str(row[name_index]), nome_mae=smart_str(row[name_mae_index]), data_nascimento=smart_str(row[data_nascimento_index]))
+			except Paciente.DoesNotExist:
+				pacientes_nao_encontrados += 1
+				report.write("Nome da mae: %s\n" % smart_str(row[name_mae_index]))
+				report.write("Data de nascimento: %s\n" % smart_str(row[data_nascimento_index]))
+				report.write("Paciente nao encontrado!\n\n")
+				continue
+
+			fichas = paciente.ficha_set.all()
+			fichas_xml = [parseString(smart_str(ficha.conteudo)) for ficha in fichas]
+			tipo_fichas = [ficha.formulario.tipo.nome for ficha in fichas]
+
+			# Verifica coluna a coluna
+			for i, column in enumerate(row):
+
+				if i == to_be_ignored: continue
+
+				xml_var_complete = smart_str(xml_vars[i]).strip().split("-")
+				tipo_da_ficha = xml_var_complete[0].strip()
+				xml_var = xml_var_complete[1].strip()
+
+				# Se o paciente nao tiver a ficha
+				try:
+					ficha_xml = fichas_xml[tipo_fichas.index(tipo_da_ficha)]
+				except ValueError:
+					continue
+
+				try:
+					field_data = ', '.join(["%s"%(smart_int(field.firstChild.nodeValue)) for field in ficha_xml.getElementsByTagName(xml_var)])
+				except AttributeError:
+					field_data = ''
+
+				column = smart_str(column)
+				field_data = smart_str(field_data)
+
+				if column != field_data:
+					erros += 1
+					report.write("Erro no campo %s\n" % smart_str(header[i]))
+					report.write("Valor no CSV: %s\n" % smart_str(column))
+					report.write("Valor no BD: %s\n\n" % smart_str(field_data))
+
+			report.write("\n")
+
+		report.write("%s pacientes verificados\n" % str(index+1-3))
+		report.write("%s paciente nao encontrados\n" % str(pacientes_nao_encontrados))
+		report.write("%s erros\n" % str(erros))
+		report.write("%s\n" % ("-"*100))
+		csvfile.close()
+
+	report.close()
+	files.append(reportfilename)
+	return files
+
 
 def parse_date(date):
 	'''
