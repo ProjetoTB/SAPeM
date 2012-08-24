@@ -922,32 +922,41 @@ def validate_export(files, report):
 	import csv
 	from forms.models import Paciente
 
+	# Valida cada CSV
 	for f in files:
 
+		# Ignora o report
 		if 'report' in f: continue
 
+		# Abre o CSV para leitura
 		csvfile = open(f, 'rb')
 		reader = csv.reader(csvfile, delimiter=';', quotechar='"', quoting=csv.QUOTE_ALL)
 
+		# Começa o report
 		report.write("%s\n" % ("-"*100))
 		report.write("Verificando arquivo %s\n\n" % f)
 
+		# Declara as variaveis
 		name_index, name_mae_index, data_nascimento_index, to_be_ignored = None, None, None, None
 		xml_vars = None
 		header = None
 		erros, pacientes_nao_encontrados, pacientes_duplicados = 0, 0, 0
 
+		# Para cada linha no CSV
 		for index, row in enumerate(reader):
 
-			# Header
+			# Salva o header e continua
 			if index == 0:
 				header = row
 				continue
 
-			# Fake line
+			# Ignora a fake line
 			if index == 1: continue
 
 			# Nome das variaveis
+			# Salva e identifica as variaveis que vao buscar o paciente: nome, nome da mae e data de nascimento
+			# Salva o index da data de consulta, que foi tratada para ficar diferente da presente no BD, e sera
+			#ignorada
 			if index == 2:
 
 				xml_vars = row
@@ -971,17 +980,20 @@ def validate_export(files, report):
 			# Pega as fichas do paciente
 			try:
 				paciente = Paciente.objects.get(nome=smart_str(row[name_index]), nome_mae=smart_str(row[name_mae_index]), data_nascimento=smart_str(row[data_nascimento_index]))
+			# Caso ele nao exista
 			except Paciente.DoesNotExist:
 				pacientes_nao_encontrados += 1
 				report.write("Nome da mae: %s\n" % smart_str(row[name_mae_index]))
 				report.write("Data de nascimento: %s\n" % smart_str(row[data_nascimento_index]))
 				report.write("Paciente nao encontrado!\n\n")
 				continue
+			# Caso exista pacientes duplicados
 			except Paciente.MultipleObjectsReturned:
 				pacientes_duplicados += 1
 				report.write("Paciente duplicado!\n")
 				continue
 
+			# Monta 3 listas: com as fichas, com o conteudo das fichas e com os tipos das fichas
 			fichas = paciente.ficha_set.all()
 			fichas_xml = [parseString(smart_str(ficha.conteudo)) for ficha in fichas]
 			tipo_fichas = [ficha.formulario.tipo.nome for ficha in fichas]
@@ -989,8 +1001,11 @@ def validate_export(files, report):
 			# Verifica coluna a coluna
 			for i, column in enumerate(row):
 
+				# Ignora a data da consulta
 				if i == to_be_ignored: continue
 
+				# Pega o tipo da ficha e o nome da variavel no XML atraves da linha que
+				# foi adicionada para esse proposito
 				xml_var_complete = smart_str(xml_vars[i]).strip().split("-")
 				tipo_da_ficha = xml_var_complete[0].strip()
 				xml_var = xml_var_complete[1].strip()
@@ -1001,17 +1016,21 @@ def validate_export(files, report):
 				except ValueError:
 					continue
 
+				# Caso existam fichas duplicadas, escreve no relatorio
 				if len(tipo_fichas) != len(set(tipo_fichas)):
 					report.write("Fomrularios duplicados: %s\n" % str(tipo_fichas))
 
+				# Pega o valor do BD
 				try:
 					field_data = ', '.join(["%s"%(smart_int(field.firstChild.nodeValue)) for field in ficha_xml.getElementsByTagName(xml_var)])
 				except AttributeError:
 					field_data = ''
 
+				# Converte tudo para smart string
 				column = smart_str(column)
 				field_data = smart_str(field_data)
 
+				# Compara os valores
 				if column != field_data:
 					erros += 1
 					report.write("Erro no campo %s\n" % smart_str(header[i]))
@@ -1020,6 +1039,7 @@ def validate_export(files, report):
 
 			report.write("\n")
 
+		# Relatorio final para cada arquivo
 		report.write("%s pacientes verificados\n" % str(index+1-3))
 		report.write("%s pacientes duplicados\n" % str(pacientes_duplicados))
 		report.write("%s pacientes nao encontrados\n" % str(pacientes_nao_encontrados))
