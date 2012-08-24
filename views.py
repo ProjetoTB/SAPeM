@@ -940,7 +940,7 @@ def validate_export(files, report):
 		name_index, name_mae_index, data_nascimento_index, to_be_ignored = None, None, None, None
 		xml_vars = None
 		header = None
-		erros, pacientes_nao_encontrados, pacientes_duplicados = 0, 0, 0
+		erros, pacientes_nao_encontrados, pacientes_duplicados, p_com_fichas_duplicadas = 0, 0, 0, 0
 
 		# Para cada linha no CSV
 		for index, row in enumerate(reader):
@@ -1016,10 +1016,6 @@ def validate_export(files, report):
 				except ValueError:
 					continue
 
-				# Caso existam fichas duplicadas, escreve no relatorio
-				if len(tipo_fichas) != len(set(tipo_fichas)):
-					report.write("Fomrularios duplicados: %s\n" % str(tipo_fichas))
-
 				# Pega o valor do BD
 				try:
 					field_data = ', '.join(["%s"%(smart_int(field.firstChild.nodeValue)) for field in ficha_xml.getElementsByTagName(xml_var)])
@@ -1037,11 +1033,17 @@ def validate_export(files, report):
 					report.write("Valor no CSV: %s\n" % smart_str(column))
 					report.write("Valor no BD: %s\n\n" % smart_str(field_data))
 
+			# Caso existam fichas duplicadas, escreve no relatorio
+			if len(tipo_fichas) != len(set(tipo_fichas)):
+				p_com_fichas_duplicadas +=1
+				report.write("Formularios duplicados: %s\n" % str(tipo_fichas))
+
 			report.write("\n")
 
 		# Relatorio final para cada arquivo
 		report.write("%s pacientes verificados\n" % str(index+1-3))
 		report.write("%s pacientes duplicados\n" % str(pacientes_duplicados))
+		report.write("%s pacientes com fichas duplicadss\n" % str(p_com_fichas_duplicadas))
 		report.write("%s pacientes nao encontrados\n" % str(pacientes_nao_encontrados))
 		report.write("%s erros\n" % str(erros))
 		report.write("%s\n" % ("-"*100))
