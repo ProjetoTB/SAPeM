@@ -905,21 +905,23 @@ def db2file(request, format='excel'):
                 writer.writerow([tags[tag].encode('utf-8') for tag  in headerKeysList])
                 #writer.writerow([k for k in tags.iterkeys()])
             csvfile.close()
-            reportfilename =  '/tmp/report.txt'
-            files.append(reportfilename)
-            report = open(reportfilename, 'w')
-            validate_export(files)
-            report.close()
+        reportfilename =  '/tmp/report.txt'
+        files.append(reportfilename)
+        report = open(reportfilename, 'w')
+        validate_export(files, report)
+        report.close()
         return zip_to_response(files, 'pacientes.zip')
     return HttpResponseNotFound("File format not found")
 
-def validate_export(files):
+def validate_export(files, report):
 	'''
 	Para cada CSV checa se os dados estao de acordo
 	com os dados presentes no BD
 	'''
 	import csv
 	from forms.models import Paciente
+
+	raise ValueError
 
 	for f in files:
 
