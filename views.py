@@ -992,13 +992,32 @@ def validate_export(files, report):
 			# Caso exista pacientes duplicados
 			except Paciente.MultipleObjectsReturned:
 				pacientes_duplicados += 1
-				report.write("Paciente duplicado!\n")
+				report.write("Paciente duplicado!\n\n")
 				continue
 
 			# Monta 3 listas: com as fichas, com o conteudo das fichas e com os tipos das fichas
+			# Depois 2 com as unidades de saude e com o nome das unidades
 			fichas = paciente.ficha_set.all()
 			fichas_xml = [parseString(smart_str(ficha.conteudo)) for ficha in fichas]
 			tipo_fichas = [ficha.formulario.tipo.nome for ficha in fichas]
+			unidades_nomes = [smart_str(f.unidadesaude.nome) for f in fichas]
+			unidades = [f.unidadesaude.id for f in fichas]
+
+			# Compara o nome do paciente no XML e na tabela Paciente do BD
+			triagem_index = tipo_fichas.index('Triagem')
+			triagem_xml = fichas_xml[triagem_index]
+			triagem_nome = None
+			if triagem_xml and triagem_xml.getElementsByTagName("nome"):
+				triagem_nome = triagem_xml.getElementsByTagName("nome")[0].firstChild.nodeValue
+			if triagem_nome != row[name_index]:
+				report.write("Nome do paciente inconsistente no XML e no BD!\n\n")
+
+			# Verifica se todos os formulario pertencem as mesmas unidades de saude
+			if unidades and len(set(unidades)) != 1:
+
+				report.write("Formularios em unidades distintas\n")
+				report.write("Formularios: %s\n" % str([smart_str(f.formulario.nome) for f in fichas]))
+				report.write("Unidades: %s\n\n" % str(unidades_nomes))
 
 			# Verifica coluna a coluna
 			for i, column in enumerate(row):
