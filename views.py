@@ -1008,7 +1008,7 @@ def validate_export(files, report):
 			triagem_xml = fichas_xml[triagem_index]
 			triagem_nome = None
 			if triagem_xml and triagem_xml.getElementsByTagName("nome"):
-				triagem_nome = triagem_xml.getElementsByTagName("nome")[0].firstChild.nodeValue
+				triagem_nome = smart_str(triagem_xml.getElementsByTagName("nome")[0].firstChild.nodeValue)
 			if triagem_nome != row[name_index]:
 				report.write("Nome do paciente inconsistente no XML e no BD!\n")
 				report.write("XML: %s!\n" % row[name_index])
