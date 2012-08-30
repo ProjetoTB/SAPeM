@@ -972,7 +972,7 @@ def validate_export(files, report):
 						data_nascimento_index = row.index(original_column)
 					if column.startswith("Triagem") and column.endswith("data_consulta"):
 						to_be_ignored = row.index(original_column)
-					if column.startswith("Triagem") and column.endswith("unidade_index"):
+					if column.startswith("Triagem") and column.endswith("unidade"):
 						unidade_index = row.index(original_column)
 
 				continue
