@@ -1011,8 +1011,8 @@ def validate_export(files, report):
 				triagem_nome = triagem_xml.getElementsByTagName("nome")[0].firstChild.nodeValue
 			if triagem_nome != row[name_index]:
 				report.write("Nome do paciente inconsistente no XML e no BD!\n")
-				report.write("XML: %s!\n", row[name_index])
-				report.write("BD: %s\n\n", triagem_nome)
+				report.write("XML: %s!\n" % row[name_index])
+				report.write("BD: %s\n\n" % triagem_nome)
 
 			# Verifica se todos os formulario pertencem as mesmas unidades de saude
 			if unidades and len(set(unidades)) != 1:
