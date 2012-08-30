@@ -977,7 +977,7 @@ def validate_export(files, report):
 
 				continue
 
-			report.write("Paciente %s -  %s\n" % smart_str(row[name_index]), smart_str(row[unidade_index]))
+			report.write("Paciente %s -  %s\n" % (smart_str(row[name_index]), smart_str(row[unidade_index])))
 
 			# Pega as fichas do paciente
 			try:
