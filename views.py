@@ -937,7 +937,7 @@ def validate_export(files, report):
 		report.write("Verificando arquivo %s\n\n" % f)
 
 		# Declara as variaveis
-		name_index, name_mae_index, data_nascimento_index, to_be_ignored = None, None, None, None
+		name_index, name_mae_index, data_nascimento_index, to_be_ignored, unidade_index = None, None, None, None, None
 		xml_vars = None
 		header = None
 		erros, pacientes_nao_encontrados, pacientes_duplicados, p_com_fichas_duplicadas = 0, 0, 0, 0
@@ -972,10 +972,12 @@ def validate_export(files, report):
 						data_nascimento_index = row.index(original_column)
 					if column.startswith("Triagem") and column.endswith("data_consulta"):
 						to_be_ignored = row.index(original_column)
+					if column.startswith("Triagem") and column.endswith("unidade_index"):
+						unidade_index = row.index(original_column)
 
 				continue
 
-			report.write("Paciente %s\n" % smart_str(row[name_index]))
+			report.write("Paciente %s -  %s\n" % smart_str(row[name_index]), smart_str(row[unidade_index]))
 
 			# Pega as fichas do paciente
 			try:
