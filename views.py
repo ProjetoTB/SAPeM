@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import os,sys
+import csv
 import tempfile2 as tempfile
 import codecs
 import tarfile
@@ -26,15 +27,17 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth import authenticate, login,logout
 from django.views.generic.simple import direct_to_template
-from django.utils.encoding import smart_str
+from django.utils.encoding import smart_str, smart_unicode
 
 import settings
 from forms.models import UnidadeSaude, Formulario, Ficha
 from forms.HumanRegister import HumanRegister
 
-
 def strip_accents(s):
     return ''.join((c for c in unicodedata.normalize('NFD', s) if unicodedata.category(c) != 'Mn'))
+
+def smart_strip_accents(s):
+	return strip_accents(smart_unicode(s)).encode('utf-8')
 
 def smart_truncate_string(str, size):
     if len(str) < size:
@@ -223,12 +226,18 @@ def getFieldsXML(form):
     if not pathname in sys.path:
         sys.path.append(pathname)
     try:
+        test_sys_path = sys.path
+        test1 = 'foi'
         moduleForm = __import__(moduleFormName)
+        test2 = 'foi'
         xmlPath = '%s/%s/%s'%(pathname,moduleFormName,
                 moduleForm.fields_xml_path,)
+        test3 = 'foi'
         xmlDom = parse(xmlPath)
+        test4 = 'foi'
     except ImportError:
-        raise customError('Módulo não encontrado')
+        return None
+        #raise customError('Módulo não encontrado')
     except IOError:
         return None
     except AttributeError:
@@ -755,7 +764,6 @@ def xls_to_response(xls, fname):
     return response
 
 def csv_to_response(csvObj, fname):
-    import csv
     response = HttpResponse(mimetype="text/csv")
     response['Content-Disposition'] = 'attachment; filename=%s' % fname
     writer = csv.writer(response)
@@ -778,6 +786,28 @@ def zip_to_response(files, fname):
     response.write(ret_zip)
     buffer.close()
     return response
+
+def generate_csv_filename(name):
+	'''
+	Cria o nome do arquivo colocando um nome aleatorio no fim
+	'''
+	import random
+	return '%s_%04d.csv'%( name.replace(' ', '_').lower().encode('utf-8'), random.randint(1, 9999))
+
+def rename_csv_filename(name):
+	'''
+	Troca o numero aleatorio por um novo
+	'''
+	splitted = name.split("_")
+	new_name = name
+	# Pode ser que seja igual, entao garante a unicidade
+	while new_name == name:
+		new_name = generate_csv_filename("_".join(splitted[:-1]))
+	return new_name
+
+def get_csv_header(reader_obj):
+	for index, row in enumerate(reader_obj):
+		if index == 0: return row
 
 def db2file(request, format='excel'):
     from forms.models import Ficha, Formulario,Paciente
@@ -840,7 +870,7 @@ def db2file(request, format='excel'):
                         pass
         return xls_to_response(wb, 'pacientes.xls')
     if format=='csv':
-        import csv, random
+        import random
         import string
         valid_chars = "-_.() %s%s" % (string.ascii_letters, string.digits)
         #Generate a file for each Triagem and complete with the other forms
@@ -856,10 +886,7 @@ def db2file(request, format='excel'):
             form_fields = SortedDict()
             form_fields[tForm.id] = getOrderedFields(tForm, show_form=True, form_in_index=True)
             form_fields.update(other_forms_fields)
-            csvfilename = '%s_%04d.csv'%(
-                tForm.nome.replace(' ', '_').lower().encode('utf-8'),
-                random.randint(1, 9999)
-                )
+            csvfilename = generate_csv_filename(tForm.nome)
             csvfilename =  '/tmp/%s'%''.join(c for c in csvfilename if c in valid_chars)
 
             csvfile = open(csvfilename, 'wb')
@@ -905,42 +932,139 @@ def db2file(request, format='excel'):
                 writer.writerow([tags[tag].encode('utf-8') for tag  in headerKeysList])
                 #writer.writerow([k for k in tags.iterkeys()])
             csvfile.close()
+        # Memory issues
+        del fake_line
+        del headerList
+        del headerKeysList
+        del data
+        del form_fields
+        # Gera o report
         if request.GET.get('report', '') == "true":
             reportfilename =  '/tmp/report.txt'
             files.append(reportfilename)
             report = open(reportfilename, 'w')
-            validate_export(files, report)
+            files = validate_export(files, report)
             report.close()
+        # Trata os acentos e cria o arquivo unindo todas as planilhas.
+        # Os acentos nao sao tratados antes porque n seria possivel
+        # a validacao dos dados
+        triagensfilename =  '/tmp/%s' % generate_csv_filename('triagens')
+        files.append(triagensfilename)
+        triagens = open(triagensfilename, 'wb')
+        triagens_writer = csv.writer(triagens, delimiter=';', quotechar='"', quoting=csv.QUOTE_ALL)
+        create_one_file(files, triagens_writer)
+        triagens.close()
         return zip_to_response(files, 'pacientes.zip')
     return HttpResponseNotFound("File format not found")
 
-def validate_export(files, report):
+def create_one_file(files, triagens):
 	'''
-	Para cada CSV checa se os dados estao de acordo
-	com os dados presentes no BD
+	Cria um CSV com todos os tipos de triagem e remove os acentos
 	'''
-	import csv
-	from forms.models import Paciente
 
-	# Valida cada CSV
+	headers = []
+
+	# Para cada CSV
 	for f in files:
 
-		# Ignora o report
-		if 'report' in f: continue
+		# Ignora o report e o triagens
+		if 'report' in f or 'triagens' in f: continue
 
 		# Abre o CSV para leitura
-		csvfile = open(f, 'rb')
+		reader = csv.reader(open(f, 'rb'), delimiter=';', quotechar='"', quoting=csv.QUOTE_ALL)
+		headers.append( (f, get_csv_header(reader)) )
+
+	headers.sort(key=lambda header:len(header[1]))
+
+	# Cria um header unico
+	new_header = SortedDict()
+	# Soma todos os headers que comecam com 'Triagem'
+	for r, h in headers:
+		new_header.update(SortedDict([ (smart_strip_accents(w), None) for w in h if w.strip().startswith('Triagem')]))
+	# E soma com a parte que nao comeca com Triagem (pego o ultimo)
+	# header visto pelo laco pq nao importa qual eu pegue, essa parte
+	# eh igual
+	new_header.update(SortedDict([ (smart_strip_accents(w), None) for w in h if not w.strip().startswith('Triagem')]))
+
+	# Escreve o novo header e a fake line
+	fake_line = ['-'*200] * len(new_header.keys())
+	triagens.writerow(new_header.keys())
+	triagens.writerow(fake_line)
+
+	# Memory issues
+	del headers
+	del fake_line
+
+	# Para cada arquivo, escreve os dados
+	for f in files:
+
+		if 'report' in f or 'triagens' in f: continue
+
+		reader = csv.reader(open(f, 'rb'), delimiter=';', quotechar='"', quoting=csv.QUOTE_ALL)
+		header = None
+
+		for index, row in enumerate(reader):
+
+			if index == 0:
+				header = row
+				continue
+
+			# Nao escreve a fake line
+			if index in [1, 2]: continue
+
+			# Para cada coluna
+			rowc = [''] * len(new_header)
+			for col_index, col in enumerate(row):
+
+				try:
+					# Pega o index correspondente ao novo header
+					# E remove os acentos
+					element_in_header = smart_strip_accents(header[col_index])
+					new_index = new_header.keys().index(element_in_header)
+					rowc[new_index] = smart_strip_accents(col)
+				except IndexError: pass
+
+			triagens.writerow(rowc)
+
+def validate_export(files, report):
+	'''
+	Para cada CSV, checa se os dados estao de acordo
+	com os dados presentes no BD e escreve o resultado
+	em um relatorio externo, alem de criar uma nova coluna
+	com o resultado da validacao para cada paciente.
+	'''
+	from forms.models import Paciente
+
+	# Cria uma copia com o cuidado de nao modificar
+	import copy
+	_files = copy.copy(files)
+
+	# Valida cada CSV
+	for _file in files:
+
+		# Ignora o report
+		if 'report' in _file: continue
+
+		# Abre o CSV para leitura
+		csvfile = open(_file, 'rb')
 		reader = csv.reader(csvfile, delimiter=';', quotechar='"', quoting=csv.QUOTE_ALL)
+		_new_name = rename_csv_filename(_file)
+		csvfilew = open(_new_name, 'wb')
+		writer = csv.writer(csvfilew, delimiter=';', quotechar='"', quoting=csv.QUOTE_ALL)
+
+		# Uma vez processada, tira da lista e coloca o novo nome
+		_files.remove(_file)
+		_files.append(_new_name)
 
 		# Começa o report
 		report.write("%s\n" % ("-"*100))
-		report.write("Verificando arquivo %s\n\n" % f)
+		report.write("Verificando arquivo %s\n\n" % _file)
 
 		# Declara as variaveis
 		name_index, name_mae_index, data_nascimento_index, to_be_ignored, unidade_index = None, None, None, None, None
 		xml_vars = None
 		header = None
-		erros, pacientes_nao_encontrados, pacientes_duplicados, p_com_fichas_duplicadas = 0, 0, 0, 0
+		num_erros, pacientes_nao_encontrados, pacientes_duplicados, p_com_fichas_duplicadas = 0, 0, 0, 0
 
 		# Para cada linha no CSV
 		for index, row in enumerate(reader):
@@ -948,10 +1072,16 @@ def validate_export(files, report):
 			# Salva o header e continua
 			if index == 0:
 				header = row
+				header.append(smart_str('"Validação"'))
+				writer.writerow(header)
 				continue
 
 			# Ignora a fake line
-			if index == 1: continue
+			if index == 1:
+				fakel = row
+				fakel.append(row[0])
+				writer.writerow(fakel)
+				continue
 
 			# Nome das variaveis
 			# Salva e identifica as variaveis que vao buscar o paciente: nome, nome da mae e data de nascimento
@@ -977,7 +1107,13 @@ def validate_export(files, report):
 
 				continue
 
+			# Caso a linha nao tenha informacao
+			if name_index is None: continue
+
 			report.write("Paciente %s -  %s\n" % (smart_str(row[name_index]), smart_str(row[unidade_index])))
+
+			# Inicializa a variavel de erros
+			erros = []
 
 			# Pega as fichas do paciente
 			try:
@@ -985,6 +1121,7 @@ def validate_export(files, report):
 			# Caso ele nao exista
 			except Paciente.DoesNotExist:
 				pacientes_nao_encontrados += 1
+				erros.append('"Paciente nao encontrado"')
 				report.write("Nome da mae: %s\n" % smart_str(row[name_mae_index]))
 				report.write("Data de nascimento: %s\n" % smart_str(row[data_nascimento_index]))
 				report.write("Paciente nao encontrado!\n\n")
@@ -992,6 +1129,7 @@ def validate_export(files, report):
 			# Caso exista pacientes duplicados
 			except Paciente.MultipleObjectsReturned:
 				pacientes_duplicados += 1
+				erros.append('"Paciente duplicado"')
 				report.write("Paciente duplicado!\n\n")
 				continue
 
@@ -1010,6 +1148,7 @@ def validate_export(files, report):
 			if triagem_xml and triagem_xml.getElementsByTagName("nome"):
 				triagem_nome = smart_str(triagem_xml.getElementsByTagName("nome")[0].firstChild.nodeValue)
 			if triagem_nome != row[name_index]:
+				erros.append('"Nome do paciente inconsistente."')
 				report.write("Nome do paciente inconsistente no XML e no BD!\n")
 				report.write("XML: %s!\n" % row[name_index])
 				report.write("BD: %s\n\n" % triagem_nome)
@@ -1017,6 +1156,7 @@ def validate_export(files, report):
 			# Verifica se todos os formulario pertencem as mesmas unidades de saude
 			if unidades and len(set(unidades)) != 1:
 
+				erros.append('"Formularios em unidades distintas"')
 				report.write("Formularios em unidades distintas\n")
 				report.write("Formularios: %s\n" % str([smart_str(f.formulario.nome) for f in fichas]))
 				report.write("Unidades: %s\n\n" % str(unidades_nomes))
@@ -1051,7 +1191,7 @@ def validate_export(files, report):
 
 				# Compara os valores
 				if column != field_data:
-					erros += 1
+					num_erros += 1
 					report.write("Erro no campo %s\n" % smart_str(header[i]))
 					report.write("Valor no CSV: %s\n" % smart_str(column))
 					report.write("Valor no BD: %s\n\n" % smart_str(field_data))
@@ -1061,6 +1201,8 @@ def validate_export(files, report):
 				p_com_fichas_duplicadas +=1
 				report.write("Formularios duplicados: %s\n" % str(tipo_fichas))
 
+			row.append(", ".join(erros))
+			writer.writerow(row)
 			report.write("\n")
 
 		# Relatorio final para cada arquivo
@@ -1068,10 +1210,18 @@ def validate_export(files, report):
 		report.write("%s pacientes duplicados\n" % str(pacientes_duplicados))
 		report.write("%s pacientes com fichas duplicadss\n" % str(p_com_fichas_duplicadas))
 		report.write("%s pacientes nao encontrados\n" % str(pacientes_nao_encontrados))
-		report.write("%s erros\n" % str(erros))
+		report.write("%s erros\n" % str(num_erros))
 		report.write("%s\n" % ("-"*100))
 		csvfile.close()
+		csvfilew.close()
+		os.remove(_file)
 
+	# Memory issues
+	del header
+	del xml_vars
+	del fakel
+
+	return _files
 
 def parse_date(date):
 	'''
@@ -1110,7 +1260,6 @@ def art_view (request, formId, patientId):
     xmlContent = ficha.conteudo
 
     #from xml dict
-    doc = parseString(xmlContent.encode('utf-8'))
 
     nodes = doc.firstChild.childNodes
     dictValues = {}

@@ -6,6 +6,7 @@ import shutil
 from django.db import models
 from django.contrib.auth.models import User, UserManager
 from django.contrib.auth.models import Group
+from django.utils.encoding import smart_unicode
 
 class UnidadeSaude(models.Model):
 	nome            = models.CharField(max_length=300,   blank=False)
@@ -17,7 +18,7 @@ class UnidadeSaude(models.Model):
 	UF              = models.CharField(max_length=2,     blank=False)
 	relacionamento  = models.ManyToManyField("self", symmetrical=True, blank=True)
 	def __str__(self):
-		return self.nome.encode('utf-8')
+		return smart_unicode(self.nome)
 	class Meta():
 		verbose_name_plural = u'unidades de saúde'
 		verbose_name        = u'unidade de saúde'
@@ -32,7 +33,7 @@ class Paciente(models.Model):
 class tipoFormulario(models.Model):
 	nome            = models.CharField(max_length=300)
 	def __str__(self):
-		return self.nome.encode('utf-8')
+		return smart_unicode(self.nome)
 	class Meta():
 		verbose_name_plural = u'tipos de formulário'
 
@@ -46,7 +47,7 @@ class Formulario(models.Model):
 	data_insercao   = models.DateTimeField(auto_now_add=True)
 	data_insercao.short_description = u'Data de Inserção do Formulário'
 	def __str__(self):
-		return self.nome.encode('utf-8')
+		return smart_unicode(self.nome)
 	#Custom delete action
 	def delete(self, *args, **kwargs):
 		try:
@@ -77,7 +78,7 @@ class Grupo(models.Model):
 	unidadesaude    = models.ForeignKey(UnidadeSaude)
 	membros         = models.ManyToManyField(User, related_name='grupos', blank=True)
 	def __str__(self):
-		return self.nome.encode('utf-8')
+		return smart_unicode(self.nome)
 
 class HistoricoFicha(models.Model):
 	ficha                     = models.ForeignKey(Ficha)
