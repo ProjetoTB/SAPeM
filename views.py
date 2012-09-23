@@ -787,12 +787,12 @@ def zip_to_response(files, fname):
     buffer.close()
     return response
 
-def generate_csv_filename(name):
+def generate_filename(name, extension='csv'):
 	'''
 	Cria o nome do arquivo colocando um nome aleatorio no fim
 	'''
 	import random
-	return '%s_%04d.csv'%( name.replace(' ', '_').lower().encode('utf-8'), random.randint(1, 9999))
+	return '%s_%04d.%s'%( name.replace(' ', '_').lower().encode('utf-8'), random.randint(1, 9999), extension )
 
 def rename_csv_filename(name):
 	'''
@@ -802,7 +802,7 @@ def rename_csv_filename(name):
 	new_name = name
 	# Pode ser que seja igual, entao garante a unicidade
 	while new_name == name:
-		new_name = generate_csv_filename("_".join(splitted[:-1]))
+		new_name = generate_filename("_".join(splitted[:-1]))
 	return new_name
 
 def get_csv_header(reader_obj):
@@ -886,7 +886,7 @@ def db2file(request, format='excel'):
             form_fields = SortedDict()
             form_fields[tForm.id] = getOrderedFields(tForm, show_form=True, form_in_index=True)
             form_fields.update(other_forms_fields)
-            csvfilename = generate_csv_filename(tForm.nome)
+            csvfilename = generate_filename(tForm.nome)
             csvfilename =  '/tmp/%s'%''.join(c for c in csvfilename if c in valid_chars)
 
             csvfile = open(csvfilename, 'wb')
@@ -940,7 +940,7 @@ def db2file(request, format='excel'):
         del form_fields
         # Gera o report
         if request.GET.get('report', '') == "true":
-            reportfilename =  '/tmp/report.txt'
+            reportfilename =  '/tmp/%s' % generate_filename('report', extension='.txt')
             files.append(reportfilename)
             report = open(reportfilename, 'w')
             files = validate_export(files, report)
@@ -948,7 +948,7 @@ def db2file(request, format='excel'):
         # Trata os acentos e cria o arquivo unindo todas as planilhas.
         # Os acentos nao sao tratados antes porque n seria possivel
         # a validacao dos dados
-        triagensfilename =  '/tmp/%s' % generate_csv_filename('triagens')
+        triagensfilename =  '/tmp/%s' % generate_filename('triagens')
         files.append(triagensfilename)
         triagens = open(triagensfilename, 'wb')
         triagens_writer = csv.writer(triagens, delimiter=';', quotechar='"', quoting=csv.QUOTE_ALL)
