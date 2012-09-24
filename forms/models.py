@@ -17,8 +17,8 @@ class UnidadeSaude(models.Model):
 	cidade          = models.CharField(max_length=300,   blank=False)
 	UF              = models.CharField(max_length=2,     blank=False)
 	relacionamento  = models.ManyToManyField("self", symmetrical=True, blank=True)
-	def __str__(self):
-		return smart_unicode(self.nome)
+	def __unicode__(self):
+		return self.nome
 	class Meta():
 		verbose_name_plural = u'unidades de saúde'
 		verbose_name        = u'unidade de saúde'
@@ -27,13 +27,15 @@ class Paciente(models.Model):
 	nome            = models.CharField(max_length=300)
 	nome_mae        = models.CharField(max_length=300)
 	data_nascimento = models.CharField(max_length=10)
+	def __unicode__(self):
+		return self.nome
 	class Meta:
 		unique_together = ('nome', 'nome_mae', 'data_nascimento')
 
 class tipoFormulario(models.Model):
 	nome            = models.CharField(max_length=300)
 	def __str__(self):
-		return smart_unicode(self.nome)
+		return self.nome
 	class Meta():
 		verbose_name_plural = u'tipos de formulário'
 
@@ -47,7 +49,7 @@ class Formulario(models.Model):
 	data_insercao   = models.DateTimeField(auto_now_add=True)
 	data_insercao.short_description = u'Data de Inserção do Formulário'
 	def __str__(self):
-		return smart_unicode(self.nome)
+		return self.nome
 	#Custom delete action
 	def delete(self, *args, **kwargs):
 		try:
@@ -78,7 +80,7 @@ class Grupo(models.Model):
 	unidadesaude    = models.ForeignKey(UnidadeSaude)
 	membros         = models.ManyToManyField(User, related_name='grupos', blank=True)
 	def __str__(self):
-		return smart_unicode(self.nome)
+		return self.nome
 
 class HistoricoFicha(models.Model):
 	ficha                     = models.ForeignKey(Ficha)
