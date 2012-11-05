@@ -166,6 +166,15 @@ def createXML(keys, dictValues):
     xmlStr += u'</documento>'
     return xmlStr
 
+def EditPrimaryKeys(xml, patient):
+    file = parseString(xml.encode("utf-8"))
+
+    patient.nome            = file.getElementsByTagName("nome")[0].childNodes[0].data
+    patient.data_nascimento = file.getElementsByTagName("data_nascimento")[0].childNodes[0].data
+    patient.nome_mae        = file.getElementsByTagName("nome_mae")[0].childNodes[0].data
+
+    patient.save()
+
 def edit_form(request, fichaId, f=''):
     if not request.user.is_authenticated():
         return HttpResponseRedirect(settings.SITE_ROOT)
@@ -202,6 +211,8 @@ def edit_form(request, fichaId, f=''):
         ficha.conteudo = xmlStr
         #Save new version
         ficha.save()
+        if ficha.formulario.tipo.nome == "Triagem":
+            EditPrimaryKeys(xmlStr, p)
         return HttpResponseRedirect(settings.SITE_ROOT)
     #else GET method
     form = Formulario.objects.get(id=int(ficha.formulario.id))
