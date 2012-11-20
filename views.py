@@ -292,6 +292,16 @@ def getOrderedFields(form, show_form=False, number_multifields=4, form_in_index=
         return content
     return {}
 
+def getModulesRootPath():
+    form = Formulario.objects.all()
+    root = "/".join(form[0].path.split("/")[0:len(form[0].path.split("/")) - 1])
+    return root
+
+def showSPSSfields(request):
+    file = "%s/spssMapping.xml"%(getModulesRootPath())
+    xmlDOM = parse(file)
+    return HttpResponse(xmlDOM.toxml(), mimetype='application/xml')
+
 def showFieldsXML(request, formId):
     try:
         form = Formulario.objects.get(id=int(formId))

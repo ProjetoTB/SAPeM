@@ -27,6 +27,7 @@ from tbForms.views import art_view
 from tbForms.views import showARTResult
 from tbForms.views import retrieveUnidadesSaude
 from tbForms.views import showFieldsXML
+from tbForms.views import showSPSSfields
 from tbForms.views import select_unidade_saude
 from tbForms.views import jsFunctionCreateHeaderFooter
 from tbForms.views import retrieveFormName
@@ -59,6 +60,7 @@ urlpatterns = patterns('',
 	(r'^form/(?P<formId>\d+)/(?P<patientId>\d+)/(?P<f>.*)$', handle_form),
 	(r'^form/edit/(?P<fichaId>\d+)/(?P<f>.*)$', edit_form),
 	(r'^form/fields/xml/(?P<formId>\d+)/', showFieldsXML),
+    (r'^form/fields/spss/xml/$', showSPSSfields),
 	(r'^form/names/(?P<formId>\d+)/$', retrieveFormName),
 	(r'^ficha/(?P<fichaId>\d+)/$', showFichaConteudo),
 	(r'^patientLastRegister/(?P<formId>\d+)/(?P<patientId>\d+)/$', showPatientLastRegister),
