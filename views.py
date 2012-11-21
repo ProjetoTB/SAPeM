@@ -33,6 +33,8 @@ import settings
 from forms.models import UnidadeSaude, Formulario, Ficha
 from forms.HumanRegister import HumanRegister
 
+from savReaderWriter import *
+
 def strip_accents(s):
     return ''.join((c for c in unicodedata.normalize('NFD', s) if unicodedata.category(c) != 'Mn'))
 
@@ -792,6 +794,18 @@ def csv_to_response(csvObj, fname):
         writer.writerow(l)
     return response
 
+def spss_to_response(sav, fname):
+    from StringIO import StringIO
+    response = HttpResponse(mimetype="application/x-spss-sav")
+    response["Content-Disposition"] = "attachment; filename=%s" % fname
+    buffer = StringIO()
+    buffer.write(sav)
+    ret = buffer.getvalue()
+    response.write(ret)
+    buffer.close()
+    return response
+
+
 def zip_to_response(files, fname):
     import zipfile
     from StringIO import StringIO
@@ -976,6 +990,24 @@ def db2file(request, format='excel'):
         create_one_file(files, triagens_writer)
         triagens.close()
         return zip_to_response(files, 'pacientes.zip')
+    if format == "spss":
+        names = []
+        types = {}
+        mapping = "%s/spssMapping.xml"%(getModulesRootPath())
+        dom = parse(mapping)
+        elements = dom.getElementsByTagName('spss')[0].childNodes
+        for el in elements:
+            if el.nodeType == el.ELEMENT_NODE:
+                names.append(el.nodeName.encode("utf-8"))
+                types[el.nodeName.encode("utf-8")] = int(el.attributes['type'].value)
+        records = []
+        file = "TB.sav"
+        w = SavWriter(file, names, types)
+        #w.writerows(records)
+        w.close()
+        zip = []
+        zip.append(file)
+        return zip_to_response(zip, "TB.sav.zip")
     return HttpResponseNotFound("File format not found")
 
 def create_one_file(files, triagens):
