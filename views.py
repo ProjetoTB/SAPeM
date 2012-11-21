@@ -794,17 +794,14 @@ def csv_to_response(csvObj, fname):
         writer.writerow(l)
     return response
 
-def spss_to_response(sav, fname):
-    from StringIO import StringIO
-    response = HttpResponse(mimetype="application/x-spss-sav")
-    response["Content-Disposition"] = "attachment; filename=%s" % fname
-    buffer = StringIO()
-    buffer.write(sav)
-    ret = buffer.getvalue()
-    response.write(ret)
-    buffer.close()
-    return response
+def spss_to_response(w):
+    from django.http import HttpResponse
+    from django.core.servers.basehttp import FileWrapper
 
+
+    response = HttpResponse(FileWrapper(open(w.savFileName, 'r')), content_type='application/sav-x-spss')
+    response['Content-Disposition'] = 'attachment; filename=%s'%w.savFileName
+    return response
 
 def zip_to_response(files, fname):
     import zipfile
@@ -1005,9 +1002,7 @@ def db2file(request, format='excel'):
         w = SavWriter(file, names, types)
         #w.writerows(records)
         w.close()
-        zip = []
-        zip.append(file)
-        return zip_to_response(zip, "TB.sav.zip")
+        return spss_to_response(w)
     return HttpResponseNotFound("File format not found")
 
 def create_one_file(files, triagens):
