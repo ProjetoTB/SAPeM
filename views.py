@@ -33,6 +33,8 @@ import settings
 from forms.models import UnidadeSaude, Formulario, Ficha
 from forms.HumanRegister import HumanRegister
 
+from savReaderWriter import *
+
 def strip_accents(s):
     return ''.join((c for c in unicodedata.normalize('NFD', s) if unicodedata.category(c) != 'Mn'))
 
@@ -166,6 +168,15 @@ def createXML(keys, dictValues):
     xmlStr += u'</documento>'
     return xmlStr
 
+def EditPrimaryKeys(xml, patient):
+    file = parseString(xml.encode("utf-8"))
+
+    patient.nome            = file.getElementsByTagName("nome")[0].childNodes[0].data
+    patient.data_nascimento = file.getElementsByTagName("data_nascimento")[0].childNodes[0].data
+    patient.nome_mae        = file.getElementsByTagName("nome_mae")[0].childNodes[0].data
+
+    patient.save()
+
 def edit_form(request, fichaId, f=''):
     if not request.user.is_authenticated():
         return HttpResponseRedirect(settings.SITE_ROOT)
@@ -202,6 +213,8 @@ def edit_form(request, fichaId, f=''):
         ficha.conteudo = xmlStr
         #Save new version
         ficha.save()
+        if ficha.formulario.tipo.nome == "Triagem":
+            EditPrimaryKeys(xmlStr, p)
         return HttpResponseRedirect(settings.SITE_ROOT)
     #else GET method
     form = Formulario.objects.get(id=int(ficha.formulario.id))
@@ -280,6 +293,16 @@ def getOrderedFields(form, show_form=False, number_multifields=4, form_in_index=
 
         return content
     return {}
+
+def getModulesRootPath():
+    form = Formulario.objects.all()
+    root = "/".join(form[0].path.split("/")[0:len(form[0].path.split("/")) - 1])
+    return root
+
+def showSPSSfields(request):
+    file = "%s/spssMapping.xml"%(getModulesRootPath())
+    xmlDOM = parse(file)
+    return HttpResponse(xmlDOM.toxml(), mimetype='application/xml')
 
 def showFieldsXML(request, formId):
     try:
@@ -771,6 +794,15 @@ def csv_to_response(csvObj, fname):
         writer.writerow(l)
     return response
 
+def spss_to_response(w):
+    from django.http import HttpResponse
+    from django.core.servers.basehttp import FileWrapper
+
+
+    response = HttpResponse(FileWrapper(open(w.savFileName, 'r')), content_type='application/sav-x-spss')
+    response['Content-Disposition'] = 'attachment; filename=%s'%w.savFileName
+    return response
+
 def zip_to_response(files, fname):
     import zipfile
     from StringIO import StringIO
@@ -787,12 +819,12 @@ def zip_to_response(files, fname):
     buffer.close()
     return response
 
-def generate_csv_filename(name):
+def generate_filename(name, extension='csv'):
 	'''
 	Cria o nome do arquivo colocando um nome aleatorio no fim
 	'''
 	import random
-	return '%s_%04d.csv'%( name.replace(' ', '_').lower().encode('utf-8'), random.randint(1, 9999))
+	return '%s_%04d.%s'%( name.replace(' ', '_').lower().encode('utf-8'), random.randint(1, 9999), extension )
 
 def rename_csv_filename(name):
 	'''
@@ -802,7 +834,7 @@ def rename_csv_filename(name):
 	new_name = name
 	# Pode ser que seja igual, entao garante a unicidade
 	while new_name == name:
-		new_name = generate_csv_filename("_".join(splitted[:-1]))
+		new_name = generate_filename("_".join(splitted[:-1]))
 	return new_name
 
 def get_csv_header(reader_obj):
@@ -886,7 +918,7 @@ def db2file(request, format='excel'):
             form_fields = SortedDict()
             form_fields[tForm.id] = getOrderedFields(tForm, show_form=True, form_in_index=True)
             form_fields.update(other_forms_fields)
-            csvfilename = generate_csv_filename(tForm.nome)
+            csvfilename = generate_filename(tForm.nome)
             csvfilename =  '/tmp/%s'%''.join(c for c in csvfilename if c in valid_chars)
 
             csvfile = open(csvfilename, 'wb')
@@ -940,7 +972,7 @@ def db2file(request, format='excel'):
         del form_fields
         # Gera o report
         if request.GET.get('report', '') == "true":
-            reportfilename =  '/tmp/report.txt'
+            reportfilename =  '/tmp/%s' % generate_filename('report', extension='.txt')
             files.append(reportfilename)
             report = open(reportfilename, 'w')
             files = validate_export(files, report)
@@ -948,13 +980,29 @@ def db2file(request, format='excel'):
         # Trata os acentos e cria o arquivo unindo todas as planilhas.
         # Os acentos nao sao tratados antes porque n seria possivel
         # a validacao dos dados
-        triagensfilename =  '/tmp/%s' % generate_csv_filename('triagens')
+        triagensfilename =  '/tmp/%s' % generate_filename('triagens')
         files.append(triagensfilename)
         triagens = open(triagensfilename, 'wb')
         triagens_writer = csv.writer(triagens, delimiter=';', quotechar='"', quoting=csv.QUOTE_ALL)
         create_one_file(files, triagens_writer)
         triagens.close()
         return zip_to_response(files, 'pacientes.zip')
+    if format == "spss":
+        names = []
+        types = {}
+        mapping = "%s/spssMapping.xml"%(getModulesRootPath())
+        dom = parse(mapping)
+        elements = dom.getElementsByTagName('spss')[0].childNodes
+        for el in elements:
+            if el.nodeType == el.ELEMENT_NODE:
+                names.append(el.nodeName.encode("utf-8"))
+                types[el.nodeName.encode("utf-8")] = int(el.attributes['type'].value)
+        records = []
+        file = "TB.sav"
+        w = SavWriter(file, names, types)
+        #w.writerows(records)
+        w.close()
+        return spss_to_response(w)
     return HttpResponseNotFound("File format not found")
 
 def create_one_file(files, triagens):

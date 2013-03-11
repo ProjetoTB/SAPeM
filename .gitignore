@@ -5,3 +5,4 @@ modules/
 tb.db
 .dropbox
 .htpasswd
+scripts/
