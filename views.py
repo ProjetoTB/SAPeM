@@ -169,13 +169,47 @@ def createXML(keys, dictValues):
     return xmlStr
 
 def EditPrimaryKeys(xml, patient):
-    file = parseString(xml.encode("utf-8"))
+    f = parseString(xml.encode("utf-8"))
 
-    patient.nome            = file.getElementsByTagName("nome")[0].childNodes[0].data
-    patient.data_nascimento = file.getElementsByTagName("data_nascimento")[0].childNodes[0].data
-    patient.nome_mae        = file.getElementsByTagName("nome_mae")[0].childNodes[0].data
-
+    patient.nome            = f.getElementsByTagName("nome")[0].childNodes[0].data
+    patient.data_nascimento = f.getElementsByTagName("data_nascimento")[0].childNodes[0].data
+    patient.nome_mae        = f.getElementsByTagName("nome_mae")[0].childNodes[0].data
+    #TODO Test whether key entry is not duplicated
     patient.save()
+
+#Edit patient number from Triagem to Exames
+def editPatientNumber(ficha):
+    import_str = 'from forms.models import Paciente, UnidadeSaude,Ficha, Formulario, HistoricoFicha'
+    exec import_str
+    p = ficha.paciente
+    if ficha.formulario.tipo.nome != "Triagem":
+        return
+    xmlStr = ficha.conteudo
+    xmlDoc = parseString(xmlStr.encode("utf-8"))
+    nPatient = xmlDoc.getElementsByTagName(u"numeroPaciente")[0].childNodes[0].data
+    try:
+        fExames = Ficha.objects.get(paciente=p, formulario__tipo__nome="Exames")
+    except Ficha.DoesNotExist:
+        return
+    except Ficha.MultipleObjectsReturned:
+        #THIS SHOULD NOT HAPPENED
+        return
+    examesXmlStr = fExames.conteudo
+    examesXmlDoc = parseString(examesXmlStr.encode("utf-8"))
+    try:
+        node = examesXmlDoc.getElementsByTagName("numeroPaciente")[0]
+    except IndexError:
+        #no match
+        return
+    node.firstChild.replaceWholeText("%s"%nPatient)
+    oldXML = fExames.conteudo
+    hf = HistoricoFicha(
+            ficha = fExames,
+            conteudo = oldXML
+            )
+    hf.save()
+    fExames.conteudo = examesXmlDoc.toxml()
+    fExames.save()
 
 def edit_form(request, fichaId, f=''):
     if not request.user.is_authenticated():
@@ -188,7 +222,7 @@ def edit_form(request, fichaId, f=''):
         url = settings.SITE_ROOT
         return render(request, 'error.html',
             dictionary=locals(), context_instance=RequestContext(request, {}), status=404)
-    p = Paciente.objects.get(id=int(ficha.paciente.id))
+    p = ficha.paciente
     if request.method == 'POST':
         form = request.POST
         keys = []
@@ -215,6 +249,7 @@ def edit_form(request, fichaId, f=''):
         ficha.save()
         if ficha.formulario.tipo.nome == "Triagem":
             EditPrimaryKeys(xmlStr, p)
+            editPatientNumber(ficha)
         return HttpResponseRedirect(settings.SITE_ROOT)
     #else GET method
     form = Formulario.objects.get(id=int(ficha.formulario.id))
