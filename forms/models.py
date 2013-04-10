@@ -34,7 +34,7 @@ class Paciente(models.Model):
 
 class tipoFormulario(models.Model):
 	nome            = models.CharField(max_length=300)
-	def __str__(self):
+	def __unicode__(self):
 		return self.nome
 	class Meta():
 		verbose_name_plural = u'tipos de formulário'
@@ -48,7 +48,7 @@ class Formulario(models.Model):
 	descricao       = models.TextField()
 	data_insercao   = models.DateTimeField(auto_now_add=True)
 	data_insercao.short_description = u'Data de Inserção do Formulário'
-	def __str__(self):
+	def __unicode__(self):
 		return self.nome
 	#Custom delete action
 	def delete(self, *args, **kwargs):
