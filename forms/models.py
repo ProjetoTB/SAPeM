@@ -79,7 +79,7 @@ class Grupo(models.Model):
 	nome            = models.CharField(max_length=200)
 	unidadesaude    = models.ForeignKey(UnidadeSaude)
 	membros         = models.ManyToManyField(User, related_name='grupos', blank=True)
-	def __str__(self):
+	def __unicode__(self):
 		return self.nome
 
 class HistoricoFicha(models.Model):
