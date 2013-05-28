@@ -75,6 +75,15 @@ class UserProfile(models.Model):
 	unidadesaude_favorita = models.ForeignKey(UnidadeSaude, null=True)
 	user = models.ForeignKey(User, unique=True)
 
+class Arquivo(models.Model):
+    CHOICES = (('G', 'Gerando') , ('D', 'Download'), ('E', 'Erro'))
+    process          = models.CharField(max_length=20)
+    nome             = models.CharField(max_length=200)
+    data_solicitacao = models.DateTimeField(auto_now_add=True)
+    data_geracao     = models.DateTimeField(auto_now=True)
+    user             = models.ForeignKey(User)
+    status           = models.CharField(max_length=1, choices=CHOICES)
+
 class Grupo(models.Model):
 	nome            = models.CharField(max_length=200)
 	unidadesaude    = models.ForeignKey(UnidadeSaude)

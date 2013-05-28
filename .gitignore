@@ -1,6 +1,7 @@
 settings.py
 *.pyc
 */modules/*
+*/userfiles/*
 modules/
 tb.db
 .dropbox

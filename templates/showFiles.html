@@ -1,0 +1,107 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+{% load forms_extras %}
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <style type="text/css" title="currentStyle">
+            @import "{{ MEDIA_URL }}css/pages.css";
+            @import "{{ MEDIA_URL }}css/dataTable.css";
+        </style>
+        <script type="text/javascript" language="javascript" src="{{ MEDIA_URL }}js/jquery/jquery.js"></script>
+        <script type="text/javascript" language="javascript" src="{{ MEDIA_URL }}js/jquery/jquery.dataTables.js"></script>
+        <script type="text/javascript" language="javascript" src="{{ url }}js/createHeaderFooter/"></script>
+        <script type="text/javascript">
+            $(document).ready(function(){
+                $("header").createHeader();
+                $("footer").createFooter();
+                $('.jqueryDataTables')
+                    .dataTable({
+                        "aaSortingFixed": [[ 0, 'asc' ]],
+                        "aaSorting"     : [[ 1, 'asc']],
+                        "sPaginationType": "full_numbers",
+                        "oLanguage" : {
+                            "bSort":         false,
+                            "sProcessing":   "Processando...",
+                            "sLengthMenu":   "Mostrar _MENU_ registros",
+                            "sZeroRecords":  "Não foram encontrados resultados",
+                            "sInfo":         "Mostrando de _START_ até _END_ de _TOTAL_ registros",
+                            "sInfoEmpty":    "Mostrando de 0 até 0 de 0 registros",
+                            "sInfoFiltered": "(filtrado de _MAX_ registros no total)",
+                            "sInfoPostFix":  "",
+                            "sSearch":       "Buscar:",
+                            "sUrl":          "",
+                            "oPaginate": {
+                                "sFirst":    "Primeiro",
+                                "sPrevious": "Anterior",
+                                "sNext":     "Seguinte",
+                                "sLast":     "Último"
+                            }
+                        }
+                    })
+                    .css("width", "100%");
+                $("button").click(function(){
+                        //TO-DO: fill the file name according with what was choosen in the interface instead of being hard-coded
+                        var filename = "SAPeM";
+
+                        Months = {0: "Janeiro", 1: "Fevereiro", 2: "Março", 3: "Abril", 4: "Maio", 5: "Junho", 6: "Julho", 7: "Agosto", 8: "Setembro", 9: "Outubro", 10: "Novembro", 11: "Dezembro"};
+
+                        $.ajax({
+                            type    : "POST",
+                            data    : { csrfmiddlewaretoken: "{{csrf_token}}"},
+                            url     : "{% url generateFile 'spss'%}",
+                            success : function(result){
+                                nodes = $(".jqueryDataTables").dataTable().fnGetNodes();
+                                tr = nodes[nodes.length - 1];
+                                if (result["HTTPRESPONSE"] == 0){
+                                    html = "<a href='{% url userfile_download %}?fileId="+ result["FILE_ID"] +"'> download </a>";
+                                    result["COLS"].push(html);
+                                    $(".jqueryDataTables").dataTable().fnUpdate(result["COLS"], tr);
+                                }
+                                else{
+                                    result["COLS"].push("ERRO ao gerar arquivo!");
+                                    $(".jqueryDataTables").dataTable().fnUpdate(result["COLS"], tr);
+                                }
+                            }
+                        });
+
+                        row = new Array();
+                        row.push(filename);
+                        var currentDate = new Date();
+                        row.push(Months[currentDate.getMonth()] + " " + currentDate.getDate() + ", " + currentDate.getFullYear() + ", " + currentDate.getHours() + ":" + currentDate.getMinutes());
+                        row.push("gerando...");
+
+                        $(".jqueryDataTables").dataTable().fnAddData(row);
+                });
+            });
+        </script>
+    </head>
+    <body>
+        <header></header>
+        <div id="content">
+            <fieldset>
+                <legend> Arquivos gerados </legend>
+                <div>
+                    <table class="jqueryDataTables">
+                        <thead>
+                            <tr>
+                                <th> Nome do Arquivo </th>
+                                <th> Solicitado em   </th>
+                                <th> Status          </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for file in files %}
+                            <tr>
+                                <td> {{ file.nome }} </td>
+                                <td> {{ file.data_solicitacao }} </td>
+                                <td> {% ifequal file.status 'D' %} <a href="{% url userfile_download %}?fileId={{ file.id }}">download</a> {% else %} gerando... {% endifequal %} </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </fieldset>
+            <button> Gerar arquivo SPSS agora! </button>
+        </div>
+        <footer></footer>
+    </body>
+</html>

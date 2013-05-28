@@ -1,0 +1,1930 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<spss>
+    <Verificado_monitoria label='Verificado_monitoria' type='0' format="F1.0"></Verificado_monitoria>
+    <Ficha_OK label='Ficha_OK' type='0' format='F1.0'></Ficha_OK>
+    <Observacoes label='Observacoes' type='200' format='A200'></Observacoes>
+    <Etapa label='Etapa' type='0' format='F1.0'>
+        <form id="1">etapa</form>
+        <form id="2">etapa</form>
+        <form id="6">etapa</form>
+        <form id="7">etapa</form>
+        <form id="8">etapa</form>
+        <form id="9">etapa</form>
+    </Etapa>
+    <Numero_da_unidade label='Numero_da_unidade' type='0' format='F2.0'>
+        <form id="1">unidade</form>
+        <form id="2">unidade</form>
+        <form id="6">unidade</form>
+        <form id="7">unidade</form>
+        <form id="8">unidade</form>
+        <form id="9">unidade</form>
+    </Numero_da_unidade>
+	<TriagemHorariodoIniciodaentrevista label='TriagemHorariodoIniciodaentrevista' type='200' format='A200'>
+		<form id="1">horarioInicioEntrevista</form>
+		<form id="2">horarioInicioEntrevista</form>
+	</TriagemHorariodoIniciodaentrevista>
+	<TriagemNumerodoPacientenoEstudo label='TriagemNumerodoPacientenoEstudo' type='0' format='F1.0'>
+		<form id="1">numeroPaciente</form>
+		<form id="2">numeroPaciente</form>
+		<form id="6">numeroPaciente</form>
+		<form id="7">numeroPaciente</form>
+		<form id="8">numeroPaciente</form>
+		<form id="9">numeroPaciente</form>
+	</TriagemNumerodoPacientenoEstudo>
+	<TriagemNumerodeProntuario label='TriagemNumerodeProntuario' type='0' format='F1.0'>
+		<form id="1">numeroProntuario</form>
+		<form id="2">numeroProntuario</form>
+		<form id="6">numeroProntuario</form>
+		<form id="7">numeroProntuario</form>
+		<form id="8">numeroProntuario</form>
+		<form id="9">numeroProntuario</form>
+	</TriagemNumerodeProntuario>
+	<TriagemDatadatriagem label='TriagemDatadatriagem' type='0' format='EDATE8.0'>
+		<form id="1">data_consulta</form>
+		<form id="2">data_consulta</form>
+		<form id="6">data_consulta</form>
+		<form id="7">data_consulta</form>
+		<form id="8">data_consulta</form>
+		<form id="9">data_consulta</form>
+	</TriagemDatadatriagem>
+	<TriagemDatadeassinaturadotermodeconsentimentoTCLE label='TriagemDatadeassinaturadotermodeconsentimentoTCLE' type='0' format='EDATE8.0'>
+		<form id="1">data_assinatura</form>
+		<form id="2">data_assinatura</form>
+		<form id="6">data_assinatura</form>
+		<form id="7">data_assinatura</form>
+		<form id="8">data_assinatura</form>
+		<form id="9">data_assinatura</form>
+	</TriagemDatadeassinaturadotermodeconsentimentoTCLE>
+	<TriagemExcluido label='TriagemExcluido' type='0' format='F1.0'>
+		<form id="1">pacienteExcluido</form>
+		<form id="2">pacienteExcluido</form>
+		<form id="6">pacienteExcluido</form>
+		<form id="7">pacienteExcluido</form>
+		<form id="8">pacienteExcluido</form>
+		<form id="9">pacienteExcluido</form>
+	</TriagemExcluido>
+	<TriagemMotivoExclusao label='TriagemMotivoExclusao' type='200' format='A200'>
+		<form id="1">motivoPacienteExcluido</form>
+		<form id="2">motivoPacienteExcluido</form>
+		<form id="6">motivoPacienteExcluido</form>
+		<form id="7">motivoPacienteExcluido</form>
+		<form id="8">motivoPacienteExcluido</form>
+		<form id="9">motivoPacienteExcluido</form>
+	</TriagemMotivoExclusao>
+	<TriagemNome label='TriagemNome' type='200' format='A200'>
+		<form id="1">nome</form>
+		<form id="2">nome</form>
+		<form id="6">nome</form>
+		<form id="7">nome</form>
+		<form id="8">nome</form>
+		<form id="9">nome</form>
+	</TriagemNome>
+	<TriagemNomeDaMae label='TriagemNomeDaMae' type='200' format='A200'>
+		<form id="1">nome_mae</form>
+		<form id="2">nome_mae</form>
+		<form id="6">nome_mae</form>
+		<form id="7">nome_mae</form>
+		<form id="8">nome_mae</form>
+		<form id="9">nome_mae</form>
+	</TriagemNomeDaMae>
+	<TriagemNaturalidade label='TriagemNaturalidade' type='200' format='A200'>
+		<form id="1">naturalidade</form>
+		<form id="2">naturalidade</form>
+		<form id="6">naturalidade</form>
+		<form id="7">naturalidade</form>
+		<form id="8">naturalidade</form>
+		<form id="9">naturalidade</form>
+	</TriagemNaturalidade>
+	<TriagemEndereco label='TriagemEndereco' type='200' format='A200'>
+		<form id="1">endereco</form>
+		<form id="2">endereco</form>
+		<form id="6">endereco</form>
+		<form id="7">endereco</form>
+		<form id="8">endereco</form>
+		<form id="9">endereco</form>
+	</TriagemEndereco>
+	<TriagemNumeroResidencia label='TriagemNumeroResidencia' type='0' format='F40.0'>
+		<form id="1">numero</form>
+		<form id="2">numero</form>
+		<form id="6">numero</form>
+		<form id="7">numero</form>
+		<form id="8">numero</form>
+		<form id="9">numero</form>
+	</TriagemNumeroResidencia>
+	<TriagemComplemento label='TriagemComplemento' type='200' format='A200'>
+		<form id="1">complemento</form>
+		<form id="2">complemento</form>
+		<form id="6">complemento</form>
+		<form id="7">complemento</form>
+		<form id="8">complemento</form>
+		<form id="9">complemento</form>
+	</TriagemComplemento>
+	<TriagemBairro label='TriagemBairro' type='200' format='A200'>
+		<form id="1">bairro</form>
+		<form id="2">bairro</form>
+		<form id="6">bairro</form>
+		<form id="7">bairro</form>
+		<form id="8">bairro</form>
+		<form id="9">bairro</form>
+	</TriagemBairro>
+	<TriagemCidade label='TriagemCidade' type='200' format='A200'>
+		<form id="1">cidade</form>
+		<form id="2">cidade</form>
+		<form id="6">cidade</form>
+		<form id="7">cidade</form>
+		<form id="8">cidade</form>
+		<form id="9">cidade</form>
+	</TriagemCidade>
+	<TriagemEstado label='TriagemEstado' type='200' format='A200'>
+		<form id="1">estado</form>
+		<form id="2">estado</form>
+		<form id="6">estado</form>
+		<form id="7">estado</form>
+		<form id="8">estado</form>
+		<form id="9">estado</form>
+	</TriagemEstado>
+	<TriagemCEP label='TriagemCEP' type='200' format='A200'>
+		<form id="1">cep</form>
+		<form id="2">cep</form>
+		<form id="6">cep</form>
+		<form id="7">cep</form>
+		<form id="8">cep</form>
+		<form id="9">cep</form>
+	</TriagemCEP>
+	<TriagemHaquantosanosvoceresidenesteestado label='TriagemHaquantosanosvoceresidenesteestado' type='0' format='F40.0'>
+		<form id="1">tempoResidenteEstadoAtual</form>
+		<form id="2">tempoResidenteEstadoAtual</form>
+		<form id="6">tempoResidenteEstadoAtual</form>
+		<form id="7">tempoResidenteEstadoAtual</form>
+		<form id="8">tempoResidenteEstadoAtual</form>
+		<form id="9">tempoResidenteEstadoAtual</form>
+	</TriagemHaquantosanosvoceresidenesteestado>
+	<TriagemDatadeNascimento label='TriagemDatadeNascimento' type='0' format='EDATE8.0'>
+		<form id="1">data_nascimento</form>
+		<form id="2">data_nascimento</form>
+		<form id="6">data_nascimento</form>
+		<form id="7">data_nascimento</form>
+		<form id="8">data_nascimento</form>
+		<form id="9">data_nascimento</form>
+	</TriagemDatadeNascimento>
+	<TriagemIdade label='TriagemIdade' type='0' format='F40.0'>
+		<form id="1">idade</form>
+		<form id="2">idade</form>
+		<form id="6">idade</form>
+		<form id="7">idade</form>
+		<form id="8">idade</form>
+		<form id="9">idade</form>
+	</TriagemIdade>
+    <TriagemSexo label='TriagemSexo' type='0' format="F1.0">
+		<form id="1">sexo</form>
+		<form id="2">sexo</form>
+		<form id="6">sexo</form>
+		<form id="7">sexo</form>
+		<form id="8">sexo</form>
+		<form id="9">sexo</form>
+	</TriagemSexo>
+	<Estado_Civil_cat label='Estado_Civil_cat' type='0' format='F1.0'>
+		<form id="1">estado_civil</form>
+		<form id="2">estado_civil</form>
+		<form id="6">estado_civil</form>
+		<form id="7">estado_civil</form>
+		<form id="8">estado_civil</form>
+		<form id="9">estado_civil</form>
+	</Estado_Civil_cat>
+	<Cor_da_pele_cat label='Cor_da_pele_cat' type='0' format='F1.0'>
+		<form id="1">raca</form>
+		<form id="2">raca</form>
+		<form id="6">raca</form>
+		<form id="7">raca</form>
+		<form id="8">raca</form>
+		<form id="9">raca</form>
+	</Cor_da_pele_cat>
+	<Grau_instrucao_paciente_cat label='Grau_instrucao_paciente_cat' type='0' format='F1.0'>
+		<form id="1">grauInstrucaoPaciente</form>
+		<form id="2">grauInstrucaoPaciente</form>
+		<form id="6">grauInstrucaoPaciente</form>
+		<form id="7">grauInstrucaoPaciente</form>
+	</Grau_instrucao_paciente_cat>
+	<Grau_instrucao_chefe_familia_cat label='Grau_instrucao_chefe_familia_cat' type='0' format='F1.0'>
+		<form id="1">grauInstrucaoChefeFamilia</form>
+		<form id="2">grauInstrucaoChefeFamilia</form>
+		<form id="6">grauInstrucaoChefeFamilia</form>
+		<form id="7">grauInstrucaoChefeFamilia</form>
+	</Grau_instrucao_chefe_familia_cat>
+	<TriagemRendamensaldafamilia label='TriagemRendamensaldafamilia' type='200' format='A200'>
+		<form id="1">rendaMensalFamiliar</form>
+		<form id="2">rendaMensalFamiliar</form>
+		<form id="6">rendaMensalFamiliar</form>
+		<form id="7">rendaMensalFamiliar</form>
+	</TriagemRendamensaldafamilia>
+	<TriagemFreezernormalouportaduplex label='TriagemFreezernormalouportaduplex' type='0' format='F1.0'>
+		<form id="1">freezer</form>
+		<form id="6">freezer</form>
+		<form id="7">freezer</form>
+		<form id="2">freezer</form>
+	</TriagemFreezernormalouportaduplex>
+	<TriagemGeladeirasimplesouduplex label='TriagemGeladeirasimplesouduplex' type='0' format='F1.0'>
+		<form id="1">geladeira</form>
+		<form id="2">geladeira</form>
+		<form id="6">geladeira</form>
+		<form id="7">geladeira</form>
+	</TriagemGeladeirasimplesouduplex>
+	<TriagemMaquinadelavarroupa label='TriagemMaquinadelavarroupa' type='0' format='F1.0'>
+		<form id="1">maquinaLavarRoupa</form>
+		<form id="2">maquinaLavarRoupa</form>
+		<form id="6">maquinaLavarRoupa</form>
+		<form id="7">maquinaLavarRoupa</form>
+	</TriagemMaquinadelavarroupa>
+	<TriagemVideocasseteDVD label='TriagemVideocasseteDVD' type='0' format='F1.0'>
+		<form id="1">videoDVD</form>
+		<form id="2">videoDVD</form>
+		<form id="6">videoDVD</form>
+		<form id="7">videoDVD</form>
+	</TriagemVideocasseteDVD>
+	<TriagemTelevisao label='TriagemTelevisao' type='0' format='F1.0'>
+		<form id="1">televisao</form>
+		<form id="2">televisao</form>
+		<form id="6">televisao</form>
+		<form id="7">televisao</form>
+	</TriagemTelevisao>
+	<TriagemRadio label='TriagemRadio' type='0' format='F1.0'>
+		<form id="1">radio</form>
+		<form id="2">radio</form>
+		<form id="6">radio</form>
+		<form id="7">radio</form>
+	</TriagemRadio>
+	<TriagemBanheiro label='TriagemBanheiro' type='0' format='F1.0'>
+		<form id="1">banheiro</form>
+		<form id="2">banheiro</form>
+		<form id="6">banheiro</form>
+		<form id="7">banheiro</form>
+	</TriagemBanheiro>
+	<TriagemAutomovel label='TriagemAutomovel' type='0' format='F1.0'>
+		<form id="1">automovel</form>
+		<form id="2">automovel</form>
+		<form id="6">automovel</form>
+		<form id="7">automovel</form>
+	</TriagemAutomovel>
+	<TriagemEmpregadaMensalista label='TriagemEmpregadaMensalista' type='0' format='F1.0'>
+		<form id="1">empregadaMensalista</form>
+		<form id="2">empregadaMensalista</form>
+		<form id="6">empregadaMensalista</form>
+		<form id="7">empregadaMensalista</form>
+	</TriagemEmpregadaMensalista>
+	<TriagemClasseSocial label='TriagemClasseSocial' type='200' format='A200'>
+		<form id="1">classeSocial</form>
+		<form id="2">classeSocial</form>
+		<form id="6">classeSocial</form>
+		<form id="7">classeSocial</form>
+	</TriagemClasseSocial>
+	<Local_atendimento label='Local_atendimento' type='600' format='A600'>
+	</Local_atendimento>
+	<Principal_motivo_veio_a_unidade_cat label='Principal_motivo_veio_a_unidade_cat' type='0' format='F1.0'>
+		<form id="2">motivoVindaUnidadeSaude</form>
+		<form id="6">motivoVindaUnidadeSaude</form>
+		<form id="8">motivoVindaUnidadeSaude</form>
+	</Principal_motivo_veio_a_unidade_cat>
+	<Outro_motivo_veio_unidade label='Outro_motivo_veio_unidade' type='200' format='A200'>
+		<form id="2">especificarMotivoVindaUnidadeSaude</form>
+		<form id="6">especificarMotivoVindaUnidadeSaude</form>
+		<form id="8">especificarMotivoVindaUnidadeSaude</form>
+	</Outro_motivo_veio_unidade>
+	<Procurou_unidade_por_orientacao_de_alguem_cat label='Procurou_unidade_por_orientacao_de_alguem_cat' type='0' format='F1.0'>
+		<form id="2">procurouUnidadeSaudePorOrientacao</form>
+		<form id="6">procurouUnidadeSaudePorOrientacao</form>
+		<form id="8">procurouUnidadeSaudePorOrientacao</form>
+	</Procurou_unidade_por_orientacao_de_alguem_cat>
+	<Especificar_encaminhamento_por_outro_servico_de_saude label='Especificar_encaminhamento_por_outro_servico_de_saude' type='40' format='A40'>
+		<form id="2">especificacaoEncaminhamento</form>
+		<form id="6">especificacaoEncaminhamento</form>
+		<form id="8">especificacaoEncaminhamento</form>
+	</Especificar_encaminhamento_por_outro_servico_de_saude>
+	<TriagemEspecificar_outra_orientacao_para_paciente_ambulatorial label='TriagemEspecificar_outra_orientacao_para_paciente_ambulatorial' type='200' format='A200'></TriagemEspecificar_outra_orientacao_para_paciente_ambulatorial>
+    <Causas_nao_medicas_cat label='Causas_nao_medicas_cat' type='0' format='F1.0'>
+        <form id="1">causasNaoMedicas</form>
+        <form id="7">causasNaoMedicas</form>
+        <form id="9">causasNaoMedicas</form>
+    </Causas_nao_medicas_cat>
+    <Especificar_causas_nao_medicas label='Especificar_causas_nao_medicas' type='40' format='A40'>
+        <form id="1">especificarCausasNaoMedicas</form>
+        <form id="7">especificarCausasNaoMedicas</form>
+        <form id="9">especificarCausasNaoMedicas</form>
+    </Especificar_causas_nao_medicas>
+    <Causas_Medicas_cat label='Causas_Medicas_cat' type='0' format='F1.0'>
+        <form id="1">causasMedicas</form>
+        <form id="7">causasMedicas</form>
+        <form id="9">causasMedicas</form>
+    </Causas_Medicas_cat>
+    <TriagemespecificarCausasMedicas label='TriagemespecificarCausasMedicas' type='200' format='A200'>
+        <form id="1">especificarCausasMedicas</form>
+        <form id="7">especificarCausasMedicas</form>
+        <form id="9">especificarCausasMedicas</form>
+    </TriagemespecificarCausasMedicas>
+    <Como_foi_encaminhamento_para_internacao_cat label='Como_foi_encaminhamento_para_internacao_cat' type='0' format='F1.0'>
+        <form id="1">responsavelPeloEncaminhamentoParaInternacao</form>
+        <form id="7">responsavelPeloEncaminhamentoParaInternacao</form>
+        <form id="9">responsavelPeloEncaminhamentoParaInternacao</form>
+    </Como_foi_encaminhamento_para_internacao_cat>
+    <Especificar_encaminhamento_para_internacao label='Especificar_encaminhamento_para_internacao' type='200' format='A200'>
+        <form id="1">especificarResponsavelPeloEncaminhamentoParaInternacao</form>
+        <form id="7">especificarResponsavelPeloEncaminhamentoParaInternacao</form>
+        <form id="9">especificarResponsavelPeloEncaminhamentoParaInternacao</form>
+    </Especificar_encaminhamento_para_internacao>
+	<TriagemPesoatual label='TriagemPesoatual' type='0' format='F40.2'>
+		<form id="1">pesoAtual</form>
+		<form id="2">pesoAtual</form>
+		<form id="6">pesoAtual</form>
+		<form id="7">pesoAtual</form>
+		<form id="8">pesoAtual</form>
+		<form id="9">pesoAtual</form>
+	</TriagemPesoatual>
+	<TriagemAltura label='TriagemAltura' type='0' format='F40.2'>
+        <form id="1">altura</form>
+		<form id="2">altura</form>
+		<form id="6">altura</form>
+		<form id="7">altura</form>
+		<form id="8">altura</form>
+		<form id="9">altura</form>
+	</TriagemAltura>
+	<TriagemPesoHabitual label='TriagemPesoHabitual' type='0' format='F40.2'>
+        <form id="1">pesoHabitual</form>
+		<form id="2">pesoHabitual</form>
+		<form id="6">pesoHabitual</form>
+		<form id="7">pesoHabitual</form>
+		<form id="8">pesoHabitual</form>
+		<form id="9">pesoHabitual</form>
+	</TriagemPesoHabitual>
+	<TriagemEmagrecimento label='TriagemEmagrecimento' type='0' format='F1.0'>
+        <form id="1">emagrecimento</form>
+		<form id="2">emagrecimento</form>
+		<form id="6">emagrecimento</form>
+		<form id="7">emagrecimento</form>
+		<form id="8">emagrecimento</form>
+		<form id="9">emagrecimento</form>
+	</TriagemEmagrecimento>
+	<TriagemTempodeEmagrecimentoSemanas label='TriagemTempodeEmagrecimentoSemanas' type='600' format='A600'>
+        <form id="1">tempoEmagrecimentoSemanas</form>
+		<form id="2">tempoEmagrecimentoSemanas</form>
+		<form id="6">tempoEmagrecimentoSemanas</form>
+		<form id="7">tempoEmagrecimentoSemanas</form>
+		<form id="8">tempoEmagrecimentoSemanas</form>
+		<form id="9">tempoEmagrecimentoSemanas</form>
+	</TriagemTempodeEmagrecimentoSemanas>
+	<TriagemTosse label='TriagemTosse' type='200' format='A200'>
+        <form id="1">tosse</form>
+		<form id="2">tosse</form>
+		<form id="6">tosse</form>
+		<form id="7">tosse</form>
+		<form id="8">tosse</form>
+		<form id="9">tosse</form>
+	</TriagemTosse>
+	<TriagemHaquantotempotemtosse label='TriagemHaquantotempotemtosse' type='200' format='A200'>
+        <form id="1">tempoTosse</form>
+		<form id="2">tempoTosse</form>
+		<form id="6">tempoTosse</form>
+		<form id="7">tempoTosse</form>
+		<form id="8">tempoTosse</form>
+		<form id="9">tempoTosse</form>
+	</TriagemHaquantotempotemtosse>
+	<Tempo_de_tosse_semanas_cat label='Tempo_de_tosse_semanas_cat' type='600' format='A600'></Tempo_de_tosse_semanas_cat>
+	<TriagemExpectoracao label='TriagemExpectoracao' type='0' format='F1.0'>
+        <form id="1">expectoracao</form>
+		<form id="2">expectoracao</form>
+		<form id="6">expectoracao</form>
+		<form id="7">expectoracao</form>
+		<form id="8">expectoracao</form>
+		<form id="9">expectoracao</form>
+	</TriagemExpectoracao>
+	<TriagemHaquantotempotemexpectoracao label='TriagemHaquantotempotemexpectoracao' type='200' format='A200'>
+        <form id="1">tempoExpectoracao</form>
+		<form id="2">tempoExpectoracao</form>
+		<form id="6">tempoExpectoracao</form>
+		<form id="7">tempoExpectoracao</form>
+		<form id="8">tempoExpectoracao</form>
+		<form id="9">tempoExpectoracao</form>
+	</TriagemHaquantotempotemexpectoracao>
+	<Tempo_expectoracao label='Tempo_expectoracao' type='600' format='A600'></Tempo_expectoracao>
+	<TriagemCatarrocomsangue label='TriagemCatarrocomsangue' type='0' format='F1.0'>
+        <form id="1">hemoptoico</form>
+		<form id="2">hemoptoico</form>
+		<form id="6">hemoptoico</form>
+		<form id="7">hemoptoico</form>
+		<form id="8">hemoptoico</form>
+		<form id="9">hemoptoico</form>
+	</TriagemCatarrocomsangue>
+	<TriagemHaquantotempotemcatarrocomsangue label='TriagemHaquantotempotemcatarrocomsangue' type='200' format='A200'>
+        <form id="1">tempoHemoptoico</form>
+		<form id="2">tempoHemoptoico</form>
+		<form id="6">tempoHemoptoico</form>
+		<form id="7">tempoHemoptoico</form>
+		<form id="8">tempoHemoptoico</form>
+		<form id="9">tempoHemoptoico</form>
+	</TriagemHaquantotempotemcatarrocomsangue>
+	<Catarro_com_sangue_tempo label='Catarro_com_sangue_tempo' type='600' format='A600'></Catarro_com_sangue_tempo>
+	<TriagemSuorNoturno label='TriagemSuorNoturno' type='0' format='F1.0'>
+        <form id="1">sudorese</form>
+		<form id="2">sudorese</form>
+		<form id="6">sudorese</form>
+		<form id="7">sudorese</form>
+		<form id="8">sudorese</form>
+		<form id="9">sudorese</form>
+	</TriagemSuorNoturno>
+	<TriagemHaquantotempotemsuornoturno label='TriagemHaquantotempotemsuornoturno' type='200' format='A200'>
+        <form id="1">tempoSudorese</form>
+		<form id="2">tempoSudorese</form>
+		<form id="6">tempoSudorese</form>
+		<form id="7">tempoSudorese</form>
+		<form id="8">tempoSudorese</form>
+		<form id="9">tempoSudorese</form>
+	</TriagemHaquantotempotemsuornoturno>
+	<Suor_noturno_tempo_semanas label='Suor_noturno_tempo_semanas' type='600' format='A600'></Suor_noturno_tempo_semanas>
+	<TriagemFebre label='TriagemFebre' type='0' format='F1.0'>
+        <form id="1">febre</form>
+		<form id="2">febre</form>
+		<form id="6">febre</form>
+		<form id="7">febre</form>
+		<form id="8">febre</form>
+		<form id="9">febre</form>
+	</TriagemFebre>
+	<TriagemHaquantotempotemfebre label='TriagemHaquantotempotemfebre' type='200' format='A200'>
+        <form id="1">tempoFebre</form>
+		<form id="2">tempoFebre</form>
+		<form id="6">tempoFebre</form>
+		<form id="7">tempoFebre</form>
+		<form id="8">tempoFebre</form>
+		<form id="9">tempoFebre</form>
+	</TriagemHaquantotempotemfebre>
+	<Febre_tempo_semanas label='Febre_tempo_semanas' type='600' format='A600'></Febre_tempo_semanas>
+	<TriagemPerdadeApetite label='TriagemPerdadeApetite' type='0' format='F1.0'>
+        <form id="1">perdaDeApetite</form>
+		<form id="2">perdaDeApetite</form>
+		<form id="6">perdaDeApetite</form>
+		<form id="7">perdaDeApetite</form>
+		<form id="8">perdaDeApetite</form>
+		<form id="9">perdaDeApetite</form>
+	</TriagemPerdadeApetite>
+	<TriagemHaquantotempotemperdadeapetite label='TriagemHaquantotempotemperdadeapetite' type='200' format='A200'>
+        <form id="1">tempoPerdaDeApetite</form>
+		<form id="2">tempoPerdaDeApetite</form>
+		<form id="6">tempoPerdaDeApetite</form>
+		<form id="7">tempoPerdaDeApetite</form>
+		<form id="8">tempoPerdaDeApetite</form>
+		<form id="9">tempoPerdaDeApetite</form>
+	</TriagemHaquantotempotemperdadeapetite>
+    <Perda_de_apetite_tempo_semanas label='Perda_de_apetite_tempo_semanas' type='600' format='A600'></Perda_de_apetite_tempo_semanas>
+    <TriagemDornopeito label='TriagemDornopeito' type='0' format='F1.0'>
+        <form id="6">dorToracica</form>
+		<form id="7">dorToracica</form>
+    </TriagemDornopeito>
+    <TriagemHaquantotempotemdortoracica label='TriagemHaquantotempotemdortoracica' type='200' format='A200'>
+        <form id="6">tempoDorToracica</form>
+		<form id="7">tempoDorToracica</form>
+    </TriagemHaquantotempotemdortoracica>
+	<Dor_toracica_tempo_semanas label='Dor_toracica_tempo_semanas' type='600' format='A600'></Dor_toracica_tempo_semanas>
+	<TriagemFaltadear label='TriagemFaltadear' type='0' format='F1.0'>
+        <form id="1">dispneia</form>
+		<form id="2">dispneia</form>
+		<form id="6">dispneia</form>
+		<form id="7">dispneia</form>
+		<form id="8">dispneia</form>
+		<form id="9">dispneia</form>
+	</TriagemFaltadear>
+	<TriagemHaquantotempotemdispneia label='TriagemHaquantotempotemdispneia' type='200' format='A200'>
+        <form id="1">tempoDispneia</form>
+		<form id="2">tempoDispneia</form>
+		<form id="6">tempoDispneia</form>
+		<form id="7">tempoDispneia</form>
+		<form id="8">tempoDispneia</form>
+		<form id="9">tempoDispneia</form>
+	</TriagemHaquantotempotemdispneia>
+	<Dispneia_tempo_semanas label='Dispneia_tempo_semanas' type='600' format='A600'></Dispneia_tempo_semanas>
+    <TriagemPossuioujapossuiucansacooufaltadearemrepouso label='TriagemPossuioujapossuiucansacooufaltadearemrepouso' type='0' format='F1.0'>
+        <form id="1">faltaAr</form>
+		<form id="2">faltaAr</form>
+		<form id="6">faltaAr</form>
+		<form id="7">faltaAr</form>
+		<form id="8">faltaAr</form>
+		<form id="9">faltaAr</form>
+    </TriagemPossuioujapossuiucansacooufaltadearemrepouso>
+	<TriagemApresentacansacomaiordoquepessoasdesuaidadeduranteativida label='TriagemApresentacansacomaiordoquepessoasdesuaidadeduranteativida' type='0' format='F1.0'>
+        <form id="1">cansaco</form>
+		<form id="2">cansaco</form>
+		<form id="6">cansaco</form>
+		<form id="7">cansaco</form>
+		<form id="8">cansaco</form>
+		<form id="9">cansaco</form>
+	</TriagemApresentacansacomaiordoquepessoasdesuaidadeduranteativida>
+	<TriagemJainterrompeualgumaatividadedodiaadiaporcansacooufaltade label='TriagemJainterrompeualgumaatividadedodiaadiaporcansacooufaltade' type='0' format='F1.0'>
+        <form id="1">interrompeuAtividade</form>
+		<form id="2">interrompeuAtividade</form>
+		<form id="6">interrompeuAtividade</form>
+		<form id="7">interrompeuAtividade</form>
+		<form id="8">interrompeuAtividade</form>
+		<form id="9">interrompeuAtividade</form>
+	</TriagemJainterrompeualgumaatividadedodiaadiaporcansacooufaltade>
+	<TriagemPossuioujapossuiuchiadonopeito label='TriagemPossuioujapossuiuchiadonopeito' type='0' format='F1.0'>
+        <form id="1">chiado</form>
+		<form id="2">chiado</form>
+		<form id="6">chiado</form>
+		<form id="7">chiado</form>
+		<form id="8">chiado</form>
+		<form id="9">chiado</form>
+	</TriagemPossuioujapossuiuchiadonopeito>
+	<TriagemJaacordoucomfaltadearchiadonopeitooutosse label='TriagemJaacordoucomfaltadearchiadonopeitooutosse' type='0' format='F1.0'>
+        <form id="1">acordaSemAr</form>
+		<form id="2">acordaSemAr</form>
+		<form id="6">acordaSemAr</form>
+		<form id="7">acordaSemAr</form>
+		<form id="8">acordaSemAr</form>
+		<form id="9">acordaSemAr</form>
+	</TriagemJaacordoucomfaltadearchiadonopeitooutosse>
+	<TriagemCorizacoceiranonarizouespirrosfrequentes label='TriagemCorizacoceiranonarizouespirrosfrequentes' type='0' format='F1.0'>
+        <form id="1">coriza</form>
+		<form id="2">coriza</form>
+		<form id="6">coriza</form>
+		<form id="7">coriza</form>
+		<form id="8">coriza</form>
+		<form id="9">coriza</form>
+	</TriagemCorizacoceiranonarizouespirrosfrequentes>
+	<TriagemTratamentoAnteriorparaTB label='TriagemTratamentoAnteriorparaTB' type='0' format='F1.0'>
+        <form id="1">tratamentoAnterior</form>
+		<form id="2">tratamentoAnterior</form>
+		<form id="6">tratamentoAnterior</form>
+		<form id="7">tratamentoAnterior</form>
+		<form id="8">tratamentoAnterior</form>
+		<form id="9">tratamentoAnterior</form>
+	</TriagemTratamentoAnteriorparaTB>
+	<TriagemQuantasvezestratoudeTB label='TriagemQuantasvezestratoudeTB' type='0' format='F20.0'>
+        <form id="1">quantasVezesTratouTB</form>
+		<form id="2">quantasVezesTratouTB</form>
+		<form id="6">quantasVezesTratouTB</form>
+		<form id="7">quantasVezesTratouTB</form>
+		<form id="8">quantasVezesTratouTB</form>
+		<form id="9">quantasVezesTratouTB</form>
+	</TriagemQuantasvezestratoudeTB>
+	<TriagemAnodoultimotratamento label='TriagemAnodoultimotratamento' type='0' format='F40.0'>
+        <form id="1">data_ultimo_tratamento</form>
+		<form id="2">data_ultimo_tratamento</form>
+		<form id="6">data_ultimo_tratamento</form>
+		<form id="7">data_ultimo_tratamento</form>
+		<form id="8">data_ultimo_tratamento</form>
+		<form id="9">data_ultimo_tratamento</form>
+	</TriagemAnodoultimotratamento>
+	<Local_tuberculose_cat label='Local_tuberculose_cat' type='0' format='F1.0'>
+        <form id="1">localTuberculose</form>
+		<form id="2">localTuberculose</form>
+		<form id="6">localTuberculose</form>
+		<form id="7">localTuberculose</form>
+		<form id="8">localTuberculose</form>
+		<form id="9">localTuberculose</form>
+	</Local_tuberculose_cat>
+	<Desfecho_tto_tuberculose_anterior_cat label='Desfecho_tto_tuberculose_anterior_cat' type='0' format='F1.0'>
+        <form id="1">desfechoTratamento</form>
+		<form id="2">desfechoTratamento</form>
+		<form id="6">desfechoTratamento</form>
+		<form id="7">desfechoTratamento</form>
+		<form id="8">desfechoTratamento</form>
+		<form id="9">desfechoTratamento</form>
+	</Desfecho_tto_tuberculose_anterior_cat>
+	<TriagemInternacaoHospitalar label='TriagemInternacaoHospitalar' type='0' format='F1.0'>
+        <form id="1">internacaoHospitalar</form>
+		<form id="2">internacaoHospitalar</form>
+		<form id="6">internacaoHospitalar</form>
+		<form id="7">internacaoHospitalar</form>
+		<form id="8">internacaoHospitalar</form>
+		<form id="9">internacaoHospitalar</form>
+	</TriagemInternacaoHospitalar>
+	<TriagemPermanenciaeminstituicaoprisionaloudelegacia label='TriagemPermanenciaeminstituicaoprisionaloudelegacia' type='0' format='F1.0'>
+        <form id="1">permanenciaPrisional</form>
+		<form id="2">permanenciaPrisional</form>
+		<form id="6">permanenciaPrisional</form>
+		<form id="7">permanenciaPrisional</form>
+		<form id="8">permanenciaPrisional</form>
+		<form id="9">permanenciaPrisional</form>
+	</TriagemPermanenciaeminstituicaoprisionaloudelegacia>
+	<TriagemPermanenciaemcasadeapoioidosodependentequimico label='TriagemPermanenciaemcasadeapoioidosodependentequimico' type='0' format='F1.0'>
+        <form id="1">permanenciaCasaApoio</form>
+		<form id="2">permanenciaCasaApoio</form>
+		<form id="6">permanenciaCasaApoio</form>
+		<form id="7">permanenciaCasaApoio</form>
+		<form id="8">permanenciaCasaApoio</form>
+		<form id="9">permanenciaCasaApoio</form>
+	</TriagemPermanenciaemcasadeapoioidosodependentequimico>
+	<TriagemContatocomTBpulmonarpositiva label='TriagemContatocomTBpulmonarpositiva' type='0' format='F1.0'>
+        <form id="1">contatoTuberculosePositiva</form>
+		<form id="2">contatoTuberculosePositiva</form>
+		<form id="6">contatoTuberculosePositiva</form>
+		<form id="7">contatoTuberculosePositiva</form>
+		<form id="8">contatoTuberculosePositiva</form>
+		<form id="9">contatoTuberculosePositiva</form>
+	</TriagemContatocomTBpulmonarpositiva>
+	<TriagemEscarroerapositivo label='TriagemEscarroerapositivo' type='0' format='F1.0'>
+        <form id="1">escarroEraPositivo</form>
+		<form id="2">escarroEraPositivo</form>
+		<form id="6">escarroEraPositivo</form>
+		<form id="7">escarroEraPositivo</form>
+		<form id="8">escarroEraPositivo</form>
+		<form id="9">escarroEraPositivo</form>
+	</TriagemEscarroerapositivo>
+	<TriagemContatocomTBpulmonarresistente label='TriagemContatocomTBpulmonarresistente' type='0' format='F1.0'>
+        <form id="1">contatoTuberculoseResistente</form>
+		<form id="2">contatoTuberculoseResistente</form>
+		<form id="6">contatoTuberculoseResistente</form>
+		<form id="7">contatoTuberculoseResistente</form>
+		<form id="8">contatoTuberculoseResistente</form>
+		<form id="9">contatoTuberculoseResistente</form>
+	</TriagemContatocomTBpulmonarresistente>
+	<Fumante_cat label='Fumante_cat' type='0' format='F1.0'>
+        <form id="1">fumante</form>
+		<form id="2">fumante</form>
+		<form id="6">fumante</form>
+		<form id="7">fumante</form>
+		<form id="8">fumante</form>
+		<form id="9">fumante</form>
+	</Fumante_cat>
+	<TriagemNumerodecigarrosquefumafumavapordia label='TriagemNumerodecigarrosquefumafumavapordia' type='0' format='F40.0'>
+        <form id="1">numeroCigarros</form>
+		<form id="2">numeroCigarros</form>
+		<form id="6">numeroCigarros</form>
+		<form id="7">numeroCigarros</form>
+		<form id="8">numeroCigarros</form>
+		<form id="9">numeroCigarros</form>
+	</TriagemNumerodecigarrosquefumafumavapordia>
+	<TriagemHaquantotempofumafumou_anos label='TriagemHaquantotempofumafumou_anos' type='0' format='F40.1'>
+        <form id="1">numeroAnosFumante</form>
+		<form id="2">numeroAnosFumante</form>
+		<form id="6">numeroAnosFumante</form>
+		<form id="7">numeroAnosFumante</form>
+		<form id="8">numeroAnosFumante</form>
+		<form id="9">numeroAnosFumante</form>
+	</TriagemHaquantotempofumafumou_anos>
+	<TriagemHaquantotempoparoudefumaranos label='TriagemHaquantotempoparoudefumaranos' type='0' format='F40.2'>
+        <form id="6">tempoParouFumarAnos</form>
+		<form id="7">tempoParouFumarAnos</form>
+		<form id="8">tempoParouFumarAnos</form>
+		<form id="9">tempoParouFumarAnos</form>
+	</TriagemHaquantotempoparoudefumaranos>
+	<TriagemCargaTabagica label='TriagemCargaTabagica' type='0' format='F40.0'>
+        <form id="1">cargaTabagistica</form>
+		<form id="2">cargaTabagistica</form>
+		<form id="6">cargaTabagistica</form>
+		<form id="7">cargaTabagistica</form>
+		<form id="8">cargaTabagistica</form>
+		<form id="9">cargaTabagistica</form>
+	</TriagemCargaTabagica>
+	<TriagemConsomebebidasalcoolicas label='TriagemConsomebebidasalcoolicas' type='200' format='A200'></TriagemConsomebebidasalcoolicas>
+    <Consome_bebida_alcoolica_cat label='Consome_bebida_alcoolica_cat' type='0' format='F1.0'>
+        <form id="1">bebida</form>
+		<form id="2">bebida</form>
+		<form id="6">bebida</form>
+		<form id="7">bebida</form>
+		<form id="8">bebida</form>
+		<form id="9">bebida</form>
+    </Consome_bebida_alcoolica_cat>
+	<TriagemJasentiuquedeveriadiminuiraquantidadedebebida label='TriagemJasentiuquedeveriadiminuiraquantidadedebebida' type='0' format='F1.0'>
+        <form id="1">criterio_cage_0</form>
+		<form id="2">criterio_cage_0</form>
+		<form id="6">criterio_cage_0</form>
+		<form id="7">criterio_cage_0</form>
+		<form id="8">criterio_cage_0</form>
+		<form id="9">criterio_cage_0</form>
+	</TriagemJasentiuquedeveriadiminuiraquantidadedebebida>
+	<TriagemRecebeucriticasaomododebeber label='TriagemRecebeucriticasaomododebeber' type='0' format='F1.0'>
+        <form id="1">criterio_cage_1</form>
+		<form id="2">criterio_cage_1</form>
+		<form id="6">criterio_cage_1</form>
+		<form id="7">criterio_cage_1</form>
+		<form id="8">criterio_cage_1</form>
+		<form id="9">criterio_cage_1</form>
+	</TriagemRecebeucriticasaomododebeber>
+	<TriagemBebepelamanhaparadiminuironervosismoouressaca label='TriagemBebepelamanhaparadiminuironervosismoouressaca' type='0' format='F1.0'>
+        <form id="1">criterio_cage_2</form>
+		<form id="2">criterio_cage_2</form>
+		<form id="6">criterio_cage_2</form>
+		<form id="7">criterio_cage_2</form>
+		<form id="8">criterio_cage_2</form>
+		<form id="9">criterio_cage_2</form>
+	</TriagemBebepelamanhaparadiminuironervosismoouressaca>
+	<TriagemSenteseculpadopelamaneiradebeber label='TriagemSenteseculpadopelamaneiradebeber' type='0' format='F1.0'>
+        <form id="1">criterio_cage_3</form>
+		<form id="2">criterio_cage_3</form>
+		<form id="6">criterio_cage_3</form>
+		<form id="7">criterio_cage_3</form>
+		<form id="8">criterio_cage_3</form>
+		<form id="9">criterio_cage_3</form>
+	</TriagemSenteseculpadopelamaneiradebeber>
+	<TriagemCriterioCAGE label='TriagemCriterioCAGE' type='0' format='F1.0'>
+        <form id="1">criterioCage</form>
+		<form id="2">criterioCage</form>
+		<form id="6">criterioCage</form>
+		<form id="7">criterioCage</form>
+		<form id="8">criterioCage</form>
+		<form id="9">criterioCage</form>
+	</TriagemCriterioCAGE>
+	<TriagemRealizouoexameHIV label='TriagemRealizouoexameHIV' type='0' format='F1.0'>
+        <form id="1">exameSida</form>
+		<form id="2">exameSida</form>
+		<form id="6">exameSida</form>
+		<form id="7">exameSida</form>
+		<form id="8">exameSida</form>
+		<form id="9">exameSida</form>
+	</TriagemRealizouoexameHIV>
+	<TriagemAnodoExameHIV label='TriagemAnodoExameHIV' type='0' format='F40.0'>
+        <form id="1">data_sida</form>
+		<form id="2">data_sida</form>
+		<form id="6">data_sida</form>
+		<form id="7">data_sida</form>
+		<form id="8">data_sida</form>
+		<form id="9">data_sida</form>
+	</TriagemAnodoExameHIV>
+	<TriagemResultadoHIV label='TriagemResultadoHIV' type='0' format='F1.0'>
+        <form id="1">sida</form>
+		<form id="2">sida</form>
+		<form id="6">sida</form>
+		<form id="7">sida</form>
+		<form id="8">sida</form>
+		<form id="9">sida</form>
+	</TriagemResultadoHIV>
+	<TriagemUsodeantiretroviral label='TriagemUsodeantiretroviral' type='0' format='F1.0'>
+        <form id="1">sidaUsoAntiRetroviral</form>
+		<form id="2">sidaUsoAntiRetroviral</form>
+		<form id="6">sidaUsoAntiRetroviral</form>
+		<form id="7">sidaUsoAntiRetroviral</form>
+		<form id="8">sidaUsoAntiRetroviral</form>
+		<form id="9">sidaUsoAntiRetroviral</form>
+	</TriagemUsodeantiretroviral>
+	<TriagemDatadeinicioAntiretroviral label='TriagemDatadeinicioAntiretroviral' type='0' format='EDATE8.0'>
+        <form id="1">dataInicioUsoRetroviral</form>
+		<form id="2">dataInicioUsoRetroviral</form>
+		<form id="6">dataInicioUsoRetroviral</form>
+		<form id="7">dataInicioUsoRetroviral</form>
+		<form id="8">dataInicioUsoRetroviral</form>
+		<form id="9">dataInicioUsoRetroviral</form>
+	</TriagemDatadeinicioAntiretroviral>
+	<TriagemAnalisedoentrevistador label='TriagemAnalisedoentrevistador' type='600' format='A600'>
+        <form id="1">desfecho</form>
+		<form id="2">desfecho</form>
+		<form id="8">analiseEntrevistador</form>
+		<form id="9">analiseEntrevistador</form>
+	</TriagemAnalisedoentrevistador>
+	<Exames_cat label='Exames_cat' type='0' format='F1.0'>
+        <form id="1">exames</form>
+		<form id="2">exames</form>
+		<form id="6">exames</form>
+		<form id="7">exames</form>
+		<form id="8">exames</form>
+		<form id="9">exames</form>
+	</Exames_cat>
+	<TriagemOutro_exame_solicitado label='TriagemOutro_exame_solicitado' type='200' format='A200'>
+        <form id="1">outrosExames</form>
+		<form id="2">outrosExames</form>
+		<form id="8">outrosExames</form>
+		<form id="9">outrosExames</form>
+	</TriagemOutro_exame_solicitado>
+	<TriagemOutrascondutas label='TriagemOutrascondutas' type='200' format='A200'>
+        <form id="1">outrasCondutas</form>
+		<form id="2">outrasCondutas</form>
+		<form id="6">outrasCondutas</form>
+		<form id="7">outrasCondutas</form>
+	</TriagemOutrascondutas>
+	<TriagemHorariodofimdaentrevista label='TriagemHorariodofimdaentrevista' type='200' format='A200'>
+        <form id="1">dataFimTriagem</form>
+		<form id="2">dataFimTriagem</form>
+	</TriagemHorariodofimdaentrevista>
+	<TriagemComooentrevistadoravaliaaconfiabilidadedasrespostasdoentr label='TriagemComooentrevistadoravaliaaconfiabilidadedasrespostasdoentr' type='0' format='F40.2'>
+        <form id="1">avaliacao</form>
+		<form id="2">avaliacao</form>
+		<form id="6">avaliacao</form>
+		<form id="7">avaliacao</form>
+		<form id="8">avaliacao</form>
+		<form id="9">avaliacao</form>
+	</TriagemComooentrevistadoravaliaaconfiabilidadedasrespostasdoentr>
+	<TriagemAvaliadopor label='TriagemAvaliadopor' type='200' format='A200'>
+        <form id="1">avaliador</form>
+		<form id="2">avaliador</form>
+		<form id="6">avaliador</form>
+		<form id="7">avaliador</form>
+		<form id="8">avaliador</form>
+		<form id="9">avaliador</form>
+	</TriagemAvaliadopor>
+	<ConsultaRaioXrealizado label='ConsultaRaioXrealizado' type='0' format='F1.0'>
+		<form id="3">rxRealizado</form>
+	</ConsultaRaioXrealizado>
+	<ConsultaDatadoRX label='ConsultaDatadoRX' type='0' format='EDATE8.0'>
+		<form id="3">data_rx</form>
+	</ConsultaDatadoRX>
+	<ConsultaCavitacao label='ConsultaCavitacao' type='0' format='F1.0'>
+		<form id="3">cavitacao</form>
+	</ConsultaCavitacao>
+	<ConsultaPadrao label='ConsultaPadrao' type='0' format='F1.0'>
+		<form id="3">padrao</form>
+	</ConsultaPadrao>
+	<Se_atipico label='Se_atipico' type='0' format='F1.0'>
+		<form id="3">casoBaixaProbabilidade</form>
+	</Se_atipico>
+	<ConsultaProbabilidadedeTBativaaoavaliaroRX label='ConsultaProbabilidadedeTBativaaoavaliaroRX' type='0' format='F1.0'>
+		<form id="3">probabilidadeTBAtivaAposEstudoRX</form>
+	</ConsultaProbabilidadedeTBativaaoavaliaroRX>
+	<ConsultaProbabilidadedeTBClinicoRadiologico label='ConsultaProbabilidadedeTBClinicoRadiologico' type='0' format='F8.2'>
+		<form id="3">probabilidadeTBClinicoRadiologica</form>
+	</ConsultaProbabilidadedeTBClinicoRadiologico>
+	<Comorbidades_cat label='Comorbidades_cat' type='0' format='F1.0'></Comorbidades_cat>
+    <ConsultaComorbidades label='ConsultaComorbidades' type='200' format='A200'>
+		<form id="3">comorbidades</form>
+    </ConsultaComorbidades>
+	<ConsultaOutrascomorbidades label='ConsultaOutrascomorbidades' type='200' format='A200'>
+		<form id="3">comorbidadesOutros</form>
+	</ConsultaOutrascomorbidades>
+	<ConsultaDiagnosticomedico label='ConsultaDiagnosticomedico' type='0' format='F1.0'>
+		<form id="3">diagnostico</form>
+	</ConsultaDiagnosticomedico>
+	<ConsultaDatadaConsulta label='ConsultaDatadaConsulta' type='0' format='EDATE8.0'>
+		<form id="3">dataConsulta</form>
+	</ConsultaDatadaConsulta>
+	<ConsultaAvaliadopor label='ConsultaAvaliadopor' type='200' format='A200'>
+		<form id="3">avaliador</form>
+	</ConsultaAvaliadopor>
+	<ConsultaTratamentoprescritoparaTB label='ConsultaTratamentoprescritoparaTB' type='0' format='F1.0'>
+		<form id="3">tratamentoPrescritoTBFarmacos</form>
+	</ConsultaTratamentoprescritoparaTB>
+	<ConsultaDatadoiniciotratamento label='ConsultaDatadoiniciotratamento' type='0' format='EDATE8.0'>
+		<form id="3">data_inicio</form>
+	</ConsultaDatadoiniciotratamento>
+	<Farmacos_utilizados_tto_cat label='Farmacos_utilizados_tto_cat' type='600' format='A600'>
+		<form id="3">tratamentoPrescritoTBFarmacos</form>
+	</Farmacos_utilizados_tto_cat>
+	<ConsultaOutros label='ConsultaOutros' type='200' format='A200'>
+		<form id="3">farmacosOutros</form>
+	</ConsultaOutros>
+	<ConsultaObservacoes label='ConsultaObservacoes' type='200' format='A200'>
+		<form id="3">observacoes</form>
+	</ConsultaObservacoes>
+    <ExamesUnidade label='ExamesUnidade' type='200' format="A200">
+		<form id="5">unidade</form>
+	</ExamesUnidade>
+    <ExamesNumerodoPaciente label='ExamesNumerodoPaciente' type='0' format="F40.0">
+		<form id="5">numeroPaciente</form>
+	</ExamesNumerodoPaciente>
+    <ColetadoSangue1 label='ColetadoSangue1' type='200' format="A200">
+		<form id="5">sangueColetado_1</form>
+	</ColetadoSangue1>
+    <NumerodoSangue1 label='NumerodoSangue1' type='0' format="F40.2">
+		<form id="5">numeroSangue_1</form>
+	</NumerodoSangue1>
+    <ExtraidoSoro1 label='ExtraidoSoro1' type='200' format="A200">
+		<form id="5">soroColetado_1</form>
+	</ExtraidoSoro1>
+    <NumerodoSoro1 label='NumerodoSoro1' type='0' format='F40.2'>
+		<form id="5">numeroSoro_1</form>
+	</NumerodoSoro1>
+    <ExamesIGRA label='ExamesIGRA' type='200' format='A200'>
+		<form id="5">IGRA</form>
+	</ExamesIGRA>
+    <ExamesProvaTuberculinicaRealizada label='ExamesProvaTuberculinicaRealizada' type='0' format='F1.0'>
+		<form id="5">provaRealizada</form>
+	</ExamesProvaTuberculinicaRealizada>
+    <ExamesDatadeaplicacaodoPT label='ExamesDatadeaplicacaodoPT' type='0' format='EDATE8.0'>
+		<form id="5">data_aplicacao</form>
+	</ExamesDatadeaplicacaodoPT>
+	<ExamesALeiturafoiRealizada label='ExamesALeiturafoiRealizada' type='0' format='F1.0'>
+		<form id="5">leituraRealizada</form>
+	</ExamesALeiturafoiRealizada>
+   	<ExamesResultadodaleitura label='ExamesResultadodaleitura' type='0' format='F8.0'>
+		<form id="5">resultadoLeitura</form>
+	</ExamesResultadodaleitura>
+    <ExamesDatadaLeitura label='ExamesDatadaLeitura' type='0' format='EDATE8.0'>
+		<form id="5">data_leitura</form>
+	</ExamesDatadaLeitura>
+    <ExamesResponsavelpelaleitura label='ExamesResponsavelpelaleitura' type='200' format='A200'>
+		<form id="5">pt</form>
+	</ExamesResponsavelpelaleitura>
+    <ExamesRealizouoexamedeHIVSIDAaposatriagem label='ExamesRealizouoexamedeHIVSIDAaposatriagem' type='0' format='F1.0'>
+		<form id="5">exameSida</form>
+	</ExamesRealizouoexamedeHIVSIDAaposatriagem>
+    <ExamesResultado_HIV_pos_triagem_cat label='ExamesResultado_HIV_pos_triagem_cat' type='0' format='F1.0'>
+		<form id="5">sida</form>
+	</ExamesResultado_HIV_pos_triagem_cat>
+    <ExamesDatadoExame_HIV label='ExamesDatadoExame_HIV' type='0' format='EDATE8.0'>
+		<form id="5">data_sida</form>
+	</ExamesDatadoExame_HIV>
+    <ExamesValordelinfocitostotaispresentenohemogramanosultimos60dias label='ExamesValordelinfocitostotaispresentenohemogramanosultimos60dias' type='0' format='F8.0'>
+		<form id="5">sidaContagemLinfocitos60dias</form>
+	</ExamesValordelinfocitostotaispresentenohemogramanosultimos60dias>
+    <ExamesValordoCD4nosultimos60dias label='ExamesValordoCD4nosultimos60dias' type='0' format='F8.0'>
+		<form id="5">sidaContagemCD460dias</form>
+	</ExamesValordoCD4nosultimos60dias>
+    <ExamesDatadarealizacaodoexameCD4elinfocitos label='ExamesDatadarealizacaodoexameCD4elinfocitos' type='0' format='EDATE8.0'>
+		<form id="5"></form>
+	</ExamesDatadarealizacaodoexameCD4elinfocitos>
+    <ExamesUsodeantiretroviral label='ExamesUsodeantiretroviral' type='0' format='F1.0'>
+		<form id="5">sidaUsoAntiRetroviral</form>
+	</ExamesUsodeantiretroviral>
+    <ExamesDatadeinicioAntiretroviral label='ExamesDatadeinicioAntiretroviral' type='200' format='A200'>
+		<form id="5">dataInicioUsoRetroviral</form>
+	</ExamesDatadeinicioAntiretroviral>
+    <Realizou_baciloscopia_triagem label='Realizou_baciloscopia_triagem' type='0' format='F1.0'>
+		<form id="5"></form>
+	</Realizou_baciloscopia_triagem>
+    <NomelaboratorioBaciloscopia1 label='NomelaboratorioBaciloscopia1' type='200' format='A200'>
+		<form id="5">origem_cepa_1</form>
+	</NomelaboratorioBaciloscopia1>
+    <NumeroBaciloscopia1 label='NumeroBaciloscopia1' type='0' format='F40.0'>
+		<form id="5">numero_cepa_1</form>
+    </NumeroBaciloscopia1>
+    <DatadacoletaBaciloscopia_triagem label='DatadacoletaBaciloscopia_triagem' type='0' format='EDATE8.0'>
+		<form id="5">data_cepa_1</form>
+	</DatadacoletaBaciloscopia_triagem>
+    <HoraBaciloscopia_triagem_coleta label='HoraBaciloscopia_triagem_coleta' type='200' format='A200'>
+		<form id="5">hora_cepa_1</form>
+	</HoraBaciloscopia_triagem_coleta>
+    <DatadoRecebimentonolaboBaciloscopia_triagem label='DatadoRecebimentonolaboBaciloscopia_triagem' type='0' format='EDATE8.0'>
+		<form id="5">data_recebimento_cepa_1</form>
+	</DatadoRecebimentonolaboBaciloscopia_triagem>
+    <horaBaciloscopia_triagem_recebimento_lab label='horaBaciloscopia_triagem_recebimento_lab' type='200' format='A200'>
+		<form id="5">hora_recebimento_cepa_1</form>
+	</horaBaciloscopia_triagem_recebimento_lab>
+    <Aspecto_escarro_baciloscopia_triagem_cat label='Aspecto_escarro_baciloscopia_triagem_cat' type='0' format='F1.0'>
+		<form id="5">aspecto_escarro_1</form>
+	</Aspecto_escarro_baciloscopia_triagem_cat>
+    <Tipo_escarro_baciloscopia_triagem_cat label='Tipo_escarro_baciloscopia_triagem_cat' type='0' format='F1.0'>
+		<form id="5">material_cepa_1</form>
+	</Tipo_escarro_baciloscopia_triagem_cat>
+    <Metodo_Baciloscopia_triagem_cat label='Metodo_Baciloscopia_triagem_cat' type='0' format='F1.0'>
+		<form id="5">baciloscopia_metodo_1</form>
+	</Metodo_Baciloscopia_triagem_cat>
+    <DatadoResultadoBAARBaciloscopia_triagem label='DatadoResultadoBAARBaciloscopia_triagem' type='0' format='EDATE8.0'>
+		<form id="5">baciloscopia_data_1</form>
+	</DatadoResultadoBAARBaciloscopia_triagem>
+    <HoraBaciloscopia_triagem_resultado label='HoraBaciloscopia_triagem_resultado' type='200' format='A200'>
+		<form id="5">baciloscopia_hora_1</form>
+	</HoraBaciloscopia_triagem_resultado>
+    <Resultadodo_Baciloscopia_triagem_cat label='Resultadodo_Baciloscopia_triagem_cat' type='0' format='F1.0'>
+		<form id="5">baciloscopia_resultado_cepa_1</form>
+	</Resultadodo_Baciloscopia_triagem_cat>
+    <Se_positivo_descrever_numero_colonias_triagem label='Se_positivo_descrever_numero_colonias_triagem' type='0' format='F8.0'>
+		<form id="5"></form>
+	</Se_positivo_descrever_numero_colonias_triagem>
+    <ResponsavelpelacoletaBaciloscopia_triagem label='ResponsavelpelacoletaBaciloscopia_triagem' type='200' format='A200'>
+		<form id="5">baciloscopia_coleta_responsavel_1</form>
+	</ResponsavelpelacoletaBaciloscopia_triagem>
+    <ResponsavelpeloexameBaciloscopia_triagem label='ResponsavelpeloexameBaciloscopia_triagem' type='200' format='A200'>
+		<form id="5">analise_responsavel_1</form>
+	</ResponsavelpeloexameBaciloscopia_triagem>
+    <Data_Recebimento_medicoenfermeiro_Baciloscopia_triagem label='Data_Recebimento_medicoenfermeiro_Baciloscopia_triagem' type='0' format='EDATE8.0'>
+		<form id="5">baciloscopia_data_recebimento_medico_1</form>
+	</Data_Recebimento_medicoenfermeiro_Baciloscopia_triagem>
+    <Realizou_baciloscopia_segunda_amostra_triagem label='Realizou_baciloscopia_segunda_amostra_triagem' type='0' format='F1.0'>
+		<form id="5"></form>
+	</Realizou_baciloscopia_segunda_amostra_triagem>
+    <NomedoLaboratorioBaciloscopia2 label='NomedoLaboratorioBaciloscopia2' type='200' format='A200'>
+		<form id="5">origem_cepa_2</form>
+	</NomedoLaboratorioBaciloscopia2>
+    <NumeroBaciloscopia2 label='NumeroBaciloscopia2' type='0' format='F40.0'>
+		<form id="5">numero_cepa_2</form>
+	</NumeroBaciloscopia2>
+    <DatadacoletaBaciloscopia2 label='DatadacoletaBaciloscopia2' type='0' format='EDATE8.0'>
+		<form id="5">data_cepa_2</form>
+	</DatadacoletaBaciloscopia2>
+    <HoraBaciloscopia2 label='HoraBaciloscopia2' type='200' format='A200'>
+		<form id="5">hora_cepa_2</form>
+	</HoraBaciloscopia2>
+    <DatadoRecebimentonolaboBaciloscopia2 label='DatadoRecebimentonolaboBaciloscopia2' type='0' format='EDATE8.0'>
+		<form id="5">data_recebimento_cepa_2</form>
+	</DatadoRecebimentonolaboBaciloscopia2>
+    <horaBaciloscopia2_A label='horaBaciloscopia2_A' type='200' format='A200'>
+		<form id="5">hora_recebimento_cepa_2</form>
+	</horaBaciloscopia2_A>
+    <Aspecto_baciloscopia2_cat label='Aspecto_baciloscopia2_cat' type='0' format='F1.0'>
+		<form id="5">aspecto_escarro_2</form>
+	</Aspecto_baciloscopia2_cat>
+    <Tipo_baciloscopia_2_cat label='Tipo_baciloscopia_2_cat' type='0' format='F1.0'>
+		<form id="5">material_cepa_2</form>
+	</Tipo_baciloscopia_2_cat>
+    <Metodo_baciloscopia_2_cat label='Metodo_baciloscopia_2_cat' type='0' format='F1.0'>
+		<form id="5">baciloscopia_metodo_2</form>
+	</Metodo_baciloscopia_2_cat>
+    <DatadoResultadoBAARBaciloscopia2 label='DatadoResultadoBAARBaciloscopia2' type='0' format='EDATE8.0'>
+		<form id="5">baciloscopia_data_2</form>
+	</DatadoResultadoBAARBaciloscopia2>
+    <HoraBaciloscopia2_B label='HoraBaciloscopia2_B' type='200' format='A200'>
+		<form id="5">baciloscopia_hora_2</form>
+	</HoraBaciloscopia2_B>
+    <Resultado_baciloscopia2_Cat label='Resultado_baciloscopia2_Cat' type='0' format='F1.0'>
+		<form id="5">baciloscopia_resultado_cepa_2</form>
+	</Resultado_baciloscopia2_Cat>
+    <ResponsavelpelacoletaBaciloscopia2 label='ResponsavelpelacoletaBaciloscopia2' type='200' format='A200'>
+		<form id="5">baciloscopia_coleta_responsavel_2</form>
+	</ResponsavelpelacoletaBaciloscopia2>
+    <ResponsavelpeloexameBaciloscopia2 label='ResponsavelpeloexameBaciloscopia2' type='200' format='A200'>
+		<form id="5">analise_responsavel_2</form>
+	</ResponsavelpeloexameBaciloscopia2>
+    <DatadoRecebmedicoenfermBaciloscopia2 label='DatadoRecebmedicoenfermBaciloscopia2' type='0' format='EDATE8.0'>
+		<form id="5">baciloscopia_data_recebimento_medico_2</form>
+	</DatadoRecebmedicoenfermBaciloscopia2>
+    <Realizou_Baciloscopia_2_meses_apos_triagem label='Realizou_Baciloscopia_2_meses_apos_triagem' type='0' format='F1.0'>
+		<form id="5">baarUmMesAposTriagemRealizado</form>
+	</Realizou_Baciloscopia_2_meses_apos_triagem>
+    <Baciloscopia_realizada_meses_apos_triagem_referente2omes label='Baciloscopia_realizada_meses_apos_triagem_referente2omes' type="200" format="A200">
+        <form id="5"></form>
+    </Baciloscopia_realizada_meses_apos_triagem_referente2omes>
+    <ExamesMotivo_nao_realizacao_2_meses_apos_triagem label='ExamesMotivo_nao_realizacao_2_meses_apos_triagem' type='200' format='A200'>
+		<form id="5">motivoBaarUmMesAposTriagem</form>
+	</ExamesMotivo_nao_realizacao_2_meses_apos_triagem>
+    <ExamesDatadoResultadodoBAAR_2_meses_apos_triagem label='ExamesDatadoResultadodoBAAR_2_meses_apos_triagem' type='0' format='EDATE8.0'>
+		<form id="5">dataResultadoBaarUmMesAposTriagem</form>
+	</ExamesDatadoResultadodoBAAR_2_meses_apos_triagem>
+    <ExamesResultadodoBAAR_2_meses_apos_triagem label='ExamesResultadodoBAAR_2_meses_apos_triagem' type='0' format='F1.0'>
+		<form id="5">resultadoBaarUmMesAposTriagem</form>
+	</ExamesResultadodoBAAR_2_meses_apos_triagem>
+    <ExamesResponsavelpelacoleta_2_meses_apos_triagem label='ExamesResponsavelpelacoleta_2_meses_apos_triagem' type='200' format='A200'>
+		<form id="5">responsavelPelaColetaUmMesAposTriagem</form>
+	</ExamesResponsavelpelacoleta_2_meses_apos_triagem>
+    <ExamesResponsavelpeloexame_2_meses_apos_triagem label='ExamesResponsavelpeloexame_2_meses_apos_triagem' type='200' format='A200'>
+		<form id="5">responsavelPeloExameUmMesAposTriagem</form>
+	</ExamesResponsavelpeloexame_2_meses_apos_triagem>
+    <Realizou_baciloscopia_6_meses_apos_triagem label='Realizou_baciloscopia_6_meses_apos_triagem' type='0' format='F1.0'>
+		<form id="5">baarDoisMesesAposTriagemRealizado</form>
+	</Realizou_baciloscopia_6_meses_apos_triagem>
+    <ExamesMotivo_nao_realizacao_6_meses_apos_triagem label='ExamesMotivo_nao_realizacao_6_meses_apos_triagem' type='200' format='A200'>
+		<form id="5">motivoBaarDoisMesesAposTriagem</form>
+	</ExamesMotivo_nao_realizacao_6_meses_apos_triagem>
+    <ExamesDatadoResultadodoBAAR_6_meses_apos_triagem label='ExamesDatadoResultadodoBAAR_6_meses_apos_triagem' type='0' format='EDATE8.0'>
+		<form id="5">dataResultadoBaarDoisMesesAposTriagem</form>
+	</ExamesDatadoResultadodoBAAR_6_meses_apos_triagem>
+    <Resultado_BAAR_6meses_apos_triagem label='Resultado_BAAR_6meses_apos_triagem' type='0' format='F1.0'>
+		<form id="5">resultadoBaarDoisMesesAposTriagem</form>
+	</Resultado_BAAR_6meses_apos_triagem>
+    <ExamesResponsavelpelacoleta_6_meses_apos_triagem label='ExamesResponsavelpelacoleta_6_meses_apos_triagem' type='200' format='A200'>
+		<form id="5">responsavelPelaColetaDoisMesesAposTriagem</form>
+	</ExamesResponsavelpelacoleta_6_meses_apos_triagem>
+    <ExamesResponsavelpeloexame_B_6_meses_apos_triagem label='ExamesResponsavelpeloexame_B_6_meses_apos_triagem' type='200' format='A200'>
+		<form id="5">responsavelPeloExameDoisMesesAposTriagem</form>
+	</ExamesResponsavelpeloexame_B_6_meses_apos_triagem>
+    <ExamesAmostrautilizadaemCultura_triagem label='ExamesAmostrautilizadaemCultura_triagem' type='200' format='A200'>
+		<form id="5">amostra</form>
+	</ExamesAmostrautilizadaemCultura_triagem>
+    <Cultura_triagem_realizada label='Cultura_triagem_realizada' type='0' format='F1.0'>
+		<form id="5"></form>
+	</Cultura_triagem_realizada>
+    <NomedoLaboratorioCultura_triagem label='NomedoLaboratorioCultura_triagem' type='200' format='A200'>
+		<form id="5">origem_cultura_1</form>
+	</NomedoLaboratorioCultura_triagem>
+    <Metodo_cultura_triagem_cat label='Metodo_cultura_triagem_cat' type='0' format='F1.0'>
+		<form id="5">metodo_cultura_cepa_1</form>
+	</Metodo_cultura_triagem_cat>
+    <OutrometodoCultura_triagem label='OutrometodoCultura_triagem' type='200' format='A200'>
+		<form id="5">outro_metodo_cultura_1</form>
+	</OutrometodoCultura_triagem>
+    <NumeroCultura_triagem label='NumeroCultura_triagem' type='0' format='F40.0'>
+		<form id="5">numero_cepa_cultura_1</form>
+	</NumeroCultura_triagem>
+    <DatadorecebimentoCultura_triagem label='DatadorecebimentoCultura_triagem' type='0' format='EDATE8.0'>
+		<form id="5">data_cultura_cepa_1</form>
+	</DatadorecebimentoCultura_triagem>
+    <HoradorecebimentoCultura_triagem label='HoradorecebimentoCultura_triagem' type='200' format='A200'>
+		<form id="5">hora_cultura_cepa_1</form>
+	</HoradorecebimentoCultura_triagem>
+    <DatadoprocessamentoCultura_triagem label='DatadoprocessamentoCultura_triagem' type='0' format='EDATE8.0'>
+		<form id="5">data_processamento_cultura_1</form>
+	</DatadoprocessamentoCultura_triagem>
+    <HoradoprocessamentoCultura_triagem label='HoradoprocessamentoCultura_triagem' type='200' format='A200'>
+		<form id="5">hora_processamento_cultura_1</form>
+	</HoradoprocessamentoCultura_triagem>
+    <DatadoresultadoCultura_triagem label='DatadoresultadoCultura_triagem' type='0' format='EDATE8.0'>
+		<form id="5">data_resultado_cultura_1</form>
+	</DatadoresultadoCultura_triagem>
+    <HoradoresultadoCultura_triagem label='HoradoresultadoCultura_triagem' type='200' format='A200'>
+		<form id="5">hora_resultado_cultura_1</form>
+	</HoradoresultadoCultura_triagem>
+    <ResponsavelCultura_triagem label='ResponsavelCultura_triagem' type='200' format='A200'>
+		<form id="5">cultura_coleta_responsavel_1</form>
+	</ResponsavelCultura_triagem>
+    <Resultado_cultura_triagem_cat label='Resultado_cultura_triagem_cat' type='0' format='F1.0'>
+		<form id="5">resultado_cultura_cepa_1</form>
+	</Resultado_cultura_triagem_cat>
+    <Cultura_positiva_munero_cruzes_triagem label='Cultura_positiva_munero_cruzes_triagem' type='200' format='A200'>
+		<form id="5"></form>
+	</Cultura_positiva_munero_cruzes_triagem>
+    <Cultura_positiva_numero_colonias_triagem label='Cultura_positiva_numero_colonias_triagem' type='24' format="A24">
+		<form id="5"></form>
+	</Cultura_positiva_numero_colonias_triagem>
+    <Identificacao_cultura_triagem_cat label='Identificacao_cultura_triagem_cat' type='0' format='F1.0'>
+		<form id="5">identificacao_cultura_cepa_1</form>
+	</Identificacao_cultura_triagem_cat>
+    <DatadorecebimentopelomedicoCultura_triagem label='DatadorecebimentopelomedicoCultura_triagem' type='0' format='EDATE8.0'>
+		<form id="5">data_recebimento_medico_1</form>
+	</DatadorecebimentopelomedicoCultura_triagem>
+    <Cultura_2omes_realizada label='Cultura_2omes_realizada' type='0' format='F1.0'>
+		<form id="5"></form>
+	</Cultura_2omes_realizada>
+    <NomedoLaboratorioCultura2mes label='NomedoLaboratorioCultura2mes' type='200' format='A200'>
+		<form id="5">origem_cultura_2</form>
+	</NomedoLaboratorioCultura2mes>
+    <Metodo_cultura_2_mes label='Metodo_cultura_2_mes' type='0' format='F1.0'>
+		<form id="5">metodo_cultura_cepa_2</form>
+	</Metodo_cultura_2_mes>
+    <OutrometodoCultura2mes label='OutrometodoCultura2mes' type='200' format='A200'>
+		<form id="5">outro_metodo_cultura_2</form>
+	</OutrometodoCultura2mes>
+    <NumeroCultura2mes label='NumeroCultura2mes' type='0' format='F40.0'>
+		<form id="5">numero_cepa_cultura_2</form>
+	</NumeroCultura2mes>
+    <DatadorecebimentoCultura2mes label='DatadorecebimentoCultura2mes' type='0' format='EDATE8.0'>
+		<form id="5">data_cultura_cepa_2</form>
+	</DatadorecebimentoCultura2mes>
+    <HoradorecebimentoCultura2mes label='HoradorecebimentoCultura2mes' type='200' format='A200'>
+		<form id="5">hora_cultura_cepa_2</form>
+	</HoradorecebimentoCultura2mes>
+    <DatadoprocessamentoCultura2mes label='DatadoprocessamentoCultura2mes' type='0' format='EDATE8.0'>
+		<form id="5">data_processamento_cultura_2</form>
+	</DatadoprocessamentoCultura2mes>
+    <HoradoprocessamentoCultura2mes label='HoradoprocessamentoCultura2mes' type='200' format='A200'>
+		<form id="5">hora_processamento_cultura_2</form>
+	</HoradoprocessamentoCultura2mes>
+    <DatadoresultadoCultura2mes label='DatadoresultadoCultura2mes' type='0' format='EDATE8.0'>
+		<form id="5">data_resultado_cultura_2</form>
+	</DatadoresultadoCultura2mes>
+    <HoradoresultadoCultura2mes label='HoradoresultadoCultura2mes' type='200' format='A200'>
+		<form id="5">hora_resultado_cultura_2</form>
+	</HoradoresultadoCultura2mes>
+    <ResponsavelCultura2mes label='ResponsavelCultura2mes' type='200' format='A200'>
+		<form id="5">cultura_coleta_responsavel_2</form>
+	</ResponsavelCultura2mes>
+    <Resultado_cultura_2_mes_cat label='Resultado_cultura_2_mes_cat' type='0' format='F1.0'>
+		<form id="5">resultado_cultura_cepa_2</form>
+	</Resultado_cultura_2_mes_cat>
+    <Cultura_positiva_numero_cruzes_2_mes label='Cultura_positiva_numero_cruzes_2_mes' type='0' format='F1.0'>
+		<form id="5"></form>
+	</Cultura_positiva_numero_cruzes_2_mes>
+    <Cultura_positiva_numero_colonias_2mes label='Cultura_positiva_numero_colonias_2mes' type='0' format='F8.2'>
+		<form id="5"></form>
+	</Cultura_positiva_numero_colonias_2mes>
+	<Identificacao_cultura_2mes label='Identificacao_cultura_2mes' type='0' format='F1.0'>
+		<form id="5">identificacao_cultura_cepa_2</form>
+	</Identificacao_cultura_2mes>
+    <DatadorecebimentopelomedicoCultura2mes label='DatadorecebimentopelomedicoCultura2mes' type='0' format='EDATE8.0'>
+		<form id="5">data_recebimento_medico_2</form>
+	</DatadorecebimentopelomedicoCultura2mes>
+    <Cultura_3omes_realizada label='Cultura_3omes_realizada' type='0' format='F1.0'>
+		<form id="5"></form>
+	</Cultura_3omes_realizada>
+    <Nome_laboratorio_cultura_3_mes label='Nome_laboratorio_cultura_3_mes' type='200' format="A200">
+		<form id="5">origem_cultura_3</form>
+	</Nome_laboratorio_cultura_3_mes>
+    <Metodo_cultura_3_mes label='Metodo_cultura_3_mes' type='0' format='F1.0'>
+		<form id="5">metodo_cultura_cepa_3</form>
+	</Metodo_cultura_3_mes>
+    <Outro_metodo_cultura_3_mes label='Outro_metodo_cultura_3_mes' type='40' format="A40">
+		<form id="5">outro_metodo_cultura_3</form>
+	</Outro_metodo_cultura_3_mes>
+    <Numero_cultura_3_mes label='Numero_cultura_3_mes' type='0' format='F8.0'>
+		<form id="5">numero_cepa_cultura_3</form>
+	</Numero_cultura_3_mes>
+    <Data_recebimento_cultura_3_mes label='Data_recebimento_cultura_3_mes' type='0' format='EDATE8.0'>
+		<form id="5">data_cultura_cepa_3</form>
+	</Data_recebimento_cultura_3_mes>
+    <Hora_recebimento_cultura_3_mes label='Hora_recebimento_cultura_3_mes' type='8' format="A8">
+		<form id="5">hora_cultura_cepa_3</form>
+	</Hora_recebimento_cultura_3_mes>
+    <Data_processamento_cultura_3_mes label='Data_processamento_cultura_3_mes' type='0' format='EDATE8.0'>
+		<form id="5">data_processamento_cultura_3</form>
+	</Data_processamento_cultura_3_mes>
+    <Hora_processamento_cultura_3_mes label='Hora_processamento_cultura_3_mes' type='200' format="A200">
+		<form id="5">hora_processamento_cultura_3</form>
+	</Hora_processamento_cultura_3_mes>
+    <Data_resultado_cultura_3_mes label='Data_resultado_cultura_3_mes' type='0' format='EDATE8.0'>
+		<form id="5">data_resultado_cultura_3</form>
+	</Data_resultado_cultura_3_mes>
+    <Hora_resultado_cultura_3_mes label='Hora_resultado_cultura_3_mes' type='8' format="A8">
+		<form id="5">hora_resultado_cultura_3</form>
+	</Hora_resultado_cultura_3_mes>
+    <Responsavel_cultura_3_mes label='Responsavel_cultura_3_mes' type='200' format='A200'>
+		<form id="5">cultura_coleta_responsavel_3</form>
+	</Responsavel_cultura_3_mes>
+    <Resultado_cultura_3_mes label='Resultado_cultura_3_mes' type='0' format='F1.0'>
+		<form id="5">resultado_cultura_cepa_3</form>
+	</Resultado_cultura_3_mes>
+    <Cultura_positiva_numero_cruzes_3_mes label='Cultura_positiva_numero_cruzes_3_mes' type='0' format='F1.0'>
+		<form id="5"></form>
+	</Cultura_positiva_numero_cruzes_3_mes>
+    <Cultura_positiva_numero_colonias3mes label='Cultura_positiva_numero_colonias3mes' type='0' format='F8.0'>
+		<form id="5"></form>
+    </Cultura_positiva_numero_colonias3mes>
+    <Identificacao_cultura_3mes label='Identificacao_cultura_3mes' type='0' format='F1.0'>
+		<form id="5">identificacao_cultura_cepa_3</form>
+    </Identificacao_cultura_3mes>
+    <Data_recebimento_medico_cultura_3_mes label='Data_recebimento_medico_cultura_3_mes' type='0' format='EDATE8.0'>
+		<form id="5">data_recebimento_medico_3</form>
+	</Data_recebimento_medico_cultura_3_mes>
+    <Cultura_4omes_realizada label='Cultura_4omes_realizada' type='0' format='F1.0'>
+		<form id="5"></form>
+	</Cultura_4omes_realizada>
+    <Nome_do_laboratorio_cultura_4_mes label='Nome_do_laboratorio_cultura_4_mes' type='200' format='A200'>
+		<form id="5">origem_cultura_4</form>
+	</Nome_do_laboratorio_cultura_4_mes>
+    <Metodo_cultura_4_mes label='Metodo_cultura_4_mes' type='0' format='F1.0'>
+		<form id="5">metodo_cultura_cepa_4</form>
+	</Metodo_cultura_4_mes>
+    <Outro_metodo_cultura_4_mes label='Outro_metodo_cultura_4_mes' type='200' format='A200'>
+		<form id="5">outro_metodo_cultura_4</form>
+	</Outro_metodo_cultura_4_mes>
+    <Numero_cultura_4_mes label='Numero_cultura_4_mes' type='0' format='F40.0'>
+		<form id="5">numero_cepa_cultura_4</form>
+	</Numero_cultura_4_mes>
+    <Data_recebimento_cultura_4_mes label='Data_recebimento_cultura_4_mes' type='0' format='EDATE8.0'>
+		<form id="5">data_cultura_cepa_4</form>
+	</Data_recebimento_cultura_4_mes>
+    <Hora_do_recebimento_cultura_4_mes label='Hora_do_recebimento_cultura_4_mes' type='8' format="A8">
+		<form id="5">hora_cultura_cepa_4</form>
+	</Hora_do_recebimento_cultura_4_mes>
+    <Data_do_processamento_cultura_4_mes label='Data_do_processamento_cultura_4_mes' type='0' format='EDATE8.0'>
+		<form id="5">data_processamento_cultura_4</form>
+	</Data_do_processamento_cultura_4_mes>
+    <Hora_do_processamento_cultura_4_mes label='Hora_do_processamento_cultura_4_mes' type='8' format="A8">
+		<form id="5">hora_processamento_cultura_4</form>
+	</Hora_do_processamento_cultura_4_mes>
+    <Data_do_resultado_cultura_4_mes label='Data_do_resultado_cultura_4_mes' type='0' format='EDATE8.0'>
+		<form id="5">data_resultado_cultura_4</form>
+	</Data_do_resultado_cultura_4_mes>
+	<Hora_do_resultado_cultura_4_mes label='Hora_do_resultado_cultura_4_mes' type='8' format="A8">
+		<form id="5">hora_resultado_cultura_4</form>
+	</Hora_do_resultado_cultura_4_mes>
+    <Responsavel_cultura_4_mes label='Responsavel_cultura_4_mes' type='200' format='A200'>
+		<form id="5">cultura_coleta_responsavel_4</form>
+	</Responsavel_cultura_4_mes>
+    <Resultado_cultura_4_mes label='Resultado_cultura_4_mes' type='0' format='F1.0'>
+		<form id="5">resultado_cultura_cepa_4</form>
+	</Resultado_cultura_4_mes>
+	<Cultura_positiva_numero_cruzes_4_mes label='Cultura_positiva_numero_cruzes_4_mes' type='0' format='F1.0'>
+		<form id="5"></form>
+	</Cultura_positiva_numero_cruzes_4_mes>
+	<Cultura_positiva_numero_de_colonias_4_mes label='Cultura_positiva_numero_de_colonias_4_mes' type='0' format='F8.0'>
+		<form id="5"></form>
+	</Cultura_positiva_numero_de_colonias_4_mes>
+	<Identificacao_cultura_4mes label='Identificacao_cultura_4mes' type='0' format='F1.0'>
+		<form id="5">identificacao_cultura_cepa_4</form>
+	</Identificacao_cultura_4mes>
+	<Data_recebimento_medico_cultura_4_mes label='Data_recebimento_medico_cultura_4_mes' type='0' format='EDATE8.0'>
+		<form id="5">data_recebimento_medico_4</form>
+	</Data_recebimento_medico_cultura_4_mes>
+    <Cultura_5omes_realizada label='Cultura_5omes_realizada' type='0' format='F1.0'>
+		<form id="5"></form>
+	</Cultura_5omes_realizada>
+    <Nome_do_laboratorio_cultura_5_mes label='Nome_do_laboratorio_cultura_5_mes' type='200' format='A200'>
+		<form id="5">origem_cultura_5</form>
+	</Nome_do_laboratorio_cultura_5_mes>
+    <Metodo_cultura_5_mes label='Metodo_cultura_5_mes' type='0' format='F1.0'>
+		<form id="5">metodo_cultura_cepa_5</form>
+	</Metodo_cultura_5_mes>
+    <Outro_metodo_cultura_5_mes label='Outro_metodo_cultura_5_mes' type='200' format='A200'>
+		<form id="5">outro_metodo_cultura_5</form>
+	</Outro_metodo_cultura_5_mes>
+    <Numero_cultura_5_mes label='Numero_cultura_5_mes' type='0' format='F40.0'>
+		<form id="5">numero_cepa_cultura_5</form>
+	</Numero_cultura_5_mes>
+    <Data_recebimento_cultura_5_mes label='Data_recebimento_cultura_5_mes' type='0' format='EDATE8.0'>
+		<form id="5">data_cultura_cepa_5</form>
+	</Data_recebimento_cultura_5_mes>
+    <Hora_do_recebimento_cultura_5_mes label='Hora_do_recebimento_cultura_5_mes' type='8' format="A8">
+		<form id="5">hora_cultura_cepa_5</form>
+	</Hora_do_recebimento_cultura_5_mes>
+    <Data_do_processamento_cultura_5_mes label='Data_do_processamento_cultura_5_mes' type='0' format='EDATE8.0'>
+		<form id="5">data_processamento_cultura_5</form>
+	</Data_do_processamento_cultura_5_mes>
+    <Hora_do_processamento_cultura_5_mes label='Hora_do_processamento_cultura_5_mes' type='8' format="A8">
+		<form id="5">hora_processamento_cultura_5</form>
+	</Hora_do_processamento_cultura_5_mes>
+    <Data_do_resultado_cultura_5_mes label='Data_do_resultado_cultura_5_mes' type='0' format='EDATE8.0'>
+		<form id="5">data_resultado_cultura_5</form>
+	</Data_do_resultado_cultura_5_mes>
+	<Hora_do_resultado_cultura_5_mes label='Hora_do_resultado_cultura_5_mes' type='8' format="A8">
+		<form id="5">hora_resultado_cultura_5</form>
+	</Hora_do_resultado_cultura_5_mes>
+    <Responsavel_cultura_5_mes label='Responsavel_cultura_5_mes' type='200' format='A200'>
+		<form id="5">cultura_coleta_responsavel_5</form>
+	</Responsavel_cultura_5_mes>
+    <Resultado_cultura_5_mes label='Resultado_cultura_5_mes' type='0' format='F1.0'>
+		<form id="5">resultado_cultura_cepa_5</form>
+	</Resultado_cultura_5_mes>
+	<Cultura_positiva_numero_cruzes_5_mes label='Cultura_positiva_numero_cruzes_5_mes' type='0' format='F1.0'>
+		<form id="5"></form>
+	</Cultura_positiva_numero_cruzes_5_mes>
+	<Cultura_positiva_numero_de_colonias_5_mes label='Cultura_positiva_numero_de_colonias_5_mes' type='0' format='F8.0'>
+		<form id="5"></form>
+	</Cultura_positiva_numero_de_colonias_5_mes>
+	<Identificacao_cultura_5mes label='Identificacao_cultura_5mes' type='0' format='F1.0'>
+		<form id="5">identificacao_cultura_cepa_5</form>
+	</Identificacao_cultura_5mes>
+	<Data_recebimento_medico_cultura_5_mes label='Data_recebimento_medico_cultura_5_mes' type='0' format='EDATE8.0'>
+		<form id="5">data_recebimento_medico_5</form>
+	</Data_recebimento_medico_cultura_5_mes>
+    <Cultura_6omes_realizada label='Cultura_6omes_realizada' type='0' format='F1.0'>
+		<form id="5"></form>
+	</Cultura_6omes_realizada>
+    <Nome_do_laboratorio_cultura_6_mes label='Nome_do_laboratorio_cultura_6_mes' type='200' format='A200'>
+		<form id="5">origem_cultura_6</form>
+	</Nome_do_laboratorio_cultura_6_mes>
+    <Metodo_cultura_6_mes label='Metodo_cultura_6_mes' type='0' format='F1.0'>
+		<form id="5">metodo_cultura_cepa_6</form>
+	</Metodo_cultura_6_mes>
+    <Outro_metodo_cultura_6_mes label='Outro_metodo_cultura_6_mes' type='200' format='A200'>
+		<form id="5">outro_metodo_cultura_6</form>
+	</Outro_metodo_cultura_6_mes>
+    <Numero_cultura_6_mes label='Numero_cultura_6_mes' type='0' format='F40.0'>
+		<form id="5">numero_cepa_cultura_6</form>
+	</Numero_cultura_6_mes>
+    <Data_recebimento_cultura_6_mes label='Data_recebimento_cultura_6_mes' type='0' format='EDATE8.0'>
+		<form id="5">data_cultura_cepa_6</form>
+	</Data_recebimento_cultura_6_mes>
+    <Hora_do_recebimento_cultura_6_mes label='Hora_do_recebimento_cultura_6_mes' type='8' format="A8">
+		<form id="5">hora_cultura_cepa_6</form>
+	</Hora_do_recebimento_cultura_6_mes>
+    <Data_do_processamento_cultura_6_mes label='Data_do_processamento_cultura_6_mes' type='0' format='EDATE8.0'>
+		<form id="5">data_processamento_cultura_6</form>
+	</Data_do_processamento_cultura_6_mes>
+    <Hora_do_processamento_cultura_6_mes label='Hora_do_processamento_cultura_6_mes' type='8' format="A8">
+		<form id="5">hora_processamento_cultura_6</form>
+	</Hora_do_processamento_cultura_6_mes>
+    <Data_do_resultado_cultura_6_mes label='Data_do_resultado_cultura_6_mes' type='0' format='EDATE8.0'>
+		<form id="5">data_resultado_cultura_6</form>
+	</Data_do_resultado_cultura_6_mes>
+	<Hora_do_resultado_cultura_6_mes label='Hora_do_resultado_cultura_6_mes' type='8' format="A8">
+		<form id="5">hora_resultado_cultura_6</form>
+	</Hora_do_resultado_cultura_6_mes>
+    <Responsavel_cultura_6_mes label='Responsavel_cultura_6_mes' type='200' format='A200'>
+		<form id="5">cultura_coleta_responsavel_6</form>
+	</Responsavel_cultura_6_mes>
+    <Resultado_cultura_6_mes label='Resultado_cultura_6_mes' type='0' format='F1.0'>
+		<form id="5">resultado_cultura_cepa_6</form>
+	</Resultado_cultura_6_mes>
+	<Cultura_positiva_numero_cruzes_6_mes label='Cultura_positiva_numero_cruzes_6_mes' type='0' format='F1.0'>
+		<form id="5"></form>
+	</Cultura_positiva_numero_cruzes_6_mes>
+	<Cultura_positiva_numero_de_colonias_6_mes label='Cultura_positiva_numero_de_colonias_6_mes' type='0' format='F8.0'>
+		<form id="5"></form>
+	</Cultura_positiva_numero_de_colonias_6_mes>
+	<Identificacao_cultura_6mes label='Identificacao_cultura_6mes' type='0' format='F1.0'>
+		<form id="5">identificacao_cultura_cepa_6</form>
+    </Identificacao_cultura_6mes>
+	<Data_recebimento_medico_cultura_6_mes label='Data_recebimento_medico_cultura_6_mes' type='0' format='EDATE8.0'>
+		<form id="5">data_recebimento_medico_6</form>
+	</Data_recebimento_medico_cultura_6_mes>
+    <ExamesTestesMoleculares label="ExamesTestesMoleculares" type='0' format="F1.0">
+        <form id="5">testesMoleculares</form>
+    </ExamesTestesMoleculares>
+    <ExamesPCRmetodos label="ExamesPCRmetodos" type="0" format="F1.0">
+        <form id="5">pcrMetodo</form>
+    </ExamesPCRmetodos>
+    <ExamesOutroPCRmetodo label="ExamesOutroPCRmetodo" type="40" format="A40">
+        <form id="5">outroMetodoPCR</form>
+    </ExamesOutroPCRmetodo>
+    <ExamesPCRresultado label="ExamesPCRresultado" type="0" format="F1.0">
+        <form id="5">pcrResultado</form>
+    </ExamesPCRresultado>
+    <ExamesPCRdataColeta label="ExamesPCRdataColeta" type='0' format='EDATE8.0'>
+        <form id="5">data_coleta_pcr</form>
+    </ExamesPCRdataColeta>
+    <ExamesPCRdataRecebimentoLab label="ExamesPCRdataRecebimentoLab" type='0' format='EDATE8.0'>
+        <form id="5">data_recebimento_laboratorio_pcr</form>
+    </ExamesPCRdataRecebimentoLab>
+    <ExamesPCRdataResultado label="ExamesPCRdataResultado" type='0' format='EDATE8.0'>
+        <form id="5">data_resultado_pcr</form>
+    </ExamesPCRdataResultado>
+	<ExamesTestedeSensibilidade label='ExamesTestedeSensibilidade' type='0' format='F8.0'>
+		<form id="5">testeSensibilidade</form>
+	</ExamesTestedeSensibilidade>
+	<TS_realizado_triagem label='TS_realizado_triagem' type='0' format='F1.0'>
+		<form id="5"></form>
+	</TS_realizado_triagem>
+    <NomedolaboratorioTestedeSensibilidade1 label='NomedolaboratorioTestedeSensibilidade1' type='200' format='A200'>
+		<form id="5">origem_tbresistente_1</form>
+	</NomedolaboratorioTestedeSensibilidade1>
+    <NumeroTestedeSensibilidade1 label='NumeroTestedeSensibilidade1' type='0' format='F1.0'>
+		<form id="5">numero_cepa_tbresistente_cultura_1</form>
+	</NumeroTestedeSensibilidade1>
+	<DatadorecebimentoTestedeSensibilidade1 label='DatadorecebimentoTestedeSensibilidade1' type='0' format='EDATE8.0'>
+		<form id="5">data_recebimento_tbresistente_cepa_1</form>
+	</DatadorecebimentoTestedeSensibilidade1>
+	<HoradorecebimentoTestedeSensibilidade1 label='HoradorecebimentoTestedeSensibilidade1' type='200' format='A200'>
+		<form id="5">hora_recebimento_tbresistente_cepa_1</form>
+	</HoradorecebimentoTestedeSensibilidade1>
+	<DatadoProcessamentoTestedeSensibilidade1 label='DatadoProcessamentoTestedeSensibilidade1' type='0' format='EDATE8.0'>
+		<form id="5">data_processamento_tbresistente_cultura_1</form>
+	</DatadoProcessamentoTestedeSensibilidade1>
+	<HoradoProcessamentoTestedeSensibilidade1 label='HoradoProcessamentoTestedeSensibilidade1' type='200' format='A200'>
+		<form id="5">hora_processamento_tbresistente_cultura_1</form>
+	</HoradoProcessamentoTestedeSensibilidade1>
+	<DatadoresultadoTestedeSensibilidade1 label='DatadoresultadoTestedeSensibilidade1' type='0' format='EDATE8.0'>
+		<form id="5">data_resultado_tbresistente_cultura_1</form>
+	</DatadoresultadoTestedeSensibilidade1>
+	<HoradoresultadoTestedeSensibilidade1 label='HoradoresultadoTestedeSensibilidade1' type='200' format='A200'>
+		<form id="5">hora_resultado_tbresistente_cultura_1</form>
+	</HoradoresultadoTestedeSensibilidade1>
+	<ResponsavelTestedeSensibilidade1 label='ResponsavelTestedeSensibilidade1' type='200' format='A200'>
+		<form id="5">cultura_coleta_tbresistente_responsavel_1</form>
+	</ResponsavelTestedeSensibilidade1>
+	<ResultadoTestedeSensibilidade1 label='ResultadoTestedeSensibilidade1' type='0' format='F1.0'>
+		<form id="5">resultado_tbresistente_cepa_1</form>
+	</ResultadoTestedeSensibilidade1>
+	<SensibilidadeTestedeSensibilidade1 label='SensibilidadeTestedeSensibilidade1' type='200' format='A200'>
+		<form id="5">sensibilidade_1</form>
+	</SensibilidadeTestedeSensibilidade1>
+	<ResistenciaTestedeSensibilidade1 label='ResistenciaTestedeSensibilidade1' type='200' format='A200'>
+		<form id="5">resistente_1</form>
+	</ResistenciaTestedeSensibilidade1>
+	<NaotestadoTestedeSensibilidade1 label='NaotestadoTestedeSensibilidade1' type='200' format='A200'>
+		<form id="5">nao_testado_tbresistente_1</form>
+	</NaotestadoTestedeSensibilidade1>
+	<MetodoTestedeSensibilidade1 label='MetodoTestedeSensibilidade1' type='0' format='F1.0'>
+		<form id="5">metodo_tbresistente_cepa_1</form>
+	</MetodoTestedeSensibilidade1>
+	<DatadoRecebimentoTSAmedicoTestedeSensibilidade1 label='DatadoRecebimentoTSAmedicoTestedeSensibilidade1' type='0' format='EDATE8.0'>
+		<form id="5">data_recebimento_TSA_medico_1</form>
+	</DatadoRecebimentoTSAmedicoTestedeSensibilidade1>
+    <TS_2omes_realizado label='TS_2omes_realizado' type='0' format='F1.0'>
+		<form id="5"></form>
+	</TS_2omes_realizado>
+	<NomedolaboratorioTestedeSensibilidade2 label='NomedolaboratorioTestedeSensibilidade2' type='200' format='A200'>
+		<form id="5">origem_tbresistente_2</form>
+	</NomedolaboratorioTestedeSensibilidade2>
+	<NumeroTestedeSensibilidade2 label='NumeroTestedeSensibilidade2' type='0' format='F1.0'>
+		<form id="5">numero_cepa_tbresistente_cultura_2</form>
+	</NumeroTestedeSensibilidade2>
+	<DatadorecebimentoTestedeSensibilidade2 label='DatadorecebimentoTestedeSensibilidade2' type='0' format='EDATE8.0'>
+		<form id="5">data_recebimento_tbresistente_cepa_2</form>
+	</DatadorecebimentoTestedeSensibilidade2>
+	<HoradorecebimentoTestedeSensibilidade2 label='HoradorecebimentoTestedeSensibilidade2' type='200' format='A200'>
+		<form id="5">hora_recebimento_tbresistente_cepa_2</form>
+	</HoradorecebimentoTestedeSensibilidade2>
+	<DatadoProcessamentoTestedeSensibilidade2 label='DatadoProcessamentoTestedeSensibilidade2' type='0' format='EDATE8.0'>
+		<form id="5">data_processamento_tbresistente_cultura_2</form>
+	</DatadoProcessamentoTestedeSensibilidade2>
+	<HoradoProcessamentoTestedeSensibilidade2 label='HoradoProcessamentoTestedeSensibilidade2' type='200' format='A200'>
+		<form id="5">hora_processamento_tbresistente_cultura_2</form>
+	</HoradoProcessamentoTestedeSensibilidade2>
+	<DatadoresultadoTestedeSensibilidade2 label='DatadoresultadoTestedeSensibilidade2' type='0' format='EDATE8.0'>
+		<form id="5">data_resultado_tbresistente_cultura_2</form>
+	</DatadoresultadoTestedeSensibilidade2>
+	<HoradoresultadoTestedeSensibilidade2 label='HoradoresultadoTestedeSensibilidade2' type='200' format='A200'>
+		<form id="5">hora_resultado_tbresistente_cultura_2</form>
+	</HoradoresultadoTestedeSensibilidade2>
+	<ResponsavelTestedeSensibilidade2 label='ResponsavelTestedeSensibilidade2' type='200' format='A200'>
+		<form id="5">cultura_coleta_tbresistente_responsavel_2</form>
+	</ResponsavelTestedeSensibilidade2>
+	<ResultadoTestedeSensibilidade2 label='ResultadoTestedeSensibilidade2' type='0' format='F1.0'>
+		<form id="5">resultado_tbresistente_cepa_2</form>
+	</ResultadoTestedeSensibilidade2>
+	<SensibilidadeTestedeSensibilidade2 label='SensibilidadeTestedeSensibilidade2' type='200' format='A200'>
+		<form id="5">sensibilidade_2</form>
+	</SensibilidadeTestedeSensibilidade2>
+	<ResistenciaTestedeSensibilidade2 label='ResistenciaTestedeSensibilidade2' type='200' format='A200'>
+		<form id="5">resistente_2</form>
+	</ResistenciaTestedeSensibilidade2>
+	<NaotestadoTestedeSensibilidade2 label='NaotestadoTestedeSensibilidade2' type='200' format='A200'>
+		<form id="5">nao_testado_tbresistente_2</form>
+	</NaotestadoTestedeSensibilidade2>
+	<MetodoTestedeSensibilidade2 label='MetodoTestedeSensibilidade2' type='0' format='F1.0'>
+		<form id="5">metodo_tbresistente_cepa_2</form>
+	</MetodoTestedeSensibilidade2>
+	<DatadoRecebimentoTSAmedicoTestedeSensibilidade2 label='DatadoRecebimentoTSAmedicoTestedeSensibilidade2' type='0' format='EDATE8.0'>
+		<form id="5">data_recebimento_TSA_medico_2</form>
+	</DatadoRecebimentoTSAmedicoTestedeSensibilidade2>
+    <TS_3omes_realizado label='TS_3omes_realizado' type='0' format='F1.0'>
+		<form id="5"></form>
+	</TS_3omes_realizado>
+	<NomedolaboratorioTestedeSensibilidade3 label='NomedolaboratorioTestedeSensibilidade3' type='200' format='A200'>
+		<form id="5">origem_tbresistente_3</form>
+	</NomedolaboratorioTestedeSensibilidade3>
+	<NumeroTestedeSensibilidade3 label='NumeroTestedeSensibilidade3' type='0' format='F1.0'>
+		<form id="5">numero_cepa_tbresistente_cultura_3</form>
+	</NumeroTestedeSensibilidade3>
+	<DatadorecebimentoTestedeSensibilidade3 label='DatadorecebimentoTestedeSensibilidade3' type='0' format='EDATE8.0'>
+		<form id="5">data_recebimento_tbresistente_cepa_3</form>
+	</DatadorecebimentoTestedeSensibilidade3>
+	<HoradorecebimentoTestedeSensibilidade3 label='HoradorecebimentoTestedeSensibilidade3' type='200' format='A200'>
+		<form id="5">hora_recebimento_tbresistente_cepa_3</form>
+	</HoradorecebimentoTestedeSensibilidade3>
+	<DatadoProcessamentoTestedeSensibilidade3 label='DatadoProcessamentoTestedeSensibilidade3' type='0' format='EDATE8.0'>
+		<form id="5">data_processamento_tbresistente_cultura_3</form>
+	</DatadoProcessamentoTestedeSensibilidade3>
+	<HoradoProcessamentoTestedeSensibilidade3 label='HoradoProcessamentoTestedeSensibilidade3' type='200' format='A200'>
+		<form id="5">hora_processamento_tbresistente_cultura_3</form>
+	</HoradoProcessamentoTestedeSensibilidade3>
+	<DatadoresultadoTestedeSensibilidade3 label='DatadoresultadoTestedeSensibilidade3' type='0' format='EDATE8.0'>
+		<form id="5">data_resultado_tbresistente_cultura_3</form>
+	</DatadoresultadoTestedeSensibilidade3>
+	<HoradoresultadoTestedeSensibilidade3 label='HoradoresultadoTestedeSensibilidade3' type='200' format='A200'>
+		<form id="5">hora_resultado_tbresistente_cultura_3</form>
+	</HoradoresultadoTestedeSensibilidade3>
+	<ResponsavelTestedeSensibilidade3 label='ResponsavelTestedeSensibilidade3' type='200' format='A200'>
+		<form id="5">cultura_coleta_tbresistente_responsavel_3</form>
+	</ResponsavelTestedeSensibilidade3>
+	<ResultadoTestedeSensibilidade3 label='ResultadoTestedeSensibilidade3' type='0' format='F1.0'>
+		<form id="5">resultado_tbresistente_cepa_3</form>
+	</ResultadoTestedeSensibilidade3>
+	<SensibilidadeTestedeSensibilidade3 label='SensibilidadeTestedeSensibilidade3' type='200' format='A200'>
+		<form id="5">sensibilidade_3</form>
+	</SensibilidadeTestedeSensibilidade3>
+	<ResistenciaTestedeSensibilidade3 label='ResistenciaTestedeSensibilidade3' type='200' format='A200'>
+		<form id="5">resistente_3</form>
+	</ResistenciaTestedeSensibilidade3>
+	<NaotestadoTestedeSensibilidade3 label='NaotestadoTestedeSensibilidade3' type='200' format='A200'>
+		<form id="5">nao_testado_tbresistente_3</form>
+	</NaotestadoTestedeSensibilidade3>
+	<MetodoTestedeSensibilidade3 label='MetodoTestedeSensibilidade3' type='0' format='F1.0'>
+		<form id="5">metodo_tbresistente_cepa_3</form>
+	</MetodoTestedeSensibilidade3>
+	<DatadoRecebimentoTSAmedicoTestedeSensibilidade3 label='DatadoRecebimentoTSAmedicoTestedeSensibilidade3' type='0' format='EDATE8.0'>
+		<form id="5">data_recebimento_TSA_medico_3</form>
+	</DatadoRecebimentoTSAmedicoTestedeSensibilidade3>
+    <TS_4omes_realizado label='TS_4omes_realizado' type='0' format='F1.0'>
+		<form id="5"></form>
+	</TS_4omes_realizado>
+	<NomedolaboratorioTestedeSensibilidade4 label='NomedolaboratorioTestedeSensibilidade4' type='200' format='A200'>
+		<form id="5">origem_tbresistente_4</form>
+	</NomedolaboratorioTestedeSensibilidade4>
+	<NumeroTestedeSensibilidade4 label='NumeroTestedeSensibilidade4' type='0' format='F1.0'>
+		<form id="5">numero_cepa_tbresistente_cultura_4</form>
+	</NumeroTestedeSensibilidade4>
+	<DatadorecebimentoTestedeSensibilidade4 label='DatadorecebimentoTestedeSensibilidade4' type='0' format='EDATE8.0'>
+		<form id="5">data_recebimento_tbresistente_cepa_4</form>
+	</DatadorecebimentoTestedeSensibilidade4>
+	<HoradorecebimentoTestedeSensibilidade4 label='HoradorecebimentoTestedeSensibilidade4' type='200' format='A200'>
+		<form id="5">hora_recebimento_tbresistente_cepa_4</form>
+	</HoradorecebimentoTestedeSensibilidade4>
+	<DatadoProcessamentoTestedeSensibilidade4 label='DatadoProcessamentoTestedeSensibilidade4' type='0' format='EDATE8.0'>
+		<form id="5">data_processamento_tbresistente_cultura_4</form>
+	</DatadoProcessamentoTestedeSensibilidade4>
+	<HoradoProcessamentoTestedeSensibilidade4 label='HoradoProcessamentoTestedeSensibilidade4' type='200' format='A200'>
+		<form id="5">hora_processamento_tbresistente_cultura_4</form>
+	</HoradoProcessamentoTestedeSensibilidade4>
+	<DatadoresultadoTestedeSensibilidade4 label='DatadoresultadoTestedeSensibilidade4' type='0' format='EDATE8.0'>
+		<form id="5">data_resultado_tbresistente_cultura_4</form>
+	</DatadoresultadoTestedeSensibilidade4>
+	<HoradoresultadoTestedeSensibilidade4 label='HoradoresultadoTestedeSensibilidade4' type='200' format='A200'>
+		<form id="5">hora_resultado_tbresistente_cultura_4</form>
+	</HoradoresultadoTestedeSensibilidade4>
+	<ResponsavelTestedeSensibilidade4 label='ResponsavelTestedeSensibilidade4' type='200' format='A200'>
+		<form id="5">cultura_coleta_tbresistente_responsavel_4</form>
+	</ResponsavelTestedeSensibilidade4>
+	<ResultadoTestedeSensibilidade4 label='ResultadoTestedeSensibilidade4' type='0' format='F1.0'>
+		<form id="5">resultado_tbresistente_cepa_4</form>
+	</ResultadoTestedeSensibilidade4>
+	<SensibilidadeTestedeSensibilidade4 label='SensibilidadeTestedeSensibilidade4' type='200' format='A200'>
+		<form id="5">sensibilidade_4</form>
+	</SensibilidadeTestedeSensibilidade4>
+	<ResistenciaTestedeSensibilidade4 label='ResistenciaTestedeSensibilidade4' type='200' format='A200'>
+		<form id="5">resistente_4</form>
+	</ResistenciaTestedeSensibilidade4>
+	<NaotestadoTestedeSensibilidade4 label='NaotestadoTestedeSensibilidade4' type='200' format='A200'>
+		<form id="5">nao_testado_tbresistente_4</form>
+	</NaotestadoTestedeSensibilidade4>
+	<MetodoTestedeSensibilidade4 label='MetodoTestedeSensibilidade4' type='0' format='F1.0'>
+		<form id="5">metodo_tbresistente_cepa_4</form>
+	</MetodoTestedeSensibilidade4>
+	<DatadoRecebimentoTSAmedicoTestedeSensibilidade4 label='DatadoRecebimentoTSAmedicoTestedeSensibilidade4' type='0' format='EDATE8.0'>
+		<form id="5">data_recebimento_TSA_medico_4</form>
+	</DatadoRecebimentoTSAmedicoTestedeSensibilidade4>
+    <TS_5omes_realizado label='TS_5omes_realizado' type='0' format='F1.0'>
+		<form id="5"></form>
+	</TS_5omes_realizado>
+	<NomedolaboratorioTestedeSensibilidade5 label='NomedolaboratorioTestedeSensibilidade5' type='200' format='A200'>
+		<form id="5">origem_tbresistente_5</form>
+	</NomedolaboratorioTestedeSensibilidade5>
+	<NumeroTestedeSensibilidade5 label='NumeroTestedeSensibilidade5' type='0' format='F1.0'>
+		<form id="5">numero_cepa_tbresistente_cultura_5</form>
+	</NumeroTestedeSensibilidade5>
+	<DatadorecebimentoTestedeSensibilidade5 label='DatadorecebimentoTestedeSensibilidade5' type='0' format='EDATE8.0'>
+		<form id="5">data_recebimento_tbresistente_cepa_5</form>
+	</DatadorecebimentoTestedeSensibilidade5>
+	<HoradorecebimentoTestedeSensibilidade5 label='HoradorecebimentoTestedeSensibilidade5' type='200' format='A200'>
+		<form id="5">hora_recebimento_tbresistente_cepa_5</form>
+	</HoradorecebimentoTestedeSensibilidade5>
+	<DatadoProcessamentoTestedeSensibilidade5 label='DatadoProcessamentoTestedeSensibilidade5' type='0' format='EDATE8.0'>
+		<form id="5">data_processamento_tbresistente_cultura_5</form>
+	</DatadoProcessamentoTestedeSensibilidade5>
+	<HoradoProcessamentoTestedeSensibilidade5 label='HoradoProcessamentoTestedeSensibilidade5' type='200' format='A200'>
+		<form id="5">hora_processamento_tbresistente_cultura_5</form>
+	</HoradoProcessamentoTestedeSensibilidade5>
+	<DatadoresultadoTestedeSensibilidade5 label='DatadoresultadoTestedeSensibilidade5' type='0' format='EDATE8.0'>
+		<form id="5">data_resultado_tbresistente_cultura_5</form>
+	</DatadoresultadoTestedeSensibilidade5>
+	<HoradoresultadoTestedeSensibilidade5 label='HoradoresultadoTestedeSensibilidade5' type='200' format='A200'>
+		<form id="5">hora_resultado_tbresistente_cultura_5</form>
+	</HoradoresultadoTestedeSensibilidade5>
+	<ResponsavelTestedeSensibilidade5 label='ResponsavelTestedeSensibilidade5' type='200' format='A200'>
+		<form id="5">cultura_coleta_tbresistente_responsavel_5</form>
+	</ResponsavelTestedeSensibilidade5>
+	<ResultadoTestedeSensibilidade5 label='ResultadoTestedeSensibilidade5' type='0' format='F1.0'>
+		<form id="5">resultado_tbresistente_cepa_5</form>
+	</ResultadoTestedeSensibilidade5>
+	<SensibilidadeTestedeSensibilidade5 label='SensibilidadeTestedeSensibilidade5' type='200' format='A200'>
+		<form id="5">sensibilidade_5</form>
+	</SensibilidadeTestedeSensibilidade5>
+	<ResistenciaTestedeSensibilidade5 label='ResistenciaTestedeSensibilidade5' type='200' format='A200'>
+		<form id="5">resistente_5</form>
+	</ResistenciaTestedeSensibilidade5>
+	<NaotestadoTestedeSensibilidade5 label='NaotestadoTestedeSensibilidade5' type='200' format='A200'>
+		<form id="5">nao_testado_tbresistente_5</form>
+	</NaotestadoTestedeSensibilidade5>
+	<MetodoTestedeSensibilidade5 label='MetodoTestedeSensibilidade5' type='0' format='F1.0'>
+		<form id="5">metodo_tbresistente_cepa_5</form>
+	</MetodoTestedeSensibilidade5>
+	<DatadoRecebimentoTSAmedicoTestedeSensibilidade5 label='DatadoRecebimentoTSAmedicoTestedeSensibilidade5' type='0' format='EDATE8.0'>
+		<form id="5">data_recebimento_TSA_medico_5</form>
+	</DatadoRecebimentoTSAmedicoTestedeSensibilidade5>
+    <TS_6omes_realizado label='TS_6omes_realizado' type='0' format='F1.0'>
+		<form id="5"></form>
+	</TS_6omes_realizado>
+	<NomedolaboratorioTestedeSensibilidade6 label='NomedolaboratorioTestedeSensibilidade6' type='200' format='A200'>
+		<form id="5">origem_tbresistente_6</form>
+	</NomedolaboratorioTestedeSensibilidade6>
+	<NumeroTestedeSensibilidade6 label='NumeroTestedeSensibilidade6' type='0' format='F1.0'>
+		<form id="5">numero_cepa_tbresistente_cultura_6</form>
+	</NumeroTestedeSensibilidade6>
+	<DatadorecebimentoTestedeSensibilidade6 label='DatadorecebimentoTestedeSensibilidade6' type='0' format='EDATE8.0'>
+		<form id="5">data_recebimento_tbresistente_cepa_6</form>
+	</DatadorecebimentoTestedeSensibilidade6>
+	<HoradorecebimentoTestedeSensibilidade6 label='HoradorecebimentoTestedeSensibilidade6' type='200' format='A200'>
+		<form id="5">hora_recebimento_tbresistente_cepa_6</form>
+	</HoradorecebimentoTestedeSensibilidade6>
+	<DatadoProcessamentoTestedeSensibilidade6 label='DatadoProcessamentoTestedeSensibilidade6' type='0' format='EDATE8.0'>
+		<form id="5">data_processamento_tbresistente_cultura_6</form>
+	</DatadoProcessamentoTestedeSensibilidade6>
+	<HoradoProcessamentoTestedeSensibilidade6 label='HoradoProcessamentoTestedeSensibilidade6' type='200' format='A200'>
+		<form id="5">hora_processamento_tbresistente_cultura_6</form>
+	</HoradoProcessamentoTestedeSensibilidade6>
+	<DatadoresultadoTestedeSensibilidade6 label='DatadoresultadoTestedeSensibilidade6' type='0' format='EDATE8.0'>
+		<form id="5">data_resultado_tbresistente_cultura_6</form>
+	</DatadoresultadoTestedeSensibilidade6>
+	<HoradoresultadoTestedeSensibilidade6 label='HoradoresultadoTestedeSensibilidade6' type='200' format='A200'>
+		<form id="5">hora_resultado_tbresistente_cultura_6</form>
+	</HoradoresultadoTestedeSensibilidade6>
+	<ResponsavelTestedeSensibilidade6 label='ResponsavelTestedeSensibilidade6' type='200' format='A200'>
+		<form id="5">cultura_coleta_tbresistente_responsavel_6</form>
+	</ResponsavelTestedeSensibilidade6>
+	<ResultadoTestedeSensibilidade6 label='ResultadoTestedeSensibilidade6' type='0' format='F1.0'>
+		<form id="5">resultado_tbresistente_cepa_6</form>
+	</ResultadoTestedeSensibilidade6>
+	<SensibilidadeTestedeSensibilidade6 label='SensibilidadeTestedeSensibilidade6' type='200' format='A200'>
+		<form id="5">sensibilidade_6</form>
+	</SensibilidadeTestedeSensibilidade6>
+	<ResistenciaTestedeSensibilidade6 label='ResistenciaTestedeSensibilidade6' type='200' format='A200'>
+		<form id="5">resistente_6</form>
+	</ResistenciaTestedeSensibilidade6>
+	<NaotestadoTestedeSensibilidade6 label='NaotestadoTestedeSensibilidade6' type='200' format='A200'>
+		<form id="5">nao_testado_tbresistente_6</form>
+	</NaotestadoTestedeSensibilidade6>
+	<MetodoTestedeSensibilidade6 label='MetodoTestedeSensibilidade6' type='0' format='F1.0'>
+		<form id="5">metodo_tbresistente_cepa_6</form>
+	</MetodoTestedeSensibilidade6>
+	<DatadoRecebimentoTSAmedicoTestedeSensibilidade6 label='DatadoRecebimentoTSAmedicoTestedeSensibilidade6' type='0' format='EDATE8.0'>
+		<form id="5">data_recebimento_TSA_medico_6</form>
+	</DatadoRecebimentoTSAmedicoTestedeSensibilidade6>
+    <ExamesGenXpertrealizado label='ExamesGenXpertrealizado' type='0' format='F1.0'>
+		<form id="5">genXpert</form>
+	</ExamesGenXpertrealizado>
+    	<ExamesDatadaColeta_Gene label='ExamesDatadaColeta_Gene' type='0' format='EDATE8.0'>
+		<form id="5">dataColetaGenXpert</form>
+	</ExamesDatadaColeta_Gene>
+	<ExamesDatadoRecebimentonoLaboratorio_Gene label='ExamesDatadoRecebimentonoLaboratorio_Gene' type='0' format='EDATE8.0'>
+		<form id="5">dataRecebimentoGenXpert</form>
+	</ExamesDatadoRecebimentonoLaboratorio_Gene>
+	<ExamesDatadoResultado_Gene label='ExamesDatadoResultado_Gene' type='0' format='EDATE8.0'>
+		<form id="5">dataResultadoGenXpert</form>
+	</ExamesDatadoResultado_Gene>
+    <ExamesResultado_Gene label='ExamesResultado_Gene' type='0' format='F1.0'>
+		<form id="5">resultadoGenXpert</form>
+	</ExamesResultado_Gene>
+	<Resultado_Gene_detectado_especificar label='Resultado_Gene_detectado_especificar' type='0' format='F1.0'>
+		<form id="5">genXpertPositivo</form>
+	</Resultado_Gene_detectado_especificar>
+	<ExamesDatadoRecebimentopeloMedico_Gene label='ExamesDatadoRecebimentopeloMedico_Gene' type='0' format='EDATE8.0'>
+		<form id="5">dataRecebimentoGenXpertMedico</form>
+	</ExamesDatadoRecebimentopeloMedico_Gene>
+	<ExamesResponsavelpeloexame_Gene label='ExamesResponsavelpeloexame_Gene' type='200' format='A200'>
+		<form id="5">responsavelPeloExameGenXpert</form>
+	</ExamesResponsavelpeloexame_Gene>
+    <ExamesFitaHainrealizado label='ExamesFitaHainrealizado' type='0' format='F1.0'>
+		<form id="5">fitaHainRealizado</form>
+	</ExamesFitaHainrealizado>
+	<ExamesDatadaColeta_fita_hain label='ExamesDatadaColeta_fita_hain' type='0' format='EDATE8.0'>
+		<form id="5">dataColetaFitaHain</form>
+	</ExamesDatadaColeta_fita_hain>
+	<ExamesDatadoRecebimentonoLaboratorio_Fita_Hain label='ExamesDatadoRecebimentonoLaboratorio_Fita_Hain' type='0' format='EDATE8.0'>
+		<form id="5">dataRecebimentoFitaHain</form>
+	</ExamesDatadoRecebimentonoLaboratorio_Fita_Hain>
+	<ExamesDatadoResultado_Fita_Hain label='ExamesDatadoResultado_Fita_Hain' type='0' format='EDATE8.0'>
+		<form id="5">dataResultadoFitaHain</form>
+	</ExamesDatadoResultado_Fita_Hain>
+    	<ExamesResultado_Fita_Hain label='ExamesResultado_Fita_Hain' type='0' format='F1.0'>
+		<form id="5">resultadoFitaHain</form>
+	</ExamesResultado_Fita_Hain>
+	<ExamesIsoniazida_detectada_Fita_hain_especificar label='ExamesIsoniazida_detectada_Fita_hain_especificar' type='0' format='F1.0'>
+		<form id="5">isoniaziada</form>
+	</ExamesIsoniazida_detectada_Fita_hain_especificar>
+	<ExamesRifampicina_detectada_Fita_hain_especificar label='ExamesRifampicina_detectada_Fita_hain_especificar' type='0' format='F1.0'>
+		<form id="5">rifampicina</form>
+	</ExamesRifampicina_detectada_Fita_hain_especificar>
+    <Control_of_conjugate_fita label='Control_of_conjugate_fita' type='0' format='F1.0'>
+		<form id="5"></form>
+	</Control_of_conjugate_fita>
+	<Amplification_control_fita label='Amplification_control_fita' type='0' format='F1.0'>
+		<form id="5"></form>
+	</Amplification_control_fita>
+	<Amplification_control_MTBC_fita label='Amplification_control_MTBC_fita' type='0' format='F1.0'>
+		<form id="5"></form>
+	</Amplification_control_MTBC_fita>
+	<Control_rpoB_fita label='Control_rpoB_fita' type='0' format='F1.0'>
+		<form id="5"></form>
+	</Control_rpoB_fita>
+	<rpoB_wildType_1_fita label='rpoB_wildType_1_fita' type='0' format='F1.0'>
+		<form id="5"></form>
+	</rpoB_wildType_1_fita>
+	<rpoB_wildType_2_fita label='rpoB_wildType_2_fita' type='0' format='F1.0'>
+		<form id="5"></form>
+	</rpoB_wildType_2_fita>
+	<rpoB_wildType_3_fita label='rpoB_wildType_3_fita' type='0' format='F1.0'>
+		<form id="5"></form>
+	</rpoB_wildType_3_fita>
+	<rpoB_wildType_4_fita label='rpoB_wildType_4_fita' type='0' format='F1.0'>
+		<form id="5"></form>
+	</rpoB_wildType_4_fita>
+	<rpoB_wildType_5_fita label='rpoB_wildType_5_fita' type='0' format='F1.0'>
+		<form id="5"></form>
+	</rpoB_wildType_5_fita>
+	<rpoB_wildType_6_fita label='rpoB_wildType_6_fita' type='0' format='F1.0'>
+		<form id="5"></form>
+	</rpoB_wildType_6_fita>
+	<rpoB_wildType_7_fita label='rpoB_wildType_7_fita' type='0' format='F1.0'>
+		<form id="5"></form>
+	</rpoB_wildType_7_fita>
+	<rpoB_wildType_8_fita label='rpoB_wildType_8_fita' type='0' format='F1.0'>
+		<form id="5"></form>
+	</rpoB_wildType_8_fita>
+	<rpoB_mut_1_fita label='rpoB_mut_1_fita' type='0' format='F1.0'>
+		<form id="5"></form>
+	</rpoB_mut_1_fita>
+	<rpoB_mut_2A_fita label='rpoB_mut_2A_fita' type='0' format='F1.0'>
+		<form id="5"></form>
+	</rpoB_mut_2A_fita>
+	<rpoB_mut_2B_fita label='rpoB_mut_2B_fita' type='0' format='F1.0'>
+		<form id="5"></form>
+	</rpoB_mut_2B_fita>
+	<rpoB_mut_3_fita label='rpoB_mut_3_fita' type='0' format='F1.0'>
+		<form id="5"></form>
+	</rpoB_mut_3_fita>
+	<Control_KatG_fita label='Control_KatG_fita' type='0' format='F1.0'>
+		<form id="5"></form>
+	</Control_KatG_fita>
+	<KatG_wildType1_fita label='KatG_wildType1_fita' type='0' format='F1.0'>
+		<form id="5"></form>
+	</KatG_wildType1_fita>
+	<KatG_mut1_fita label='KatG_mut1_fita' type='0' format='F1.0'>
+		<form id="5"></form>
+	</KatG_mut1_fita>
+	<KatG_mut2_fita label='KatG_mut2_fita' type='0' format='F1.0'>
+		<form id="5"></form>
+	</KatG_mut2_fita>
+	<Control_inhA_fita label='Control_inhA_fita' type='0' format='F1.0'>
+		<form id="5"></form>
+	</Control_inhA_fita>
+	<inhA_wildType1_fita label='inhA_wildType1_fita' type='0' format='F1.0'>
+		<form id="5"></form>
+	</inhA_wildType1_fita>
+	<inhA_wildType2_fita label='inhA_wildType2_fita' type='0' format='F1.0'>
+		<form id="5"></form>
+	</inhA_wildType2_fita>
+	<inhA_mut1_fita label='inhA_mut1_fita' type='0' format='F1.0'>
+		<form id="5"></form>
+	</inhA_mut1_fita>
+	<inhA_mut2_fita label='inhA_mut2_fita' type='0' format='F1.0'>
+		<form id="5"></form>
+	</inhA_mut2_fita>
+	<inhA_mut3A_fita label='inhA_mut3A_fita' type='0' format='F1.0'>
+		<form id="5"></form>
+	</inhA_mut3A_fita>
+	<inhA_mut3B_fita label='inhA_mut3B_fita' type='0' format='F1.0'>
+		<form id="5"></form>
+    </inhA_mut3B_fita>
+    <ExamesDatadoRecebimentopeloMedico_fita label='ExamesDatadoRecebimentopeloMedico_fita' type='0' format='EDATE8.0'>
+		<form id="5">dataRecebimentoMedico</form>
+	</ExamesDatadoRecebimentopeloMedico_fita>
+	<ExamesResponsavelpeloexame label='ExamesResponsavelpeloexame' type='200' format='A200'>
+		<form id="5">responsavelPeloExameFitaHain</form>
+	</ExamesResponsavelpeloexame>
+    <FollowupHorariodoIniciodaentrevista label='FollowupHorariodoIniciodaentrevista' type='200' format='A200'>
+		<form id="4">horarioInicioEntrevista</form>
+	</FollowupHorariodoIniciodaentrevista>
+	<FollowupFormulario label='FollowupFormulario' type='0' format='F1.0'>
+		<form id="4">formulario</form>
+	</FollowupFormulario>
+	<FollowupSeguimentoClinicoRealizado label='FollowupSeguimentoClinicoRealizado' type='0' format='F1.0'>
+		<form id="4">tratamentoPrescritoTB</form>
+	</FollowupSeguimentoClinicoRealizado>
+	<Motivo_nao_realizacao_seguimento_clinico label='Motivo_nao_realizacao_seguimento_clinico' type='200' format='A200'>
+		<form id="4">motivoSeguimentoNaoRealizado</form>
+	</Motivo_nao_realizacao_seguimento_clinico>
+	<FollowupDatadoseguimentoclinico label='FollowupDatadoseguimentoclinico' type='0' format='EDATE8.0'>
+		<form id="4">dataSeguimentoClinico</form>
+	</FollowupDatadoseguimentoclinico>
+	<Local_Realizacao_Seguimento_Clinico_cat label='Local_Realizacao_Seguimento_Clinico_cat' type='0' format='F1.0'>
+		<form id="4">seguimentoClinico</form>
+	</Local_Realizacao_Seguimento_Clinico_cat>
+	<FollowupHouveinternacaohospitalar label='FollowupHouveinternacaohospitalar' type='0' format='F1.0'>
+		<form id="4">internacaoHospitalar</form>
+	</FollowupHouveinternacaohospitalar>
+	<FollowupDatadainternacao label='FollowupDatadainternacao' type='0' format='EDATE8.0'>
+		<form id="4">dataInternacao</form>
+	</FollowupDatadainternacao>
+	<FollowupDatadaalta_hospitalar label='FollowupDatadaalta_hospitalar' type='0' format='EDATE8.0'>
+		<form id="4">dataAlta</form>
+	</FollowupDatadaalta_hospitalar>
+	<Se_paciente_Hospitalizado_Houve_encaminhamento_para_UBS label='Se_paciente_Hospitalizado_Houve_encaminhamento_para_UBS' type='0' format='F1.0'>
+		<form id="4">encaminhamentoParaUbs</form>
+	</Se_paciente_Hospitalizado_Houve_encaminhamento_para_UBS>
+	<FollowupDatadaaltahospitalar label='FollowupDatadaaltahospitalar' type='0' format='EDATE8.0'>
+		<form id="4">dataAltaHospitalar</form>
+	</FollowupDatadaaltahospitalar>
+	<FollowupDatadoencaminhamento_para_UBS label='FollowupDatadoencaminhamento_para_UBS' type='0' format='EDATE8.0'>
+		<form id="4">dataEncaminhamento</form>
+	</FollowupDatadoencaminhamento_para_UBS>
+	<Data_inicio_tto_na_unidade label='Data_inicio_tto_na_unidade' type='0' format='EDATE8.0'>
+		<form id="4">data_inicio</form>
+	</Data_inicio_tto_na_unidade>
+	<FollowupReacaoadversadosmedicamentosantiTB label='FollowupReacaoadversadosmedicamentosantiTB' type='0' format='F1.0'>
+		<form id="4">reacoesAdversasTuberculostaticos</form>
+	</FollowupReacaoadversadosmedicamentosantiTB>
+	<FollowupMaioresreacoes label='FollowupMaioresreacoes' type='200' format='A200'>
+		<form id="4">reacoesAdversasTuberculostaticosMaiores</form>
+	</FollowupMaioresreacoes>
+	<FollowupMenoresreacoes label='FollowupMenoresreacoes' type='200' format='A200'>
+		<form id="4">reacoesAdversasTuberculostaticosMenores</form>
+	</FollowupMenoresreacoes>
+	<FollowupInterrupcaodotratamento label='FollowupInterrupcaodotratamento' type='0' format='F1.0'>
+		<form id="4">interrupcaoTratamento</form>
+	</FollowupInterrupcaodotratamento>
+	<FollowupMudancadeesquemadetratamentoparaTB label='FollowupMudancadeesquemadetratamentoparaTB' type='0' format='F1.0'>
+		<form id="4">mudancaEsquemaTratamentoTB</form>
+	</FollowupMudancadeesquemadetratamentoparaTB>
+	<FollowupDatadamudanca label='FollowupDatadamudanca' type='0' format='EDATE8.0'>
+		<form id="4">data_mudanca</form>
+	</FollowupDatadamudanca>
+	<Farmacos_utilizados_mudanca_tto label='Farmacos_utilizados_mudanca_tto' type='200' format='A200'>
+		<form id="4">mudancaFarmacos</form>
+	</Farmacos_utilizados_mudanca_tto>
+	<FollowupMotivo_mudanca_tto label='FollowupMotivo_mudanca_tto' type='200' format='A200'>
+		<form id="4">mudancaMotivo</form>
+	</FollowupMotivo_mudanca_tto>
+	<Especificar_outro_motivo_mudanca_tto label='Especificar_outro_motivo_mudanca_tto' type='200' format='A200'>
+		<form id="4">outro_motivo</form>
+	</Especificar_outro_motivo_mudanca_tto>
+	<FollowupSuspensaodotratamentoparaTB label='FollowupSuspensaodotratamentoparaTB' type='200' format='A200'>
+		<form id="4">suspensaoTratamentoTB</form>
+	</FollowupSuspensaodotratamentoparaTB>
+	<FollowupHaquantosdiassuspendeuotratamento label='FollowupHaquantosdiassuspendeuotratamento' type='200' format='A200'>
+		<form id="4">suspensaoDiasTratamento</form>
+	</FollowupHaquantosdiassuspendeuotratamento>
+	<FollowupTosse label='FollowupTosse' type='0' format='F1.0'>
+		<form id="4">tosseDiminuida</form>
+	</FollowupTosse>
+	<FollowupPesoatual label='FollowupPesoatual' type='200' format='A200'>
+		<form id="4">pesoAtual</form>
+	</FollowupPesoatual>
+	<FollowupFebre label='FollowupFebre' type='0' format='F1.0'>
+		<form id="4">febre</form>
+	</FollowupFebre>
+	<FollowupExpectoracao label='FollowupExpectoracao' type='0' format='F1.0'>
+		<form id="4">expectoracao</form>
+	</FollowupExpectoracao>
+	<FollowupOutrosSintomas label='FollowupOutrosSintomas' type='200' format='A200'>
+		<form id="4">outrosSintomas</form>
+	</FollowupOutrosSintomas>
+	<FollowupAlteracoesevolutivasnoexamefisico label='FollowupAlteracoesevolutivasnoexamefisico' type='0' format='F1.0'>
+		<form id="4">alteracoesEvolutivasNoExameFisico</form>
+	</FollowupAlteracoesevolutivasnoexamefisico>
+	<FollowupAvaliacaoClinica label='FollowupAvaliacaoClinica' type='0' format='F1.0'>
+		<form id="4">avaliacaoGeral</form>
+	</FollowupAvaliacaoClinica>
+	<FollowupRXrealizado label='FollowupRXrealizado' type='0' format='F1.0'>
+		<form id="4">rx</form>
+	</FollowupRXrealizado>
+	<FollowupDatadoRX label='FollowupDatadoRX' type='0' format='EDATE8.0'>
+		<form id="4">data_rx</form>
+	</FollowupDatadoRX>
+	<FollowupAvaliacaoComparacaoentreoRXTinicialcomoatual label='FollowupAvaliacaoComparacaoentreoRXTinicialcomoatual' type='200' format='A200'>
+		<form id="4">avaliacaoPos</form>
+	</FollowupAvaliacaoComparacaoentreoRXTinicialcomoatual>
+	<FollowupHouveobito label='FollowupHouveobito' type='0' format='F1.0'>
+		<form id="4">obito</form>
+	</FollowupHouveobito>
+	<FollowupCausa_obito label='FollowupCausa_obito' type='200' format='A200'>
+		<form id="4">casoObito</form>
+	</FollowupCausa_obito>
+	<FollowupDatadoobito label='FollowupDatadoobito' type='0' format='EDATE8.0'>
+		<form id="4">data_obito</form>
+	</FollowupDatadoobito>
+	<FollowupObservacoes label='FollowupObservacoes' type='200' format='A200'>
+		<form id="4">observacoes</form>
+	</FollowupObservacoes>
+</spss>
