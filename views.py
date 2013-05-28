@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+
 import os,sys
 import csv
 import tempfile2 as tempfile
@@ -32,6 +33,8 @@ from django.utils.encoding import smart_str, smart_unicode
 import settings
 from forms.models import UnidadeSaude, Formulario, Ficha
 from forms.HumanRegister import HumanRegister
+
+import subprocess
 
 from savReaderWriter import *
 
@@ -296,7 +299,7 @@ def getOrderedFields(form, show_form=False, number_multifields=4, form_in_index=
 
 def getModulesRootPath():
     form = Formulario.objects.all()
-    root = "/".join(form[0].path.split("/")[0:len(form[0].path.split("/")) - 1])
+    root = ("/".join(form[0].path.split("/")[0:len(form[0].path.split("/")) - 1])).replace("modules", "exportconfig")
     return root
 
 def showSPSSfields(request):
@@ -798,7 +801,6 @@ def spss_to_response(w):
     from django.http import HttpResponse
     from django.core.servers.basehttp import FileWrapper
 
-
     response = HttpResponse(FileWrapper(open(w.savFileName, 'r')), content_type='application/sav-x-spss')
     response['Content-Disposition'] = 'attachment; filename=%s'%w.savFileName
     return response
@@ -988,22 +990,85 @@ def db2file(request, format='excel'):
         triagens.close()
         return zip_to_response(files, 'pacientes.zip')
     if format == "spss":
-        names = []
-        types = {}
         mapping = "%s/spssMapping.xml"%(getModulesRootPath())
+
+        names     = []
+        types     = {}
+        format    = {}
         dom = parse(mapping)
         elements = dom.getElementsByTagName('spss')[0].childNodes
+        header = []
+
+        file = open("%s/values"%(getModulesRootPath()), "rb")
+        values = eval(file.read())
+        file.close()
+
+        file = open("%s/codifiedAnswers"%(getModulesRootPath()), "rb")
+        codifiedAnswers = eval(file.read())
+        file.close()
+
         for el in elements:
+            column = {}
+            try:
+                forms = el.getElementsByTagName("form")
+                for f in forms:
+                    if f.nodeType == f.ELEMENT_NODE:
+                        try:
+                            column[int(f.attributes["id"].value)] = getText(f.childNodes)
+                        except ValueError: pass
+            except AttributeError: pass
             if el.nodeType == el.ELEMENT_NODE:
                 names.append(el.nodeName.encode("utf-8"))
                 types[el.nodeName.encode("utf-8")] = int(el.attributes['type'].value)
+                format[el.nodeName.encode("utf-8")] = el.attributes['format'].value
+                header.append(column)
         records = []
+        pacientes = Paciente.objects.all()
+        for paciente in pacientes:
+            fichas = Ficha.objects.filter(paciente=paciente)
+            register = []
+            pacienteFichas = fichas2Dict(fichas)
+            for column in header:
+                answer = ""
+                for form, question in column.items():
+                    try:
+                        answer = codifiedAnswers[question][pacienteFichas[int(form)][question]]
+                    except:
+                        try:
+                            answer = int(pacienteFichas[int(form)][question])
+                        except:
+                            try:
+                                answer = float(pacienteFichas[int(form)][question])
+                            except:
+                                try:
+                                    answer = pacienteFichas[int(form)][question]
+                                except: pass
+                register.append(answer)
+            records.append(register)
         file = "TB.sav"
-        w = SavWriter(file, names, types)
-        #w.writerows(records)
-        w.close()
+
+        with SavWriter(savFileName=file, varNames=names, varTypes=types, valueLabels=values, formats=format) as sav:
+            sav.writerows(records)
+
         return spss_to_response(w)
     return HttpResponseNotFound("File format not found")
+
+def fichas2Dict(fichas):
+    pacienteFichas = {}
+    for ficha in fichas:
+        try:
+            pacienteFichas[ficha.formulario.id]
+            return None
+        except KeyError:
+            conteudo = {}
+            xml = parseString(ficha.conteudo.encode("utf-8"))
+            for field in xml.firstChild.childNodes:
+                for f in xml.getElementsByTagName(field.tagName):
+                    try:
+                        conteudo[field.tagName] = f.firstChild.nodeValue.encode("utf-8")
+                    except AttributeError: pass
+            pacienteFichas[ficha.formulario.id] = conteudo
+    return pacienteFichas
 
 def create_one_file(files, triagens):
 	'''
@@ -1408,3 +1473,61 @@ def ffrequired(request):
 def retrieveFormName(request, formId):
 	formulario = Formulario.objects.get(id=formId)
 	return HttpResponse(formulario.nome)
+
+def userfiles(request):
+    url = settings.SITE_ROOT
+    import_str = 'from forms.models import Arquivo'
+    exec import_str
+
+    files         = Arquivo.objects.filter(user=request.user)
+    user          = request.user
+    userfilespath = "%s/%s/"%(os.path.join(os.path.dirname(__file__), 'userfiles'), request.user)
+    return render_to_response(
+                                "showFiles.html",
+                                locals(),
+                                RequestContext(request, {})
+                             )
+def generateFile(request, format):
+    from forms.models import Arquivo
+    import json
+
+    pythonScript = os.path.join(os.path.dirname(__file__), 'SPSSexport.py')
+    bashScript   = os.path.join(os.path.dirname(__file__), 'activate_virtualenv.sh')
+
+    response = {}
+
+    #TO-DO: pick the name from interface, instead of hard-coded
+    filename = "SAPeM"
+
+    file = Arquivo.objects.create(
+                                   nome   = filename,
+                                   user   = request.user,
+                                   status = 'G'
+                                 )
+
+    columns = []
+    columns.append(filename)
+    columns.append(file.data_solicitacao.strftime("%B %d, %Y, %I:%M %p"))
+
+    response["COLS"] = columns
+
+    userDir  = "%s/userfiles/%s"%(os.path.join(os.path.dirname(__file__)), request.user)
+    filename = "%s.sav"%(file.id)
+
+    sp = subprocess.call(["%s %s %s %s"%(bashScript, pythonScript, userDir, filename)], shell=True)
+
+    response["HTTPRESPONSE"] = sp
+    response["FILE_ID"] = file.id
+
+    return HttpResponse(json.dumps(response), mimetype='application/json')
+
+def download_userfile(request):
+    from django.http import HttpResponse
+    from django.core.servers.basehttp import FileWrapper
+
+    file = "%s/userfiles/%s/%s.sav"%(os.path.dirname(__file__), request.user, request.GET["fileId"])
+
+    response = HttpResponse(FileWrapper(open(file, 'r')), content_type='application/sav-x-spss')
+    response['Content-Disposition'] = 'attachment; filename=SAPeM.sav'
+    return response
+

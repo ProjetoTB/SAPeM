@@ -31,6 +31,9 @@ from tbForms.views import showSPSSfields
 from tbForms.views import select_unidade_saude
 from tbForms.views import jsFunctionCreateHeaderFooter
 from tbForms.views import retrieveFormName
+from tbForms.views import userfiles
+from tbForms.views import generateFile
+from tbForms.views import download_userfile
 
 from tbForms.reports.views import create_configuration_reports
 from tbForms.reports.views import view_configuration_reports
@@ -74,6 +77,7 @@ urlpatterns = patterns('',
 	(r'^js/createHeaderFooter/$', jsFunctionCreateHeaderFooter),
 	(r'^$', homepage_view),
 	(r'^download/(?P<format>\w+)/$', db2file),
+    (r'^files/$', userfiles),
 	(r'^login/$', sapem_login),
 	(r'^logout/$', sapem_logout),
 	(r'^art_image/(?P<formId>\d+)/(?P<patientId>\d+)/$', art_view),
@@ -87,4 +91,6 @@ urlpatterns = patterns('',
 	(r'^reports/showReport/(?P<configId>\d+)/$', show_report),
 	(r'^reports/configSettingXml/(?P<configId>\d+)/$', get_configSettingsXml),
 	(r'^reports/getData/(?P<configId>\d+)/(?P<formId>\d+)/(?P<variable>\w+)/$', get_dataXml),
+    url(r'^generateFile/(?P<format>\w+)/$', generateFile, name="generateFile"),
+    url(r'^userfile_download/$', download_userfile, name='userfile_download'),
 )
